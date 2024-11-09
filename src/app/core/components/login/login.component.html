@@ -1,0 +1,84 @@
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+<div>
+    <div class=" w-1/2 pt-4 mr-auto ml-auto pb-5">
+        <div class>
+            <form [formGroup]="loginForm"
+                class="ml-[10vw] mr-[10vw] border-2 p-4 rounded-lg drop-shadow-xl">
+                <div class="pb-4">
+                    <h3 class="text-2xl text-red-600 text-center font-semibold">Wellcome</h3>
+                </div>
+                <div class="pb-1">
+                    <img src="../../../../assets/images/5087579.png" alt
+                        class="h-[10vw] w-[10vw] mr-auto ml-auto drop-shadow-xl">
+                        
+                </div>
+                <div class="pb-2">
+                    <label for="Username" class="pb-2 pl-5 font-medium  font-semibold">
+                        Username<span class="text-red-600"> *</span></label><br>
+                    <input type="text"
+                        class="border-solid border-2 w-full  h-10 rounded-lg text-center drop-shadow-xl"
+                        formControlName="username" placeholder="Enter your Username"
+                        required="required" value
+                        name="username"
+                        id="username">
+                    <div class="form-text  text-red-600"
+                        *ngIf="Username.errors?.['required']  &&  (Username.touched || Username.dirty)">
+                        Username is Required
+                    </div>
+
+                </div>
+                <div class="pb-5">
+                    <label for="Password" class="pb-2 pl-5 font-medium font-semibold">Password<span
+                            class="text-red-600"> *</span></label><br>
+                    <input [type]="password"
+                        class="border-solid border-2 w-full h-10 rounded-lg text-center drop-shadow-xl"
+                        formControlName="password"
+                        placeholder="Enter your Password" required="required"
+                        name="password"
+                        id="password">
+                    <div class="form-text  text-red-600"
+                        *ngIf="Password.errors?.['required']  && (Password.touched|| Password.dirty)">
+                        Password is Required.
+                    </div>
+
+                    <div class=" text-end pr-5 pb-1">
+                        <button type="button" (click)="onClick()"
+                            value="show_password">
+                            <i class="fa fa-eye " aria-hidden="true"
+                                *ngIf="!show"></i>
+                            <i class="fa fa-eye-slash" aria-hidden="true"
+                                *ngIf="show"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pb-4 place-content-center lg:flex flex-row space-x-4 ">
+                    <div class="w-1/3 ">
+                        <button type="button"
+                            class="font-medium border-solid  bg-blue-800 text-white h-8 rounded-md w-full  drop-shadow-xl hover:bg-blue-500 " (click)="login()">Login</button>
+                    </div>
+                    <div class="w-1/3 ">
+                        <input type="reset" value="Clear"
+                            class="font-medium border-solid  bg-red-800 text-white h-8 rounded-md w-full drop-shadow-xl hover:bg-red-500">
+                    </div>
+                </div>
+
+                <div class="pl-5">
+                    <p class="pb-2 font-semibold">Forget your password ?<a
+                            routerLink="/" class="text-red-700"> click</a></p>
+                    <p class="font-semibold">Register now<a
+                            routerLink="/register" class="text-red-700 "> click</a></p>
+                </div>
+                <div class>
+                    <p class="text-slate-300 text-end">&copy; E-2046035 PARD Jayaruwan</p>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

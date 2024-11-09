@@ -5,6 +5,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './core/components/login/login.component';
 import { Routes, RouterModule } from '@angular/router';
 import { RegisterComponent } from './core/components/register/register.component';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 const appRoutes:Routes = [
   {path:'',component:LoginComponent},
@@ -20,7 +22,8 @@ const appRoutes:Routes = [
   imports: [
     BrowserModule,
     AppRoutingModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
