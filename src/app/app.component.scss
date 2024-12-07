@@ -1,0 +1,40 @@
+$app-container-bg: theme('colors.gray.100');
+$side-nav-width: 250px;
+$header-height: 4rem;
+
+.app-container {
+  display: grid;
+  grid-template-areas:
+    'header header'
+    'nav content';
+  grid-template-columns: $side-nav-width 1fr;
+  grid-template-rows: $header-height 1fr;
+  height: 100vh;
+  @apply bg-[#f5f6f6];
+
+  &.login-page {
+    grid-template-areas: 'content';
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    height: 100vh; // Ensure full viewport height
+    overflow: hidden; // Prevent scrollbar
+
+    .main-content {
+      grid-area: content;
+      @apply p-0 h-full; // Remove padding and use full height
+      overflow: auto; // Allow scrolling within main content if needed
+    }
+  }
+
+  &:not(.login-page) {
+    .main-content {
+      @apply py-4  ;
+    }
+  }
+
+  .main-content {
+    div {
+      @apply block;
+    }
+  }
+}
