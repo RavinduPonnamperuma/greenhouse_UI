@@ -1,0 +1,37 @@
+<svg width="414" height="414" viewBox="0 0 414 414" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_0_75)">
+    <rect x="0.976562" y="0.273438" width="413" height="413" rx="206.5" fill="#FF7750"/>
+    <g filter="url(#filter0_ii_0_75)">
+      <rect x="68.8359" y="67.9375" width="276.961" height="504.332" rx="138.48" fill="#F3F3F3"/>
+      <rect x="68.8359" y="67.9375" width="276.961" height="504.332" rx="138.48" fill="url(#paint0_linear_0_75)"/>
+    </g>
+    <circle cx="162.871" cy="170.926" r="18.7695" fill="#111111"/>
+    <circle cx="254.582" cy="170.926" r="18.7695" fill="#111111"/>
+    <path d="M159.859 231.992C159.859 293.885 255.086 298.066 255.086 231.992" stroke="#111111" stroke-width="10" stroke-linecap="round"/>
+  </g>
+  <defs>
+    <filter id="filter0_ii_0_75" x="56.8359" y="67.9375" width="300.961" height="516.332" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="12" dy="12"/>
+      <feGaussianBlur stdDeviation="100"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"/>
+      <feBlend mode="normal" in2="shape" result="effect1_innerShadow_0_75"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dx="-12"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"/>
+      <feBlend mode="normal" in2="effect1_innerShadow_0_75" result="effect2_innerShadow_0_75"/>
+    </filter>
+    <linearGradient id="paint0_linear_0_75" x1="207.316" y1="67.9375" x2="207.316" y2="572.27" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFEBB8"/>
+      <stop offset="1" stop-color="#FFC839"/>
+    </linearGradient>
+    <clipPath id="clip0_0_75">
+      <rect x="0.976562" y="0.273438" width="413" height="413" rx="206.5" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>

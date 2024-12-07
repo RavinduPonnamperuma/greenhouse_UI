@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "greenhouse_ui": {
+    "gate-pass-ui": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/greenhouse_ui",
+            "outputPath": "dist/gate-pass-ui",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -30,7 +30,8 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
@@ -40,12 +41,12 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumError": "4mb"
                 },
                 {
                   "type": "anyComponentStyle",
                   "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumError": "4mb"
                 }
               ],
               "outputHashing": "all"
@@ -56,7 +57,13 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true
+              "namedChunks": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.development.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -65,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "greenhouse_ui:build:production"
+              "browserTarget": "gate-pass-ui:build:production"
             },
             "development": {
-              "browserTarget": "greenhouse_ui:build:development"
+              "browserTarget": "gate-pass-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "greenhouse_ui:build"
+            "browserTarget": "gate-pass-ui:build"
           }
         },
         "test": {
@@ -95,13 +102,16 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/tailwindcss/dist/tailwind.js",
+              "postcss ./src/**/*.css -o ./src/**/*.css"
+            ]
           }
         }
       }
     }
   },
   "cli": {
-    "analytics": "cca5561b-8faf-47bb-8b7d-e0a0854068d5"
+    "analytics": "05fc86e2-74b0-4292-a8bd-5e514f4b1b91"
   }
 }
