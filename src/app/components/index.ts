@@ -1,2 +1,2 @@
-export * from './feature/index'
+export * from './feature/component/index'
 
