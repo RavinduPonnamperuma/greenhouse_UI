@@ -8,10 +8,10 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        loadComponent: () => import('./core/index').then(com => com.LoginComponent),
+        loadComponent: () => import('./components/index').then(com => com.LoginComponent),
     },
     {
         path: 'home',
-        loadComponent: () => import('./components/index').then(com => com.DashboardComponent),
+        loadComponent: () => import('./components/index').then(com => com.HomeComponent),
     },
 ];
