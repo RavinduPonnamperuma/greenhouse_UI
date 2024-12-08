@@ -9,23 +9,19 @@ import {environment} from "../../environments/environment";
 export class UserService {
 
     private readonly baseUrl = environment.baseUrl;
-    constructor(private httpClient: HttpClient) {}
+    constructor(private httpClient: HttpClient) {
+      this.getUsers();
+    }
 
-    /**
-     * Fetches all visitors.
-     */
-    getVisitors(): Observable<HttpResponse<any>> {
+
+    getUsers(): Observable<HttpResponse<any>> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-        return this.httpClient.get<any>(`${this.baseUrl}/visitor`, {
+        return this.httpClient.get<any>(`${this.baseUrl}/user`, {
             headers,
             observe: 'response',
         });
     }
 
-    /**
-     * Fetches visitors by NIC number.
-     * @param nicNo - The NIC number to filter visitors.
-     */
     getVisitorsByName(nicNo: string): Observable<HttpResponse<any>> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
         return this.httpClient.get<any>(`${this.baseUrl}/visitor/nicNo/${nicNo}`, {
@@ -34,9 +30,7 @@ export class UserService {
         });
     }
 
-    /**
-     * Fetches all employees.
-     */
+
     getEmployees(): Observable<HttpResponse<any>> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
         return this.httpClient.get<any>(`${this.baseUrl}/employee`, {
@@ -45,12 +39,9 @@ export class UserService {
         });
     }
 
-    /**
-     * Creates a visitor appointment.
-     * @param data - The appointment details.
-     */
-    createVisitorAppointment(data: any): Observable<any> {
+
+    createUser(data: any): Observable<any> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-        return this.httpClient.post(`${this.baseUrl}/appointment`, data, { headers });
+        return this.httpClient.post(`${this.baseUrl}/user`, data, { headers });
     }
 }
