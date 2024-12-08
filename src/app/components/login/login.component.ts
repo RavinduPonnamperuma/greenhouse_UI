@@ -15,7 +15,6 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   registrationForm!: FormGroup;
-  // Hardcoded credentials
   private readonly hardcodedUsername = 'admin@gmail.com';
   private readonly hardcodedPassword = 'admin123';
 
