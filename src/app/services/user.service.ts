@@ -30,16 +30,6 @@ export class UserService {
         });
     }
 
-
-    getEmployees(): Observable<HttpResponse<any>> {
-        const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-        return this.httpClient.get<any>(`${this.baseUrl}/employee`, {
-            headers,
-            observe: 'response',
-        });
-    }
-
-
     createUser(data: any): Observable<any> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
         return this.httpClient.post(`${this.baseUrl}/user`, data, { headers });
