@@ -18,4 +18,8 @@ export const routes: Routes = [
         path: 'register',
         loadComponent: () => import('./components/index').then(com => com.RegisterComponent),
     },
+  {
+    path: 'admin',
+    loadComponent: () => import('./components/index').then(com => com.AdminComponent),
+  },
 ];

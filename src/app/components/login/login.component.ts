@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-login',
@@ -14,8 +15,11 @@ import {NgIf} from "@angular/common";
 })
 export class LoginComponent implements OnInit {
   registrationForm!: FormGroup;
+  // Hardcoded credentials
+  private readonly hardcodedUsername = 'admin@gmail.com';
+  private readonly hardcodedPassword = 'admin123';
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder, private router: Router) {}
 
   ngOnInit(): void {
     this.registrationForm = this.fb.group({
@@ -25,9 +29,26 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // onSubmit(): void {
+  //   if (this.registrationForm.valid) {
+  //     console.log(this.registrationForm.value);
+  //   } else {
+  //     console.log('Form is invalid');
+  //   }
+  // }
+
   onSubmit(): void {
     if (this.registrationForm.valid) {
-      console.log(this.registrationForm.value);
+      const { email, password } = this.registrationForm.value;
+
+      // Check hardcoded credentials
+      if (email === this.hardcodedUsername && password === this.hardcodedPassword) {
+        console.log('Login successful');
+        this.router.navigate(['/admin']); // Navigate to the admin page
+      } else {
+        this.router.navigate(['/home']);
+        alert('Wellcome to the dashbord..!');
+      }
     } else {
       console.log('Form is invalid');
     }
