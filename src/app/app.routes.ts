@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 
+
 export const routes: Routes = [
     {
         path: '',
@@ -21,5 +22,9 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () => import('./components/index').then(com => com.AdminComponent),
+  },
+  {
+    path: 'chart',
+    loadComponent: () => import('./components/index').then(com => com.ChartComponent),
   },
 ];

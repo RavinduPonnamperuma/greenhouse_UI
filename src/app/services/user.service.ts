@@ -23,13 +23,6 @@ export class UserService {
         });
     }
 
-    getVisitorsByName(nicNo: string): Observable<HttpResponse<any>> {
-        const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-        return this.httpClient.get<any>(`${this.baseUrl}/visitor/nicNo/${nicNo}`, {
-            headers,
-            observe: 'response',
-        });
-    }
 
     createUser(data: any): Observable<any> {
         const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
