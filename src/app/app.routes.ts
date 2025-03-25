@@ -1,4 +1,5 @@
 import {Routes} from '@angular/router';
+import {ManageSensorsComponent} from "./components/manage-sensors/manage-sensors.component";
 
 
 export const routes: Routes = [
@@ -26,5 +27,25 @@ export const routes: Routes = [
   {
     path: 'chart',
     loadComponent: () => import('./components/index').then(com => com.ChartComponent),
+  },
+  {
+    path: 'users',
+    loadComponent: () => import('./components/index').then(com => com.UserManageComponent),
+  },
+  {
+    path: 'sensors',
+    loadComponent: () => import('./components/index').then(com => com.ManageSensorsComponent),
+  },
+  {
+    path: 'plants',
+    loadComponent: () => import('./components/index').then(com => com.ManagePlantsComponent),
+  },
+  {
+    path: 'green-houses',
+    loadComponent: () => import('./components/index').then(com => com.ManageGreenHouseComponent),
+  },
+  {
+    path: 'contact',
+    loadComponent: () => import('./components/index').then(com => com.ManageContactComponent),
   },
 ];
