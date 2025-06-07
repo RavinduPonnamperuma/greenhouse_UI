@@ -5,12 +5,12 @@ import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-register',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     NgIf
   ],
   templateUrl: './register.component.html',
+  standalone: true,
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit {
