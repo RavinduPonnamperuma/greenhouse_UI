@@ -3,14 +3,24 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
+import {APIRequest, APIRequestResources} from "../../core";
 
 @Injectable({
   providedIn: 'root',
 })
-export class SensorDataService {
+export class SensorDataService  {
   private readonly apiUrl = `${environment.baseUrl}/sensors`;  // API URL
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+
+
+  }
+
+
+  // constructor(protected override http: HttpClient) {
+  //   super(http, APIRequestResources.InvoiceService)
+  // }
+
 
   // Fetch all sensor data with error handling
   getAllSensorData(): Observable<any[]> {
