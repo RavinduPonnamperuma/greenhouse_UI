@@ -26,14 +26,16 @@ export class SideNavComponent {
 
     navigationItems: NavItem[] = [
     { label: 'Dashboard', route: '/dashboard' },
+    { label: 'Profile', route: '/profile' },
+    { label: 'Tunnel', route: '/Tunnel' },
+    { label: 'Plant', route: '/plant' },
     { label: 'Schedule', route: '/schedule' },
-    { label: 'Inbox', route: '/inbox' },
-    { label: 'Users', route: '/users' },
-    { label: 'Products', route: '/products' },
-    { label: 'Sign In', route: '/login' },
+    { label: 'Irrigation', route: '/Irrigation' },
+    { label: 'Harvest', route: '/harvest' },
+
+    { label: 'Reports', route: '/report' },
+    { label: 'Alerts', route: '/alerts' },
     { label: 'Sign Up', route: '/register' },
-    { label: 'Settings', route: '/settings' },
-    { label: 'Earnings', route: '/earnings' },
     { label: 'Sign out', route: '/logout' }
   ];
 
