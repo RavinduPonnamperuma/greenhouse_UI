@@ -4,13 +4,14 @@ import {NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 
 @Component({
-    selector: 'app-login',
-    imports: [
-        ReactiveFormsModule,
-        NgIf
-    ],
-    templateUrl: './login.component.html',
-    styleUrl: './login.component.scss'
+  selector: 'app-login',
+  imports: [
+    ReactiveFormsModule,
+    NgIf
+  ],
+  templateUrl: './login.component.html',
+  standalone: true,
+  styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
   registrationForm!: FormGroup;

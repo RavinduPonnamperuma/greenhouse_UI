@@ -4,7 +4,7 @@ import {Routes} from '@angular/router';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'dashboard',
         pathMatch: 'full'
     },
     {
@@ -12,7 +12,7 @@ export const routes: Routes = [
         loadComponent: () => import('./components/index').then(com => com.LoginComponent),
     },
     {
-        path: 'home',
+        path: 'dashboard',
         loadComponent: () => import('./components/index').then(com => com.HomeComponent),
     },
     {
@@ -22,9 +22,5 @@ export const routes: Routes = [
   {
     path: 'admin',
     loadComponent: () => import('./components/index').then(com => com.AdminComponent),
-  },
-  {
-    path: 'chart',
-    loadComponent: () => import('./components/index').then(com => com.ChartComponent),
-  },
+  }
 ];

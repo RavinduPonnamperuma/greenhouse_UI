@@ -15,12 +15,11 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:application",
+          "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": {
-              "base": "dist/gate-pass-ui"
-            },
+            "outputPath": "dist/gate-pass-ui",
             "index": "src/index.html",
+            "main": "src/main.ts",
             "polyfills": [
               "zone.js"
             ],
@@ -34,8 +33,7 @@
               "src/styles.scss",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": [],
-            "browser": "src/main.ts"
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -54,7 +52,9 @@
               "outputHashing": "all"
             },
             "development": {
+              "buildOptimizer": false,
               "optimization": false,
+              "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
               "namedChunks": true,
@@ -72,10 +72,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "gate-pass-ui:build:production"
+              "browserTarget": "gate-pass-ui:build:production"
             },
             "development": {
-              "buildTarget": "gate-pass-ui:build:development"
+              "browserTarget": "gate-pass-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -83,7 +83,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "gate-pass-ui:build"
+            "browserTarget": "gate-pass-ui:build"
           }
         },
         "test": {
