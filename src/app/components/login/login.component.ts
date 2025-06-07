@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";
 import {Router} from "@angular/router";
+import {UserService} from "../../services/user.service";
 
 @Component({
   selector: 'app-login',
@@ -15,8 +16,10 @@ import {Router} from "@angular/router";
 })
 export class LoginComponent implements OnInit {
   registrationForm!: FormGroup;
-  private readonly hardcodedUsername = 'admin@gmail.com';
-  private readonly hardcodedPassword = 'admin123';
+  private readonly hardcodedUsername = 'rav@gmail.com';
+  private readonly hardcodedPassword = 'securePassword123';
+
+  userService=inject(UserService)
 
   constructor(private fb: FormBuilder, private router: Router) {}
 
@@ -37,19 +40,41 @@ export class LoginComponent implements OnInit {
   // }
 
   onSubmit(): void {
-    if (this.registrationForm.valid) {
-      const { email, password } = this.registrationForm.value;
-
-      // Check hardcoded credentials
-      if (email === this.hardcodedUsername && password === this.hardcodedPassword) {
-        console.log('Login successful');
-        this.router.navigate(['/admin']); // Navigate to the admin page
-      } else {
-        this.router.navigate(['/home']);
-        alert('Wellcome to the dashbord..!');
+    this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
+      data => {
+        console.log(data);
+        localStorage.setItem('userData', JSON.stringify(data.data.userName));
+        this.router.navigate(['dashboard']);
       }
-    } else {
-      console.log('Form is invalid');
-    }
+    )
+
+
+
+
+
+
+
+
+    // if (this.registrationForm.valid) {
+    //   const { email, password } = this.registrationForm.value;
+    //
+    //   // Check hardcoded credentials
+    //   if (email === this.hardcodedUsername && password === this.hardcodedPassword) {
+    //     console.log('Login successful');
+    //     this.router.navigate(['/admin']); // Navigate to the admin page
+    //   } else {
+    //     this.router.navigate(['/home']);
+    //     alert('Wellcome to the dashbord..!');
+    //   }
+    // } else {
+    //   console.log('Form is invalid');
+    // }
+  }
+
+  logOut(): void {
+    localStorage.removeItem('userData');
+    localStorage.clear();
+    this.router.navigate(['login']);
+
   }
 }

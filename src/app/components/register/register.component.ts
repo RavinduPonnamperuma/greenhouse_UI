@@ -63,7 +63,7 @@ export class RegisterComponent implements OnInit {
       roleId: 1,
 
     }
-    this.userService.createUser(userDTO).subscribe()
+    // this.userService.createUser(userDTO).subscribe()
     console.log(this.registrationForm.value);
     alert('Registration Successful!');
   }
