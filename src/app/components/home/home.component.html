@@ -1,69 +1,87 @@
-<div class="p-4 sm:ml-64 " >
-  <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700 mt-14 ">
+<div class="p-4 sm:ml-64">
+  <div class="p-6 border border-gray-200 rounded-xl bg-white shadow-lg mt-14">
+    <div class="space-y-8">
+      <!-- Top Section: Stats Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div class="flex items-center justify-between p-6 rounded-xl bg-gradient-to-r from-green-50 to-white shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div>
+            <p class="text-lg font-semibold text-gray-700">Live Plants</p>
+            <p class="text-3xl font-bold text-green-600">1,245</p>
+          </div>
+          <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+        </div>
 
-    <div class="grid grid-cols-3 gap-4 mb-4 ">
-      <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          Humidity %
-        </p>
+        <div class="flex items-center justify-between p-6 rounded-xl bg-gradient-to-r from-red-50 to-white shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div>
+            <p class="text-lg font-semibold text-gray-700">Dead Plants</p>
+            <p class="text-3xl font-bold text-red-600">23</p>
+          </div>
+          <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6"></path>
+          </svg>
+        </div>
 
+        <div class="flex items-center justify-between p-6 rounded-xl bg-gradient-to-r from-blue-50 to-white shadow-md hover:shadow-xl transition-shadow duration-300">
+          <div>
+            <p class="text-lg font-semibold text-gray-700">Total Income</p>
+            <p class="text-3xl font-bold text-blue-600">$12,450</p>
+          </div>
+          <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+          </svg>
+        </div>
       </div>
 
-      <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          Soil Moisture %
-        </p>
+      <!-- Middle Section: Controls -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 px-4 sm:px-16">
+        <label class="inline-flex items-center cursor-pointer group">
+          <span class="text-lg font-medium text-gray-700 mr-3">Fan</span>
+          <input type="checkbox" class="sr-only peer" checked>
+          <div class="relative w-12 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-purple-200 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500 transition-colors duration-300"></div>
+          <span class="ml-2 text-sm text-gray-500 group-hover:text-purple-500">On</span>
+        </label>
+
+        <label class="inline-flex items-center cursor-pointer group">
+          <span class="text-lg font-medium text-gray-700 mr-3">Water</span>
+          <input type="checkbox" class="sr-only peer" checked>
+          <div class="relative w-12 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-yellow-200 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-400 transition-colors duration-300"></div>
+          <span class="ml-2 text-sm text-gray-500 group-hover:text-yellow-500">On</span>
+        </label>
+
+        <label class="inline-flex items-center cursor-pointer group">
+          <span class="text-lg font-medium text-gray-700 mr-3">Fertilizer</span>
+          <input type="checkbox" class="sr-only peer" checked>
+          <div class="relative w-12 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-green-200 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500 transition-colors duration-300"></div>
+          <span class="ml-2 text-sm text-gray-500 group-hover:text-green-500">On</span>
+        </label>
       </div>
 
-      <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-        <p class="text-2xl text-gray-400 dark:text-gray-500">
-          Temperature +.c
-        </p>
+      <!-- Bottom Section: Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="p-6 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow duration-300">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">Realtime Data</h3>
+          <apx-chart
+            #realtimeChart
+            [series]="lineChartOptions.series"
+            [chart]="lineChartOptions.chart"
+            [xaxis]="lineChartOptions.xaxis"
+            [title]="lineChartOptions.title"
+          ></apx-chart>
+        </div>
+        <div class="p-6 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow duration-300">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">Water Level</h3>
+          <apx-chart
+            #waterLevelChart
+            [series]="gaugeChartOptions.series"
+            [chart]="gaugeChartOptions.chart"
+            [labels]="gaugeChartOptions.labels"
+            [title]="gaugeChartOptions.title"
+            [responsive]="gaugeChartOptions.responsive"
+          ></apx-chart>
+        </div>
       </div>
     </div>
-
-
-    <div class="flex flex-row ">
-
-
-    </div>
-
-    <div *ngIf="sensorData; else noData" class=" grid grid-cols-3 gap-4">
-      <div  class="flex items-center justify-center rounded bg-gray-50 h-40 dark:bg-gray-800">
-        {{ sensorData.data.humidity }}
-
-      </div>
-
-      <div class="flex items-center justify-center rounded bg-gray-50 h-40 dark:bg-gray-800">
-        {{ sensorData.data.moisture }}
-      </div>
-      <div class="flex items-center justify-center rounded bg-gray-50 h-40 dark:bg-gray-800">
-        {{ sensorData.data.temperature }}
-      </div>
-
-    </div>
-    <ng-template #noData>
-      <p>No sensor data available.</p>
-    </ng-template>
-
-    <div class="grid grid-cols-3 gap-8 mb-4 mt-10 pl-28">
-      <label class="inline-flex items-center me-5 cursor-pointer">
-        <input type="checkbox" value="off" class="sr-only peer" checked>
-        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-purple-300 dark:peer-focus:ring-purple-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-purple-600 dark:peer-checked:bg-purple-600"></div>
-      </label>
-
-      <label class="inline-flex items-center me-5 cursor-pointer">
-        <input type="checkbox" value="" class="sr-only peer" checked>
-        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-400 dark:peer-checked:bg-yellow-400"></div>
-      </label>
-
-      <label class="inline-flex items-center me-5 cursor-pointer">
-        <input type="checkbox" value="" class="sr-only peer" checked>
-        <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-green-300 dark:peer-focus:ring-green-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 dark:peer-checked:bg-green-600"></div>
-      </label>
-    </div>
-
-
   </div>
-
 </div>
