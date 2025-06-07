@@ -1,5 +1,5 @@
 export enum APIRequestResources {
   AuthService = 'auth',
-  // AuthService = 'auth',
 }
 
+export type APIRequestResource = APIRequestResources.AuthService;
