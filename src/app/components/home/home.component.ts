@@ -3,7 +3,6 @@ import {CommonModule, NgIf} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router, RouterLink} from "@angular/router";
 import {SensorDataService} from "../../services/sensor-data.service";
-import {ChartComponent} from "../chart/chart.component";
 
 @Component({
   selector: 'app-home',
@@ -12,7 +11,6 @@ import {ChartComponent} from "../chart/chart.component";
     ReactiveFormsModule,
     RouterLink,
     CommonModule,
-    ChartComponent
   ],
   templateUrl: './home.component.html',
   standalone: true,
