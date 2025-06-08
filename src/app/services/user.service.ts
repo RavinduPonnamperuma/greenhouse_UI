@@ -1,14 +1,11 @@
-import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders, HttpResponse } from "@angular/common/http";
-import { Observable } from "rxjs";
+import {Injectable} from "@angular/core";
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
+import {Observable} from "rxjs";
 import {APIRequest, APIRequestResources} from "../../core";
 
 
-
-
-
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class UserService extends APIRequest {
 
@@ -26,20 +23,23 @@ export class UserService extends APIRequest {
     });
   }
 
-
+  create(data: any) {
+    return this.post<any>(data, {
+    });
+  }
 
 
   // getUsers(): Observable<HttpResponse<any>> {
-    //     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    //     return this.httpClient.get<any>(`${this.baseUrl}/user`, {
-    //         headers,
-    //         observe: 'response',
-    //     });
-    // }
-    //
-    //
-    // createUser(data: any): Observable<any> {
-    //     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
-    //     return this.httpClient.post(`${this.baseUrl}/user`, data, { headers });
-    // }
+  //     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
+  //     return this.httpClient.get<any>(`${this.baseUrl}/user`, {
+  //         headers,
+  //         observe: 'response',
+  //     });
+  // }
+  //
+  //
+  // createUser(data: any): Observable<any> {
+  //     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
+  //     return this.httpClient.post(`${this.baseUrl}/user`, data, { headers });
+  // }
 }
