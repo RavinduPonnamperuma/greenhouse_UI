@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgIf } from '@angular/common';
 import { UserService } from '../../services/user.service';
+import {NotificationService} from "../Utility/notification/notification.service";
 
 @Component({
   selector: 'app-register',
@@ -15,6 +16,8 @@ export class RegisterComponent implements OnInit {
   submitted = false;
   isSubmitting = false;
   errorMessage: string | null = null;
+
+  notificationService=inject(NotificationService)
 
   constructor(private fb: FormBuilder, private userService: UserService) {}
 
@@ -71,10 +74,9 @@ export class RegisterComponent implements OnInit {
     try {
       this.userService.create(userDTO).subscribe({
         next: (res) => {
-          console.log(res)
+          this.notificationService.showSuccess('New user added Successfully', 3000);
         }
       })
-      alert('Registration Successful!');
       this.registrationForm.reset();
       this.submitted = false;
     } catch (error: any) {
