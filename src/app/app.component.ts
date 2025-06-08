@@ -25,8 +25,7 @@ export class AppComponent  implements OnInit {
     this.router.events.subscribe(() => {
       this.checkLoginStatus();
     });
-    // Test notification on init
-    this.notificationService.showSuccess('App initialized successfully!', 3000);
+
   }
 
   checkLoginStatus() {

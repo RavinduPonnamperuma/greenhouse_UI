@@ -2,7 +2,7 @@
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 50;
+  z-index: 1000; /* Increased to ensure notifications are on top */
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -97,9 +97,6 @@
   .warning-icon {
     background-color: #f97316;
     color: #fed7aa;
-  }
-  .notification-toast {
-    background-color: transparent !important;
   }
   .close-button:hover {
     background-color: #374151;

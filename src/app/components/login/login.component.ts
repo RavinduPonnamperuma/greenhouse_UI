@@ -45,8 +45,7 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
       data => {
-        // this.notificationService.set({ type: 'error', message: 'Failed to fetch sales order data.' });
-        this.notificationService.showError('Action failed!', 3000);
+        this.notificationService.showSuccess('Login Successfully!', 3000);
         console.log(data);
         localStorage.setItem('userData', JSON.stringify(data.data.userName));
         this.router.navigate(['dashboard']);
