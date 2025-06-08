@@ -31,7 +31,6 @@ export class AppComponent  implements OnInit {
   checkLoginStatus() {
     const userData = localStorage.getItem('userData');
     const currentRoute = this.router.url;
-    console.log('Current route:', currentRoute);
     this.isLoggedIn = !!userData && currentRoute !== '/login';
   }
 

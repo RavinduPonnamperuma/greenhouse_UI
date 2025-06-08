@@ -31,7 +31,7 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('Notification component initialized'); // Debug log
+
   }
 
   trackByFn(index: number, notification: ToastNotification): string {

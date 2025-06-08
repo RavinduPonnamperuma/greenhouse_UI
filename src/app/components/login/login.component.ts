@@ -46,7 +46,6 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
       data => {
         this.notificationService.showSuccess('Login Successfully!', 3000);
-        console.log(data);
         localStorage.setItem('userData', JSON.stringify(data.data.userName));
         this.router.navigate(['dashboard']);
       }

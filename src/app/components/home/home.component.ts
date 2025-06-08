@@ -165,8 +165,6 @@ export class HomeComponent implements OnInit {
       // Update the chart display
       this.realtimeChart?.updateSeries(this.lineChartOptions.series);
 
-      console.log('Bucketed Humidity Values:', this.humidityValues);
-      console.log('Processed Sensor Data:', this.sensorDataDTOS);
     });
 
     // Existing intervals for random data update on temperature and moisture if you want to keep those

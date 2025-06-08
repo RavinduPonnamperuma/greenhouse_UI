@@ -22,8 +22,6 @@ export class NotificationService {
   private addNotification(notification: ToastNotification): void {
     const currentNotifications = this.notificationsSubject.value;
     this.notificationsSubject.next([...currentNotifications, notification]);
-    console.log('Added notification:', notification); // Debug log
-
     if (notification.duration !== 0) {
       setTimeout(() => {
         this.removeNotification(notification.id);
@@ -75,11 +73,9 @@ export class NotificationService {
     const currentNotifications = this.notificationsSubject.value;
     const filteredNotifications = currentNotifications.filter(n => n.id !== id);
     this.notificationsSubject.next(filteredNotifications);
-    console.log('Removed notification:', id); // Debug log
   }
 
   clearAll(): void {
     this.notificationsSubject.next([]);
-    console.log('Cleared all notifications'); // Debug log
   }
 }
