@@ -4,3 +4,8 @@ export interface SensorDataDTO {
   value: number;
   createdAt: string;
 }
+
+
+export interface TemperatureDTO extends SensorDataDTO {}
+export interface HumidityDTO extends SensorDataDTO {}
+export interface MoistureDTO extends SensorDataDTO {}
