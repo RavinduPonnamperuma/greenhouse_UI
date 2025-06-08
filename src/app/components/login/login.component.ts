@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {NgIf} from "@angular/common";
 import {Router} from "@angular/router";
 import {UserService} from "../../services/user.service";
+import {NotificationService} from "../Utility/notification/notification.service";
 
 @Component({
   selector: 'app-login',
@@ -20,6 +21,8 @@ export class LoginComponent implements OnInit {
   private readonly hardcodedPassword = 'securePassword123';
 
   userService=inject(UserService)
+  notificationService=inject(NotificationService)
+
 
   constructor(private fb: FormBuilder, private router: Router) {}
 
@@ -42,6 +45,8 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
       data => {
+        // this.notificationService.set({ type: 'error', message: 'Failed to fetch sales order data.' });
+        this.notificationService.showError('Action failed!', 3000);
         console.log(data);
         localStorage.setItem('userData', JSON.stringify(data.data.userName));
         this.router.navigate(['dashboard']);

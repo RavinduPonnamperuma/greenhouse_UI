@@ -1,7 +1,5 @@
-
-  <main class="main-content" role="main">
-    <router-outlet></router-outlet>
-    <app-side-nav></app-side-nav>
-  </main>
-
-
+<main class="main-content" role="main">
+  <app-notification></app-notification>
+  <router-outlet></router-outlet>
+  <app-side-nav *ngIf="isLoggedIn"></app-side-nav>
+</main>

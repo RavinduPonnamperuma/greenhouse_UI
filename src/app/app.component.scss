@@ -38,3 +38,25 @@ $header-height: 4rem;
     }
   }
 }
+.main-content {
+  position: relative;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.test-notification-btn {
+  position: fixed;
+  bottom: 1rem;
+  left: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.test-notification-btn:hover {
+  background-color: #1e40af;
+}
