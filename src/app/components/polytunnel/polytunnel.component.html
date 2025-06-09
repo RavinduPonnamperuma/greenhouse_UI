@@ -1,0 +1,195 @@
+<div class="min-h-screen bg-white flex justify-center items-start mt-5 p-4">
+  <div class="flex flex-col w-full max-w-4xl mt-5">
+    <!-- Form Card -->
+
+    <form [formGroup]="plotForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
+      <h3>Add new Polytunnel</h3>
+      <div class="grid grid-cols-3 gap-4">
+        <!-- Code -->
+
+        <div>
+          <label for="code" class="block mb-2 text-sm font-medium text-gray-900">
+            Plot Code
+          </label>
+          <input
+            type="text"
+            id="code"
+            formControlName="code"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plotForm.get('code')?.touched && plotForm.get('code')?.invalid" class="text-red-500 text-sm mt-1">
+            Plot code is required
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div>
+          <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
+            Status
+          </label>
+          <input
+            type="text"
+            id="status"
+            formControlName="status"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plotForm.get('status')?.touched && plotForm.get('status')?.invalid" class="text-red-500 text-sm mt-1">
+            Status is required
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div>
+          <label for="location" class="block mb-2 text-sm font-medium text-gray-900">
+            Location
+          </label>
+          <input
+            type="text"
+            id="location"
+            formControlName="location"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plotForm.get('location')?.touched && plotForm.get('location')?.invalid" class="text-red-500 text-sm mt-1">
+            Location is required
+          </div>
+        </div>
+
+        <!-- Size -->
+        <div>
+          <label for="size" class="block mb-2 text-sm font-medium text-gray-900">
+            Size
+          </label>
+          <input
+            type="text"
+            id="size"
+            formControlName="size"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plotForm.get('size')?.touched && plotForm.get('size')?.invalid" class="text-red-500 text-sm mt-1">
+            Size is required
+          </div>
+        </div>
+
+        <!-- Length -->
+        <div>
+          <label for="length" class="block mb-2 text-sm font-medium text-gray-900">
+            Length
+          </label>
+          <input
+            type="number"
+            id="length"
+            formControlName="length"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plotForm.get('length')?.touched && plotForm.get('length')?.invalid" class="text-red-500 text-sm mt-1">
+            Length must be a positive number
+          </div>
+        </div>
+
+        <!-- Width -->
+        <div>
+          <label for="width" class="block mb-2 text-sm font-medium text-gray-900">
+            Width
+          </label>
+          <input
+            type="number"
+            id="width"
+            formControlName="width"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plotForm.get('width')?.touched && plotForm.get('width')?.invalid" class="text-red-500 text-sm mt-1">
+            Width must be a positive number
+          </div>
+        </div>
+
+        <!-- Number of Plants -->
+        <div>
+          <label for="numberOfPlants" class="block mb-2 text-sm font-medium text-gray-900">
+            Number of Plants
+          </label>
+          <input
+            type="number"
+            id="numberOfPlants"
+            formControlName="numberOfPlants"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plotForm.get('numberOfPlants')?.touched && plotForm.get('numberOfPlants')?.invalid" class="text-red-500 text-sm mt-1">
+            Number of plants must be a positive number
+          </div>
+        </div>
+
+        <!-- User ID -->
+        <div>
+          <label for="userId" class="block mb-2 text-sm font-medium text-gray-900">
+            User
+          </label>
+          <select
+            id="userId"
+            formControlName="userId"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          >
+            <option value="" disabled>Select a user</option>
+            <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+          </select>
+          <div *ngIf="plotForm.get('userId')?.touched && plotForm.get('userId')?.invalid" class="text-red-500 text-sm mt-1">
+            Please select a user
+          </div>
+        </div>
+
+        <!-- Device ID -->
+        <div>
+          <label for="deviceId" class="block mb-2 text-sm font-medium text-gray-900">
+            Device
+          </label>
+          <select
+            id="deviceId"
+            formControlName="deviceId"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          >
+            <option value="" disabled>Select a device</option>
+            <option *ngFor="let device of devices" [value]="device.id">{{ device.name }}</option>
+          </select>
+          <div *ngIf="plotForm.get('deviceId')?.touched && plotForm.get('deviceId')?.invalid" class="text-red-500 text-sm mt-1">
+            Please select a device
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-6">
+        <button
+          type="submit"
+          [disabled]="plotForm.invalid"
+          class="w-full bg-blue-500 text-white p-2.5 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+
+    <!-- New Card with Table -->
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Additional Information</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300">
+          <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Column 1</th>
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Column 2</th>
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Column 3</th>
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Column 4</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr  class="even:bg-gray-50">
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"> row.col1 </td>
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"> row.col2 </td>
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"> row.col3 </td>
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"> row.col4 </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

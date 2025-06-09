@@ -38,7 +38,7 @@ export class SideNavComponent {
   navigationItems: NavItem[] = [
     {label: 'Dashboard', route: '/dashboard'},
     {label: 'Profile', route: '/profile'},
-    {label: 'Tunnel', route: '/Tunnel'},
+    {label: 'Tunnel', route: '/polytunnel'},
     {label: 'Plant', route: '/plant'},
     {label: 'Schedule', route: '/schedule'},
     {label: 'Irrigation', route: '/Irrigation'},
