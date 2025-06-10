@@ -27,14 +27,20 @@ export const routes: Routes = [
     path: 'admin',
     loadComponent: () => import('./components/index').then(com => com.AdminComponent),
     canActivate: [AuthGuard]
-  },  {
+  }, {
     path: 'polytunnel',
     loadComponent: () => import('./components/index').then(com => com.PolytunnelComponent),
     canActivate: [AuthGuard]
   }
-  ,  {
+  ,
+  {
     path: 'plant',
     loadComponent: () => import('./components/index').then(com => com.PlantComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'harvest',
+    loadComponent: () => import('./components/index').then(com => com.HarvestComponent),
     canActivate: [AuthGuard]
   }
 ];
