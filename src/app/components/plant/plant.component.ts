@@ -17,6 +17,8 @@ import {ChartComponent} from "ng-apexcharts";
 })
 export class PlantComponent implements OnInit {
   plantForm: FormGroup;
+  isSubmitting = false;
+  errorMessage: string | null = null;
   polytunnels = [
     { id: 1, name: 'Polytunnel 1' },
     { id: 2, name: 'Polytunnel 2' },
@@ -31,21 +33,41 @@ export class PlantComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.plantForm = this.fb.group({
-      plantName: ['Tomato', Validators.required],
-      status: ['growing', Validators.required],
-      cost: [100, [Validators.required, Validators.min(0)]],
-      harvestTime: [60, [Validators.required, Validators.min(0)]],
-      startDate: ['2025-06-01', Validators.required],
-      endDate: ['2025-08-01', Validators.required],
-      polytunnelId: [1, Validators.required],
+      plantName: ['', [Validators.required, Validators.minLength(2)]],
+      status: ['', [Validators.required, Validators.minLength(2)]],
+      cost: ['', [Validators.required, Validators.min(0)]],
+      harvestTime: ['', [Validators.required, Validators.min(0)]],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      polytunnelId: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {}
 
+  get f() {
+    return this.plantForm.controls;
+  }
+
+  isFieldInvalid(field: string): boolean {
+    const control = this.plantForm.get(field);
+    return !!control && control.invalid && (control.dirty || control.touched);
+  }
+
   onSubmit(): void {
-    if (this.plantForm.valid) {
-      console.log('Form submitted:', this.plantForm.value);
+    if (this.plantForm.invalid) {
+      this.plantForm.markAllAsTouched();
+      return;
     }
+
+    this.isSubmitting = true;
+    this.errorMessage = null;
+
+    // Simulate form submission
+    setTimeout(() => {
+      console.log('Form submitted:', this.plantForm.value);
+      this.isSubmitting = false;
+      // Reset form or handle success as needed
+    }, 1000);
   }
 }

@@ -13,11 +13,12 @@
               type="text"
               id="plantName"
               formControlName="plantName"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('plantName') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="Tomato"
             />
-            <div *ngIf="plantForm.get('plantName')?.touched && plantForm.get('plantName')?.invalid"
-                 class="text-red-500 text-sm mt-1">
-              Plant name is required
+            <div *ngIf="isFieldInvalid('plantName')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['plantName'].errors?.['required']">Plant name is required</div>
+              <div *ngIf="f['plantName'].errors?.['minlength']">Plant name must be at least 2 characters</div>
             </div>
           </div>
 
@@ -30,11 +31,12 @@
               type="text"
               id="status"
               formControlName="status"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="Growing"
             />
-            <div *ngIf="plantForm.get('status')?.touched && plantForm.get('status')?.invalid"
-                 class="text-red-500 text-sm mt-1">
-              Status is required
+            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['status'].errors?.['required']">Status is required</div>
+              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>
             </div>
           </div>
 
@@ -47,11 +49,12 @@
               type="number"
               id="cost"
               formControlName="cost"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('cost') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="100"
             />
-            <div *ngIf="plantForm.get('cost')?.touched && plantForm.get('cost')?.invalid"
-                 class="text-red-500 text-sm mt-1">
-              Cost must be a positive number
+            <div *ngIf="isFieldInvalid('cost')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['cost'].errors?.['required']">Cost is required</div>
+              <div *ngIf="f['cost'].errors?.['min']">Cost must be a positive number</div>
             </div>
           </div>
 
@@ -64,11 +67,12 @@
               type="number"
               id="harvestTime"
               formControlName="harvestTime"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('harvestTime') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="50"
             />
-            <div *ngIf="plantForm.get('harvestTime')?.touched && plantForm.get('harvestTime')?.invalid"
-                 class="text-red-500 text-sm mt-1">
-              Harvest time must be a positive number
+            <div *ngIf="isFieldInvalid('harvestTime')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['harvestTime'].errors?.['required']">Harvest time is required</div>
+              <div *ngIf="f['harvestTime'].errors?.['min']">Harvest time must be a positive number</div>
             </div>
           </div>
 
@@ -81,10 +85,9 @@
               type="date"
               id="startDate"
               formControlName="startDate"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('startDate') ? 'border-red-500' : 'border-gray-300' }}"
             />
-            <div *ngIf="plantForm.get('startDate')?.touched && plantForm.get('startDate')?.invalid"
-                 class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('startDate')" class="text-red-500 text-sm mt-1">
               Start date is required
             </div>
           </div>
@@ -98,10 +101,9 @@
               type="date"
               id="endDate"
               formControlName="endDate"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('endDate') ? 'border-red-500' : 'border-gray-300' }}"
             />
-            <div *ngIf="plantForm.get('endDate')?.touched && plantForm.get('endDate')?.invalid"
-                 class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('endDate')" class="text-red-500 text-sm mt-1">
               End date is required
             </div>
           </div>
@@ -114,31 +116,48 @@
             <select
               id="polytunnelId"
               formControlName="polytunnelId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('polytunnelId') ? 'border-red-500' : 'border-gray-300' }}"
             >
               <option value="" disabled>Select a polytunnel</option>
               <option *ngFor="let polytunnel of polytunnels" [value]="polytunnel.id">{{ polytunnel.name }}</option>
             </select>
-            <div *ngIf="plantForm.get('polytunnelId')?.touched && plantForm.get('polytunnelId')?.invalid"
-                 class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('polytunnelId')" class="text-red-500 text-sm mt-1">
               Please select a polytunnel
             </div>
           </div>
+
+          <!-- Clear Button -->
+          <div class="mt-5 ">
+            <label for="polytunnelId" class="block mb-2 text-sm font-medium text-gray-900">
+            </label>
+            <button
+              type="reset"
+              class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
+            >
+              Clear
+            </button>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="mt-7 ">
+
+            <button
+              type="submit"
+              [disabled]="isSubmitting"
+              class="w-full p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
+            >
+              {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+            </button>
+          </div>
         </div>
 
-        <!-- Submit Button -->
-        <div class="mt-6">
-          <button
-            type="submit"
-            [disabled]="plantForm.invalid"
-            class="w-full bg-blue-500 text-white p-2.5 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
-          >
-            Submit
-          </button>
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-4">
+          {{ errorMessage }}
         </div>
       </form>
 
-      <!-- New Card with Table -->
+      <!-- Table Card -->
       <div class="bg-white p-6 rounded-lg shadow-lg w-full">
         <h2 class="text-lg font-medium text-gray-900 mb-4">Plant Information</h2>
         <div class="overflow-x-auto">
@@ -162,8 +181,6 @@
           </table>
         </div>
       </div>
-
-
     </div>
   </div>
 </div>
