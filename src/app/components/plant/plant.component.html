@@ -168,17 +168,19 @@
             <thead>
             <tr class="bg-gray-50">
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Plant Name</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Planted Date</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Status</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Cost</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Harvest Time</th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+            <tr *ngFor="let row of plantDtos" class="even:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.plantName }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.status }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.cost }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestTime }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.startDate }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"><app-status-badges [statusValue]="row.status"></app-status-badges></td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">Rs:{{ row.cost }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestTime }} Days</td>
             </tr>
             </tbody>
           </table>

@@ -6,6 +6,8 @@ import {NotificationService} from "../Utility/notification/notification.service"
 import {PolytunnelService} from "../../services/polytunnel.service";
 import {PlantTrayDTO} from "../../interfaces/polytunnel.interface";
 import {PlantService} from "../../services/plant.service";
+import {PlantDto} from "../../interfaces/plant.interface";
+import {StatusBadgesComponent} from "../Utility/status-badges/status-badges.component";
 
 @Component({
   selector: 'app-plant',
@@ -14,7 +16,8 @@ import {PlantService} from "../../services/plant.service";
     ReactiveFormsModule,
     NgIf,
     NgForOf,
-    ChartComponent
+    ChartComponent,
+    StatusBadgesComponent
   ],
   templateUrl: './plant.component.html',
   styleUrl: './plant.component.scss'
@@ -25,6 +28,7 @@ export class PlantComponent implements OnInit {
   errorMessage: string | null = null;
 
   polytunnel:PlantTrayDTO[]=[]
+  plantDtos:PlantDto[]=[]
 
   notificationService=inject(NotificationService)
   polytunnelService=inject(PolytunnelService)
@@ -42,7 +46,8 @@ export class PlantComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder) {
-   this.getAll();
+   this.tunnelGetAll();
+    this.plantGetAll();
     this.plantForm = this.fb.group({
       plantName: ['', [Validators.required, Validators.minLength(2)]],
       status: 'active',
@@ -81,7 +86,7 @@ export class PlantComponent implements OnInit {
           this.notificationService.showSuccess('New plant added successfully', 3000);
           this.isSubmitting = false;
           console.log(data);
-          this.getAll()
+          this.plantGetAll();
         }
       })
 
@@ -89,10 +94,19 @@ export class PlantComponent implements OnInit {
     }, 1000);
   }
 
-  getAll(){
+  tunnelGetAll(){
     this.polytunnelService.getAll().subscribe({
       next: data => {
         this.polytunnel=data.data
+      }
+    })
+  }
+
+
+  plantGetAll(){
+    this.plantService.getAll().subscribe({
+      next: data => {
+        this.plantDtos=data.data
       }
     })
   }
