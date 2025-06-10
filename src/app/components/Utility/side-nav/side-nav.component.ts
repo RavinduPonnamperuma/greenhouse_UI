@@ -40,10 +40,13 @@ export class SideNavComponent implements OnInit {
     { label: 'Sign Up', route: '/register' },
     { label: 'Sign out', route: '/logout' }
   ];
+  userName: string | null =''
 
   constructor(private router: Router) {}
 
   ngOnInit() {
+    this.userName = JSON.parse(<string>localStorage.getItem('userData'));
+    console.log(this.userName);
     this.checkLoginStatus();
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
