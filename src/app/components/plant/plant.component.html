@@ -26,22 +26,22 @@
           </div>
 
           <!-- Status -->
-          <div>
-            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
-              Status
-            </label>
-            <input
-              type="text"
-              id="status"
-              formControlName="status"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"
-              placeholder="Growing"
-            />
-            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['status'].errors?.['required']">Status is required</div>
-              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>
-            </div>
-          </div>
+<!--          <div>-->
+<!--            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">-->
+<!--              Status-->
+<!--            </label>-->
+<!--            <input-->
+<!--              type="text"-->
+<!--              id="status"-->
+<!--              formControlName="status"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"-->
+<!--              placeholder="Growing"-->
+<!--            />-->
+<!--            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">-->
+<!--              <div *ngIf="f['status'].errors?.['required']">Status is required</div>-->
+<!--              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>-->
+<!--            </div>-->
+<!--          </div>-->
 
           <!-- Cost -->
           <div>
@@ -122,7 +122,7 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('polytunnelId') ? 'border-red-500' : 'border-gray-300' }}"
             >
               <option value="" disabled>Select a polytunnel</option>
-              <option *ngFor="let polytunnel of polytunnels" [value]="polytunnel.id">{{ polytunnel.name }}</option>
+              <option *ngFor="let polytunnel of polytunnel" [value]="polytunnel.id">{{ polytunnel.code }}-{{ polytunnel.location}}</option>
             </select>
             <div *ngIf="isFieldInvalid('polytunnelId')" class="text-red-500 text-sm mt-1">
               Please select a polytunnel

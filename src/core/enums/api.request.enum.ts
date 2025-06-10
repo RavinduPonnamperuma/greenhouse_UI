@@ -7,6 +7,7 @@ export enum APIRequestResources {
   UserService = 'user',
   DeviceService = 'device',
   PolytunnelService = 'polytunnel',
+  PlantService = 'plant',
 }
 
 export type APIRequestResource =
@@ -14,4 +15,5 @@ export type APIRequestResource =
   APIRequestResources.SensorService |
   APIRequestResources.DeviceService |
   APIRequestResources.UserService|
-  APIRequestResources.PolytunnelService ;
+  APIRequestResources.PolytunnelService|
+  APIRequestResources.PlantService;

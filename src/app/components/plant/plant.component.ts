@@ -1,7 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
 import {ChartComponent} from "ng-apexcharts";
+import {NotificationService} from "../Utility/notification/notification.service";
+import {PolytunnelService} from "../../services/polytunnel.service";
+import {PlantTrayDTO} from "../../interfaces/polytunnel.interface";
+import {PlantService} from "../../services/plant.service";
 
 @Component({
   selector: 'app-plant',
@@ -19,6 +23,12 @@ export class PlantComponent implements OnInit {
   plantForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
+
+  polytunnel:PlantTrayDTO[]=[]
+
+  notificationService=inject(NotificationService)
+  polytunnelService=inject(PolytunnelService)
+  plantService=inject(PlantService)
   polytunnels = [
     { id: 1, name: 'Polytunnel 1' },
     { id: 2, name: 'Polytunnel 2' },
@@ -32,9 +42,10 @@ export class PlantComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder) {
+   this.getAll();
     this.plantForm = this.fb.group({
       plantName: ['', [Validators.required, Validators.minLength(2)]],
-      status: ['', [Validators.required, Validators.minLength(2)]],
+      status: 'active',
       cost: ['', [Validators.required, Validators.min(0)]],
       harvestTime: ['', [Validators.required, Validators.min(0)]],
       startDate: ['', Validators.required],
@@ -62,12 +73,27 @@ export class PlantComponent implements OnInit {
 
     this.isSubmitting = true;
     this.errorMessage = null;
-
-    // Simulate form submission
     setTimeout(() => {
-      console.log('Form submitted:', this.plantForm.value);
-      this.isSubmitting = false;
+      const formValue = this.plantForm.value;
+      formValue.polytunnelId = +formValue.polytunnelId;
+      this.plantService.createPlant(this.plantForm.value).subscribe({
+        next: data => {
+          this.notificationService.showSuccess('New plant added successfully', 3000);
+          this.isSubmitting = false;
+          console.log(data);
+          this.getAll()
+        }
+      })
+
       // Reset form or handle success as needed
     }, 1000);
+  }
+
+  getAll(){
+    this.polytunnelService.getAll().subscribe({
+      next: data => {
+        this.polytunnel=data.data
+      }
+    })
   }
 }
