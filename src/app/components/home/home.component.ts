@@ -144,7 +144,7 @@ export class HomeComponent implements OnInit {
   humidities: { timestamp: string; value: number }[] = [];
   moistures: { timestamp: string; value: number }[] = [];
 
-  //get data
+  //get sensor data
   fetchSensorData() {
     this.sensorDataService.getSensorById('all').subscribe({
       next: (data: any) => {

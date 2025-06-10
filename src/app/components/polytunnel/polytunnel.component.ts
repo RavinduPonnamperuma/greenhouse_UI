@@ -4,6 +4,7 @@ import {NgForOf, NgIf} from "@angular/common";
 import {DeviceService} from "../../services/device.service";
 import {DeviceDTO} from "../../interfaces/device.interface";
 import {NotificationService} from "../Utility/notification/notification.service";
+import {PolytunnelService} from "../../services/polytunnel.service";
 
 @Component({
   selector: 'app-polytunnel',
@@ -23,6 +24,7 @@ export class PolytunnelComponent implements OnInit {
 
   deviceService=inject(DeviceService)
   notificationService=inject(NotificationService)
+  polytunnelService=inject(PolytunnelService)
 
   getAllDevices(): void {
     this.deviceService.getAll().subscribe({
@@ -98,8 +100,13 @@ export class PolytunnelComponent implements OnInit {
       formValue.deviceId = +formValue.deviceId;
       formValue.userId = +formValue.userId;
       formValue.status = 'active';
-      this.isSubmitting = false;
-      this.notificationService.showSuccess('New poly tunnel added successfully', 3000);
+      this.polytunnelService.create(this.plotForm.value).subscribe({
+        next: data => {
+          this.notificationService.showSuccess('New poly tunnel added successfully', 3000);
+          this.isSubmitting = false;
+          console.log(data);
+        }
+      })
 
     }, 1000);
   }

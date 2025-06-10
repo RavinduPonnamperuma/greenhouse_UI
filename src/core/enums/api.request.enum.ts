@@ -1,14 +1,17 @@
 import {DeviceService} from "../../app/services/device.service";
 
+
 export enum APIRequestResources {
   AuthService = 'auth',
   SensorService = 'sensor',
   UserService = 'user',
   DeviceService = 'device',
+  PolytunnelService = 'polytunnel',
 }
 
 export type APIRequestResource =
   APIRequestResources.AuthService |
   APIRequestResources.SensorService |
   APIRequestResources.DeviceService |
-  APIRequestResources.UserService;
+  APIRequestResources.UserService|
+  APIRequestResources.PolytunnelService ;
