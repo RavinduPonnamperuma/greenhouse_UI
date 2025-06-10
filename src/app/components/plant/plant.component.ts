@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
+import {ChartComponent} from "ng-apexcharts";
 
 @Component({
   selector: 'app-plant',
@@ -8,7 +9,8 @@ import {NgForOf, NgIf} from "@angular/common";
   imports: [
     ReactiveFormsModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    ChartComponent
   ],
   templateUrl: './plant.component.html',
   styleUrl: './plant.component.scss'
