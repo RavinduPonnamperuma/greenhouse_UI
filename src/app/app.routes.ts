@@ -43,4 +43,10 @@ export const routes: Routes = [
     loadComponent: () => import('./components/index').then(com => com.HarvestComponent),
     canActivate: [AuthGuard]
   }
+  , {
+    path: 'irrigation',
+    loadComponent: () => import('./components/index').then(com => com.IrrigationComponent),
+    canActivate: [AuthGuard]
+  }
+
 ];
