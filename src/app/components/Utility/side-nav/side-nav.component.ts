@@ -33,7 +33,7 @@ export class SideNavComponent implements OnInit {
     { label: 'Tunnel', route: '/polytunnel' },
     { label: 'Plant', route: '/plant' },
     { label: 'Schedule', route: '/schedule' },
-    { label: 'Irrigation', route: '/Irrigation' },
+    { label: 'Irrigation', route: '/irrigation' },
     { label: 'Harvest', route: '/harvest' },
     { label: 'Reports', route: '/report' },
     { label: 'Alerts', route: '/alerts' },
