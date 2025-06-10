@@ -17,8 +17,8 @@ import {NotificationService} from "../Utility/notification/notification.service"
 })
 export class LoginComponent implements OnInit {
   registrationForm!: FormGroup;
-  private readonly hardcodedUsername = 'rav@gmail.com';
-  private readonly hardcodedPassword = 'securePassword123';
+  // private readonly hardcodedUsername = '';
+  // private readonly hardcodedPassword = '';
 
   userService=inject(UserService)
   notificationService=inject(NotificationService)
@@ -36,7 +36,9 @@ export class LoginComponent implements OnInit {
 
   onSubmit(): void {
     // if (this.registrationForm.valid) {
-      this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
+    const formValue = this.registrationForm.value;
+    formValue.polytunnelId = +formValue.polytunnelId;
+      this.userService.login(formValue.email,formValue.password).subscribe(
         data => {
           this.notificationService.showSuccess('Login Successfully!', 3000);
           localStorage.setItem('userData', JSON.stringify(data.data.userName));
