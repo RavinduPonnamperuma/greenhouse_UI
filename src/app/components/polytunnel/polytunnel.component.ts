@@ -1,6 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
+import {DeviceService} from "../../services/device.service";
+import {DeviceDTO} from "../../interfaces/device.interface";
 
 @Component({
   selector: 'app-polytunnel',
@@ -14,14 +16,34 @@ import {NgForOf, NgIf} from "@angular/common";
   styleUrl: './polytunnel.component.scss'
 })
 export class PolytunnelComponent implements OnInit {
+
+  deviceDTOS:DeviceDTO[]=[]
+
+
+  deviceService=inject(DeviceService)
+
+  getAllDevices(): void {
+    this.deviceService.getAll().subscribe({
+      next: data => {
+        this.deviceDTOS=data.data
+        console.log(data.data)
+      }
+    })
+  }
+
+  userId=0
+
+
+
+  ngOnInit(): void {
+    // this.getAllDevices()
+    // this.userId = JSON.parse(<string>localStorage.getItem('userId'));
+    // console.log(this.userId);
+  }
+
   plotForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
-  users = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Jane Smith' },
-    { id: 3, name: 'Bob Johnson' },
-  ];
   devices = [
     { id: 1, name: 'Device 001' },
     { id: 2, name: 'Device 002' },
@@ -35,6 +57,8 @@ export class PolytunnelComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder) {
+    this.getAllDevices();
+    this.userId = JSON.parse(<string>localStorage.getItem('userId'));
     this.plotForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(3)]],
       status: ['', [Validators.required, Validators.minLength(2)]],
@@ -43,12 +67,11 @@ export class PolytunnelComponent implements OnInit {
       length: ['', [Validators.required, Validators.min(0)]],
       width: ['', [Validators.required, Validators.min(0)]],
       numberOfPlants: ['', [Validators.required, Validators.min(0)]],
-      userId: ['', Validators.required],
       deviceId: ['', Validators.required],
+      userId: this.userId,
     });
   }
 
-  ngOnInit(): void {}
 
   get f() {
     return this.plotForm.controls;
@@ -71,6 +94,7 @@ export class PolytunnelComponent implements OnInit {
     // Simulate form submission
     setTimeout(() => {
       console.log('Form submitted:', this.plotForm.value);
+      console.log(this.plotForm.value);
       this.isSubmitting = false;
       // Reset form or handle success as needed
     }, 1000);

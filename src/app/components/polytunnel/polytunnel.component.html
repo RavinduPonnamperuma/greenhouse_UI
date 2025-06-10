@@ -133,22 +133,6 @@
           </div>
 
           <!-- User ID -->
-          <div>
-            <label for="userId" class="block mb-2 text-sm font-medium text-gray-900">
-              User
-            </label>
-            <select
-              id="userId"
-              formControlName="userId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('userId') ? 'border-red-500' : 'border-gray-300' }}"
-            >
-              <option value="" disabled>Select a user</option>
-              <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
-            </select>
-            <div *ngIf="isFieldInvalid('userId')" class="text-red-500 text-sm mt-1">
-              Please select a user
-            </div>
-          </div>
 
           <!-- Device ID -->
           <div>
@@ -161,7 +145,7 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('deviceId') ? 'border-red-500' : 'border-gray-300' }}"
             >
               <option value="" disabled>Select a device</option>
-              <option *ngFor="let device of devices" [value]="device.id">{{ device.name }}</option>
+              <option *ngFor="let device of deviceDTOS" [value]="device.id">{{ device.code }}</option>
             </select>
             <div *ngIf="isFieldInvalid('deviceId')" class="text-red-500 text-sm mt-1">
               Please select a device

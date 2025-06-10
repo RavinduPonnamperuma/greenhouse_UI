@@ -5,6 +5,7 @@ import {catchError} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {APIRequest, APIRequestResources} from "../../core";
 import {SensorDataDTO} from "../interfaces/sensor-data.interface";
+import {DeviceDTO} from "../interfaces/device.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -15,11 +16,8 @@ export class DeviceService extends APIRequest {
     super(http, APIRequestResources.DeviceService)
   }
 
-  public getSensorById(topics: string): Observable<any> {
-    return this.get<SensorDataDTO>({
-      params: {
-        topic: topics,
-      },
+  public getAll(): Observable<any> {
+    return this.get<DeviceDTO>({
     });
   }
 
