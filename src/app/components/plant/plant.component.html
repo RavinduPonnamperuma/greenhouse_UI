@@ -1,0 +1,158 @@
+<div class="min-h-screen bg-white flex justify-center items-start p-4">
+  <div class="flex flex-col w-full max-w-4xl mt-4">
+    <!-- Form Card -->
+    <form [formGroup]="plantForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
+      <div class="grid grid-cols-3 gap-4">
+        <!-- Plant Name -->
+        <div>
+          <label for="plantName" class="block mb-2 text-sm font-medium text-gray-900">
+            Plant Name
+          </label>
+          <input
+            type="text"
+            id="plantName"
+            formControlName="plantName"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plantForm.get('plantName')?.touched && plantForm.get('plantName')?.invalid" class="text-red-500 text-sm mt-1">
+            Plant name is required
+          </div>
+        </div>
+
+        <!-- Status -->
+        <div>
+          <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
+            Status
+          </label>
+          <input
+            type="text"
+            id="status"
+            formControlName="status"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plantForm.get('status')?.touched && plantForm.get('status')?.invalid" class="text-red-500 text-sm mt-1">
+            Status is required
+          </div>
+        </div>
+
+        <!-- Cost -->
+        <div>
+          <label for="cost" class="block mb-2 text-sm font-medium text-gray-900">
+            Cost
+          </label>
+          <input
+            type="number"
+            id="cost"
+            formControlName="cost"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plantForm.get('cost')?.touched && plantForm.get('cost')?.invalid" class="text-red-500 text-sm mt-1">
+            Cost must be a positive number
+          </div>
+        </div>
+
+        <!-- Harvest Time -->
+        <div>
+          <label for="harvestTime" class="block mb-2 text-sm font-medium text-gray-900">
+            Harvest Time (days)
+          </label>
+          <input
+            type="number"
+            id="harvestTime"
+            formControlName="harvestTime"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plantForm.get('harvestTime')?.touched && plantForm.get('harvestTime')?.invalid" class="text-red-500 text-sm mt-1">
+            Harvest time must be a positive number
+          </div>
+        </div>
+
+        <!-- Start Date -->
+        <div>
+          <label for="startDate" class="block mb-2 text-sm font-medium text-gray-900">
+            Start Date
+          </label>
+          <input
+            type="date"
+            id="startDate"
+            formControlName="startDate"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plantForm.get('startDate')?.touched && plantForm.get('startDate')?.invalid" class="text-red-500 text-sm mt-1">
+            Start date is required
+          </div>
+        </div>
+
+        <!-- End Date -->
+        <div>
+          <label for="endDate" class="block mb-2 text-sm font-medium text-gray-900">
+            End Date
+          </label>
+          <input
+            type="date"
+            id="endDate"
+            formControlName="endDate"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          />
+          <div *ngIf="plantForm.get('endDate')?.touched && plantForm.get('endDate')?.invalid" class="text-red-500 text-sm mt-1">
+            End date is required
+          </div>
+        </div>
+
+        <!-- Polytunnel ID -->
+        <div>
+          <label for="polytunnelId" class="block mb-2 text-sm font-medium text-gray-900">
+            Polytunnel
+          </label>
+          <select
+            id="polytunnelId"
+            formControlName="polytunnelId"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          >
+            <option value="" disabled>Select a polytunnel</option>
+            <option *ngFor="let polytunnel of polytunnels" [value]="polytunnel.id">{{ polytunnel.name }}</option>
+          </select>
+          <div *ngIf="plantForm.get('polytunnelId')?.touched && plantForm.get('polytunnelId')?.invalid" class="text-red-500 text-sm mt-1">
+            Please select a polytunnel
+          </div>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="mt-6">
+        <button
+          type="submit"
+          [disabled]="plantForm.invalid"
+          class="w-full bg-blue-500 text-white p-2.5 rounded-lg hover:bg-blue-600 disabled:bg-gray-400"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+
+    <!-- New Card with Table -->
+    <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+      <h2 class="text-lg font-medium text-gray-900 mb-4">Plant Information</h2>
+      <div class="overflow-x-auto">
+        <table class="min-w-full border border-gray-300">
+          <thead>
+          <tr class="bg-gray-50">
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Plant Name</th>
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Status</th>
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Cost</th>
+            <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Harvest Time</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.plantName }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.status }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.cost }}</td>
+            <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestTime }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

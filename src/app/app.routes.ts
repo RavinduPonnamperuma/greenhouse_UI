@@ -32,4 +32,9 @@ export const routes: Routes = [
     loadComponent: () => import('./components/index').then(com => com.PolytunnelComponent),
     canActivate: [AuthGuard]
   }
+  ,  {
+    path: 'plant',
+    loadComponent: () => import('./components/index').then(com => com.PlantComponent),
+    canActivate: [AuthGuard]
+  }
 ];
