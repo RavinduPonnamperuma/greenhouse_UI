@@ -19,7 +19,8 @@ export interface NavItem {
     DatePipe
   ],
   templateUrl: './side-nav.component.html',
-  styleUrl: './side-nav.component.scss'
+  styleUrl: './side-nav.component.scss',
+  providers: [DatePipe],
 })
 export class SideNavComponent implements OnInit {
   currentDateTime: Date = new Date();
@@ -42,7 +43,7 @@ export class SideNavComponent implements OnInit {
   ];
   userName: string | null =''
 
-  constructor(private router: Router) {}
+  constructor(private router: Router ,private datePipe: DatePipe) {}
 
   ngOnInit() {
     this.userName = JSON.parse(<string>localStorage.getItem('userData'));
