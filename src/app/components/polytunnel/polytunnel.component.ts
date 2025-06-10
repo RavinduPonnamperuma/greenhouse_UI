@@ -61,7 +61,7 @@ export class PolytunnelComponent implements OnInit {
     this.userId = JSON.parse(<string>localStorage.getItem('userId'));
     this.plotForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(3)]],
-      status: ['', [Validators.required, Validators.minLength(2)]],
+      // status: ['', [Validators.required, Validators.minLength(2)]],
       location: ['', [Validators.required, Validators.minLength(2)]],
       size: ['', [Validators.required, Validators.minLength(2)]],
       length: ['', [Validators.required, Validators.min(0)]],
@@ -87,16 +87,14 @@ export class PolytunnelComponent implements OnInit {
       this.plotForm.markAllAsTouched();
       return;
     }
-
     this.isSubmitting = true;
     this.errorMessage = null;
-
-    // Simulate form submission
     setTimeout(() => {
-      console.log('Form submitted:', this.plotForm.value);
-      console.log(this.plotForm.value);
+      const formValue = this.plotForm.value;
+      formValue.deviceId = +formValue.deviceId;
+      formValue.userId = +formValue.userId;
+      formValue.status = 'active';
       this.isSubmitting = false;
-      // Reset form or handle success as needed
     }, 1000);
   }
 }

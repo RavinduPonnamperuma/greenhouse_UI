@@ -25,22 +25,22 @@
           </div>
 
           <!-- Status -->
-          <div>
-            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
-              Status
-            </label>
-            <input
-              type="text"
-              id="status"
-              formControlName="status"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"
-              placeholder="Active"
-            />
-            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['status'].errors?.['required']">Status is required</div>
-              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>
-            </div>
-          </div>
+<!--          <div>-->
+<!--            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">-->
+<!--              Status-->
+<!--            </label>-->
+<!--            <input-->
+<!--              type="text"-->
+<!--              id="status"-->
+<!--              formControlName="status"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"-->
+<!--              placeholder="Active"-->
+<!--            />-->
+<!--            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">-->
+<!--              <div *ngIf="f['status'].errors?.['required']">Status is required</div>-->
+<!--              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>-->
+<!--            </div>-->
+<!--          </div>-->
 
           <!-- Location -->
           <div>
@@ -153,7 +153,7 @@
           </div>
 
           <!-- Clear Button -->
-          <div>
+          <div class="mt-7">
             <button
               type="reset"
               class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
@@ -163,7 +163,7 @@
           </div>
 
           <!-- Submit Button -->
-          <div>
+          <div class="mt-7">
             <button
               type="submit"
               [disabled]="isSubmitting"
