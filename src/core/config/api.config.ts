@@ -1,5 +1,6 @@
-import {environment} from "src/environments/environment"
+import {environment} from "../../environments/environment";
+
 
 export class ApiConfig {
-  public static baseURL = environment.API_BASE
+  public static baseURL = environment.baseUrl
 }

@@ -1,0 +1,157 @@
+<div class="p-4 sm:ml-64">
+  <div class="p-6 border border-gray-200 rounded-xl bg-white shadow-lg mt-14">
+    <div class="space-y-8">
+      <!-- Form Card -->
+      <form [formGroup]="harvestForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Harvest Record</h3>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <!-- Harvest Date -->
+          <div>
+            <label for="harvestDate" class="block mb-2 text-sm font-medium text-gray-900">
+              Harvest Date
+            </label>
+            <input
+              type="date"
+              id="harvestDate"
+              formControlName="harvestDate"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('harvestDate') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="YYYY-MM-DD"
+            />
+            <div *ngIf="isFieldInvalid('harvestDate')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['harvestDate'].errors?.['required']">Harvest date is required</div>
+            </div>
+          </div>
+
+          <!-- Selling Price -->
+          <div>
+            <label for="sellingPrice" class="block mb-2 text-sm font-medium text-gray-900">
+              Selling Price
+            </label>
+            <input
+              type="number"
+              id="sellingPrice"
+              formControlName="sellingPrice"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('sellingPrice') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="120.50"
+              step="0.01"
+            />
+            <div *ngIf="isFieldInvalid('sellingPrice')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['sellingPrice'].errors?.['required']">Selling price is required</div>
+              <div *ngIf="f['sellingPrice'].errors?.['min']">Selling price must be positive</div>
+            </div>
+          </div>
+
+          <!-- Quantity -->
+          <div>
+            <label for="quantity" class="block mb-2 text-sm font-medium text-gray-900">
+              Quantity
+            </label>
+            <input
+              type="number"
+              id="quantity"
+              formControlName="quantity"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('quantity') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="250.75"
+              step="0.01"
+            />
+            <div *ngIf="isFieldInvalid('quantity')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['quantity'].errors?.['required']">Quantity is required</div>
+              <div *ngIf="f['quantity'].errors?.['min']">Quantity must be positive</div>
+            </div>
+          </div>
+
+          <!-- Variety -->
+          <div>
+            <label for="variety" class="block mb-2 text-sm font-medium text-gray-900">
+              Variety
+            </label>
+            <input
+              type="text"
+              id="variety"
+              formControlName="variety"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('variety') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="Apple"
+            />
+            <div *ngIf="isFieldInvalid('variety')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['variety'].errors?.['required']">Variety is required</div>
+              <div *ngIf="f['variety'].errors?.['minlength']">Variety must be at least 2 characters</div>
+            </div>
+          </div>
+
+          <!-- Plant ID -->
+          <div>
+            <label for="plantId" class="block mb-2 text-sm font-medium text-gray-900">
+              Plant
+            </label>
+            <select
+              id="plantId"
+              formControlName="plantId"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('plantId') ? 'border-red-500' : 'border-gray-300' }}"
+            >
+              <option value="" disabled>Select a plant</option>
+              <option *ngFor="let plant of plants" [value]="plant.id">{{ plant.name }}</option>
+            </select>
+            <div *ngIf="isFieldInvalid('plantId')" class="text-red-500 text-sm mt-1">
+              Please select a plant
+            </div>
+          </div>
+
+          <!-- Clear Button -->
+          <div>
+            <button
+              type="reset"
+              class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
+            >
+              Clear
+            </button>
+          </div>
+
+          <!-- Submit Button -->
+          <div>
+            <button
+              type="submit"
+              [disabled]="isSubmitting"
+              class="w-full p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
+            >
+              {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-4">
+          {{ errorMessage }}
+        </div>
+      </form>
+
+      <!-- Table Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Harvest Records</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full border border-gray-300">
+            <thead>
+            <tr class="bg-gray-50">
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Harvest Date</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Selling Price</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Quantity</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Variety</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Plant</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestDate }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.sellingPrice | currency }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.quantity }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.variety }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ getPlantName(row.plantId) }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

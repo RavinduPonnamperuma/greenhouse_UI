@@ -1,76 +1,93 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
-import {UserService} from "../../services/user.service";
+import {Component, inject, OnInit} from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { NgIf } from '@angular/common';
+import { UserService } from '../../services/user.service';
+import {NotificationService} from "../Utility/notification/notification.service";
 
 @Component({
   selector: 'app-register',
-  imports: [
-    ReactiveFormsModule,
-    NgIf
-  ],
+  imports: [ReactiveFormsModule, NgIf],
   templateUrl: './register.component.html',
   standalone: true,
-  styleUrl: './register.component.scss'
+  styleUrl: './register.component.scss',
 })
 export class RegisterComponent implements OnInit {
   registrationForm!: FormGroup;
   submitted = false;
+  isSubmitting = false;
+  errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder,private userService:UserService) {}
+  notificationService=inject(NotificationService)
+
+  constructor(private fb: FormBuilder, private userService: UserService) {}
 
   ngOnInit(): void {
-    this.registrationForm = this.fb.group({
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.required, Validators.minLength(8)]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]],
-      address: ['', [Validators.required]],
-      terms: [false, Validators.requiredTrue],
-    }, { validators: this.passwordMatchValidator });
+    this.registrationForm = this.fb.group(
+      {
+        username: ['', [Validators.required, Validators.minLength(3)]],
+        firstName: ['', [Validators.required, Validators.minLength(2)]],
+        lastName: ['', [Validators.required, Validators.minLength(2)]],
+        email: ['', [Validators.required, Validators.email]],
+        phone: ['', [Validators.required, Validators.minLength(10)]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.required]],
+        address: ['', [Validators.required]],
+        terms: [false, Validators.requiredTrue],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   passwordMatchValidator(form: FormGroup) {
-    const password = form.get('password');
-    const confirmPassword = form.get('confirmPassword');
-    return password && confirmPassword && password.value === confirmPassword.value
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    return password && confirmPassword && password === confirmPassword
       ? null
       : { passwordMismatch: true };
   }
 
-  get f() { return this.registrationForm.controls; }
+  get f() {
+    return this.registrationForm.controls;
+  }
 
-  onSubmit() {
+  async onSubmit() {
     this.submitted = true;
+    this.errorMessage = null;
 
-    // Stop here if form is invalid
     if (this.registrationForm.invalid) {
-      console.log(this.registrationForm.value);
       return;
     }
 
+    this.isSubmitting = true;
 
-    const userDTO={
-      firstName: this.registrationForm.value.firstName,
-      lastName: this.registrationForm.value.lastName,
+    const fullName = `${this.registrationForm.value.firstName} ${this.registrationForm.value.lastName}`;
+    const userDTO = {
+      userName: this.registrationForm.value.username,
+      name: fullName,
       email: this.registrationForm.value.email,
       password: this.registrationForm.value.password,
-      confirmPassword: this.registrationForm.value.confirmPassword,
-      mobileNumber:this.registrationForm.value.phone,
+      contact: this.registrationForm.value.phone,
       address: this.registrationForm.value.address,
-      roleId: 1,
+      role: 'user',
+    };
 
+    try {
+      this.userService.create(userDTO).subscribe({
+        next: (res) => {
+          this.notificationService.showSuccess('New user added Successfully', 3000);
+        }
+      })
+      this.registrationForm.reset();
+      this.submitted = false;
+    } catch (error: any) {
+      this.errorMessage = error.message || 'An error occurred during registration. Please try again.';
+    } finally {
+      this.isSubmitting = false;
     }
-    this.userService.createUser(userDTO).subscribe()
-    console.log(this.registrationForm.value);
-    alert('Registration Successful!');
   }
-
 
   isFieldInvalid(fieldName: string): boolean {
     const field = this.registrationForm.get(fieldName);
-    return field ? (field.invalid && (field.dirty || field.touched || this.submitted)) : false;
+    return field ? field.invalid && (field.dirty || field.touched || this.submitted) : false;
   }
 }

@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexNonAxisChartSeries, ApexResponsive } from 'ng-apexcharts';
+import {SensorDataService} from "../../services/sensor-data.service";
+import {HumidityDTO, MoistureDTO, SensorDataDTO, TemperatureDTO} from "../../interfaces/sensor-data.interface";
 
 @Component({
   selector: 'app-home',
@@ -17,6 +19,8 @@ import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSub
 export class HomeComponent implements OnInit {
   @ViewChild('realtimeChart') realtimeChart: ChartComponent | undefined;
   @ViewChild('waterLevelChart') waterLevelChart: ChartComponent | undefined;
+
+  sensorDataService=inject(SensorDataService)
 
   public lineChartOptions: {
     series: ApexAxisChartSeries;
@@ -36,15 +40,15 @@ export class HomeComponent implements OnInit {
     this.lineChartOptions = {
       series: [
         {
-          name: 'Live Plants',
+          name: 'Humidity',
           data: [1200, 1230, 1245, 1220, 1250, 1260, 1245]
         },
         {
-          name: 'Dead Plants',
+          name: 'Moisture',
           data: [20, 22, 23, 21, 24, 22, 23]
         },
         {
-          name: 'Income ($)',
+          name: 'Temperature',
           data: [11500, 11650, 12000, 11900, 12100, 12300, 12450]
         }
       ],
@@ -104,6 +108,9 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.temperatures=[]
+    this.humidities=[]
+    this.moistures=[]
     setInterval(() => {
       const newLive = (this.lineChartOptions.series[0].data.slice(-1)[0] as number) + Math.floor(Math.random() * 10 - 5);
       const newDead = (this.lineChartOptions.series[1].data.slice(-1)[0] as number) + Math.floor(Math.random() * 3 - 1);
@@ -121,5 +128,59 @@ export class HomeComponent implements OnInit {
       this.gaugeChartOptions.series = [newLevel];
       this.waterLevelChart?.updateSeries(this.gaugeChartOptions.series);
     }, 3000);
+
+
+    //3 second wli autorun wnw
+
+    setInterval(() => {
+      this.fetchSensorData();
+    }, 3000);
+
+
+
   }
+
+  temperatures: { timestamp: string; value: number }[] = [];
+  humidities: { timestamp: string; value: number }[] = [];
+  moistures: { timestamp: string; value: number }[] = [];
+
+  //get data
+  fetchSensorData() {
+    this.sensorDataService.getSensorById('all').subscribe({
+      next: (data: any) => {
+        const sensorData: SensorDataDTO[] = data.data;
+
+
+        this.temperatures = sensorData
+          .filter(item => item.topic === 'temperature')
+          .map(item => ({ value: item.value, timestamp: item.createdAt }));
+        this.humidities = sensorData
+          .filter(item => item.topic === 'humidity')
+          .map(item => ({ value: item.value, timestamp: item.createdAt }));
+        this.moistures = sensorData
+          .filter(item => item.topic === 'moisture')
+          .map(item => ({ value: item.value, timestamp: item.createdAt }));
+        this.lineChartOptions.series = [
+          {
+            name: 'Humidity',
+            data: this.humidities.map(item => item.value)
+          },
+          {
+            name: 'Moisture',
+            data: this.moistures.map(item => item.value)
+          },
+          {
+            name: 'Temperature',
+            data: this.temperatures.map(item => item.value)
+          }
+        ];
+        this.lineChartOptions.xaxis.categories = this.temperatures.map(item => item.timestamp);
+      },
+      error: (err) => {
+        console.error('Error fetching sensor data:', err);
+      }
+    });
+  }
+
+
 }
