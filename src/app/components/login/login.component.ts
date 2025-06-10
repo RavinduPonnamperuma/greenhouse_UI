@@ -34,45 +34,47 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  // onSubmit(): void {
-  //   if (this.registrationForm.valid) {
-  //     console.log(this.registrationForm.value);
-  //   } else {
-  //     console.log('Form is invalid');
-  //   }
-  // }
-
   onSubmit(): void {
-    this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
-      data => {
-        this.notificationService.showSuccess('Login Successfully!', 3000);
-        localStorage.setItem('userData', JSON.stringify(data.data.userName));
-        this.router.navigate(['dashboard']);
-      }
-    )
-
-
-
-
-
-
-
-
-    // if (this.registrationForm.valid) {
-    //   const { email, password } = this.registrationForm.value;
-    //
-    //   // Check hardcoded credentials
-    //   if (email === this.hardcodedUsername && password === this.hardcodedPassword) {
-    //     console.log('Login successful');
-    //     this.router.navigate(['/admin']); // Navigate to the admin page
-    //   } else {
-    //     this.router.navigate(['/home']);
-    //     alert('Wellcome to the dashbord..!');
-    //   }
-    // } else {
-    //   console.log('Form is invalid');
-    // }
+    if (this.registrationForm.valid) {
+      this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
+        data => {
+          this.notificationService.showSuccess('Login Successfully!', 3000);
+          localStorage.setItem('userData', JSON.stringify(data.data.userName));
+          localStorage.setItem('userId', data.data.userId);
+          this.router.navigate(['dashboard']);
+        }
+      )
+    } else {
+      this.notificationService.showError('Login Failed!', 3000);
+      console.log('Form is invalid');
+    }
   }
+
+  // onSubmit(): void {
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //   // if (this.registrationForm.valid) {
+  //   //   const { email, password } = this.registrationForm.value;
+  //   //
+  //   //   // Check hardcoded credentials
+  //   //   if (email === this.hardcodedUsername && password === this.hardcodedPassword) {
+  //   //     console.log('Login successful');
+  //   //     this.router.navigate(['/admin']); // Navigate to the admin page
+  //   //   } else {
+  //   //     this.router.navigate(['/home']);
+  //   //     alert('Wellcome to the dashbord..!');
+  //   //   }
+  //   // } else {
+  //   //   console.log('Form is invalid');
+  //   // }
+  // }
 
   logOut(): void {
     localStorage.removeItem('userData');
