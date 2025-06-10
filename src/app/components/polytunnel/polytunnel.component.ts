@@ -1,10 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, NgSwitch} from "@angular/common";
 import {DeviceService} from "../../services/device.service";
 import {DeviceDTO} from "../../interfaces/device.interface";
 import {NotificationService} from "../Utility/notification/notification.service";
 import {PolytunnelService} from "../../services/polytunnel.service";
+import {PlantTrayDTO} from "../../interfaces/polytunnel.interface";
+import {StatusBadgesComponent} from "../Utility/status-badges/status-badges.component";
 
 @Component({
   selector: 'app-polytunnel',
@@ -12,7 +14,9 @@ import {PolytunnelService} from "../../services/polytunnel.service";
   imports: [
     ReactiveFormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NgSwitch,
+    StatusBadgesComponent
   ],
   templateUrl: './polytunnel.component.html',
   styleUrl: './polytunnel.component.scss'
@@ -20,6 +24,7 @@ import {PolytunnelService} from "../../services/polytunnel.service";
 export class PolytunnelComponent implements OnInit {
 
   deviceDTOS:DeviceDTO[]=[]
+  polytunnel:PlantTrayDTO[]=[]
 
 
   deviceService=inject(DeviceService)
@@ -62,6 +67,7 @@ export class PolytunnelComponent implements OnInit {
 
   constructor(private fb: FormBuilder) {
     this.getAllDevices();
+    this.getAll()
     this.userId = JSON.parse(<string>localStorage.getItem('userId'));
     this.plotForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(3)]],
@@ -105,9 +111,18 @@ export class PolytunnelComponent implements OnInit {
           this.notificationService.showSuccess('New poly tunnel added successfully', 3000);
           this.isSubmitting = false;
           console.log(data);
+          this.getAll()
         }
       })
 
     }, 1000);
+  }
+
+  getAll(){
+    this.polytunnelService.getAll().subscribe({
+      next: data => {
+        this.polytunnel=data.data
+      }
+    })
   }
 }

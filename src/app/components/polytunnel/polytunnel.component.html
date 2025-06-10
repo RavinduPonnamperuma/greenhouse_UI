@@ -191,14 +191,18 @@
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Status</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Location</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Size</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">No Of Plants</th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+            <tr *ngFor="let row of polytunnel" class="even:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.code }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.status }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"><app-status-badges [statusValue]="row.status"></app-status-badges>
+              </td>
+
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.location }}</td>
               <td class="border border-gray-600 px-4 py-2 text-sm text-gray-600">{{ row.size }}</td>
+              <td class="border border-gray-600 px-4 py-2 text-sm text-gray-600">{{ row.numberOfPlants }}</td>
             </tr>
             </tbody>
           </table>
