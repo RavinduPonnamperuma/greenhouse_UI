@@ -10,38 +10,40 @@ $header-height: 4rem;
   grid-template-columns: $side-nav-width 1fr;
   grid-template-rows: $header-height 1fr;
   height: 100vh;
-  @apply bg-[#f5f6f6];
+  @apply bg-[#f5f6f6] m-0; // Ensure no margin on container
 
   &.login-page {
     grid-template-areas: 'content';
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
-    height: 100vh; // Ensure full viewport height
-    overflow: hidden; // Prevent scrollbar
+    height: 100vh;
+    overflow: hidden;
 
     .main-content {
       grid-area: content;
-      @apply p-0 h-full; // Remove padding and use full height
-      overflow: auto; // Allow scrolling within main content if needed
+      @apply p-0 h-full m-0; // Remove padding and margin
+      overflow: auto;
     }
   }
 
   &:not(.login-page) {
     .main-content {
-      @apply py-4  ;
+      grid-area: content;
+      @apply py-4 pl-0 pr-4; // Remove left padding to align with sidebar
+      margin-left: $side-nav-width; // Shift content to account for fixed sidebar
     }
   }
 
   .main-content {
+    position: relative;
+    min-height: calc(100vh - $header-height); // Account for header height
+    @apply m-0; // Ensure no margin
+    box-sizing: border-box;
+
     div {
       @apply block;
     }
   }
-}
-.main-content {
-  position: relative;
-  min-height: 100vh;
-  padding: 1rem;
 }
 
 .test-notification-btn {
@@ -60,4 +62,3 @@ $header-height: 4rem;
 .test-notification-btn:hover {
   background-color: #1e40af;
 }
-
