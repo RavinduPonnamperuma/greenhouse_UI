@@ -1,9 +1,9 @@
 @if (isLoggedIn){
-  <nav class="fixed top-0 z-50 w-full  border-b border-gray-200 bg-blue-800 dark:border-gray-700">
-    <div class="px-3 py-3 lg:px-5 lg:pl-3">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center justify-start">
-          <span class="text-white ms-3">{{ currentDateTime | date: 'medium' }}</span>
+  <nav class="fixed top-0 z-50  mr-5 w-screen border-b border-gray-200 bg-blue-800 dark:border-gray-700">
+    <div class="pl-0 pr-3 py-3  ml-0 lg:pl-3 lg:pr-5">
+      <div class="flex items-center justify-between ml-0">
+        <div class="flex items-center justify-start ml-0">
+          <span class="text-white">{{ currentDateTime | date: 'medium' }}</span>
           <button (click)="toggleSidebar()"
                   class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
             <span class="sr-only">Open sidebar</span>
@@ -17,24 +17,22 @@
         <div class="flex items-center">
           <div class="relative">
             <div class="flex gap-4">
-              <span class="text-white">Welcome Ravindu</span>
-              <button (click)="toggleDropdown()"
-                      class="flex text-sm bg-gray-800 rounded-full focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600">
-                <span class="sr-only">Open user menu</span>
+              <span class="text-white">Welcome {{userName}}</span>
                 <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                      alt="user photo">
-              </button>
+
             </div>
 
             <div *ngIf="isDropdownOpen"
-                 class="absolute right-0 mt-2 w-48  divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
+                 class="absolute right-0 mt-2 w-48 rounded-lg bg-white divide-y divide-gray-400 shadow dark:bg-gray-800 dark:divide-gray-600">
               <div class="px-4 py-3">
                 <p class="text-sm text-gray-900 dark:text-white">Neil Sims</p>
               </div>
               <ul class="py-1">
                 <li *ngFor="let item of navigationItems | slice:7:10">
                   <a [routerLink]="item.route"
-                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">{{ item.label }}</a>
+                     [ngClass]="{'bg-blue-100 text-blue-700 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white': !isActive(item.route)}"
+                     class="block px-4 py-2 text-sm">{{ item.label }}</a>
                 </li>
               </ul>
             </div>
@@ -48,16 +46,17 @@
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
       <ul class="space-y-2 font-medium">
         <li *ngFor="let item of navigationItems">
-          <!-- If it's Sign out, use click handler; otherwise use routerLink -->
           <a *ngIf="item.label !== 'Sign out'; else logoutTemplate"
              [routerLink]="item.route"
-             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+             [ngClass]="{'bg-blue-100 text-blue-700 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700': !isActive(item.route)}"
+             class="flex items-center p-2 rounded-lg">
             <span class="flex-1 ms-3 whitespace-nowrap">{{ item.label }}</span>
           </a>
 
           <ng-template #logoutTemplate>
             <a href="#" (click)="logOut()"
-               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               [ngClass]="{'bg-blue-100 text-blue-700 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700': !isActive(item.route)}"
+               class="flex items-center p-2 rounded-lg">
               <span class="flex-1 ms-3 whitespace-nowrap">{{ item.label }}</span>
             </a>
           </ng-template>
@@ -65,5 +64,4 @@
       </ul>
     </div>
   </aside>
-
 }

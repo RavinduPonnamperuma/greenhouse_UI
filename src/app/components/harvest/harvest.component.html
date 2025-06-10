@@ -99,7 +99,7 @@
           </div>
 
           <!-- Clear Button -->
-          <div>
+          <div class="mt-6">
             <button
               type="reset"
               class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
@@ -129,10 +129,10 @@
       <!-- Table Card -->
       <div class="bg-white p-6 rounded-lg shadow-lg w-full">
         <h2 class="text-lg font-medium text-gray-900 mb-4">Harvest Records</h2>
-        <div class="overflow-x-auto">
+        <div class="relative overflow-x-auto overflow-y-auto max-h-96">
           <table class="min-w-full border border-gray-300">
-            <thead>
-            <tr class="bg-gray-50">
+            <thead class="sticky top-0 bg-gray-50">
+            <tr>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Harvest Date</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Selling Price</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Quantity</th>

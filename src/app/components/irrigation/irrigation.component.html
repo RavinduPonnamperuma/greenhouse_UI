@@ -1,0 +1,240 @@
+<div class="p-4 sm:ml-64">
+  <div class="p-6 border border-gray-200 rounded-xl bg-white shadow-lg mt-14">
+    <div class="space-y-8">
+      <!-- Form Card -->
+      <form [formGroup]="irrigationForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Irrigation Schedule</h3>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <!-- Water Per Day -->
+          <div>
+            <label for="waterPerDay" class="block mb-2 text-sm font-medium text-gray-900">
+              Water Per Day (liters)
+            </label>
+            <input
+              type="number"
+              id="waterPerDay"
+              formControlName="waterPerDay"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('waterPerDay') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="2.5"
+              step="0.1"
+            />
+            <div *ngIf="isFieldInvalid('waterPerDay')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['waterPerDay'].errors?.['required']">Water per day is required</div>
+              <div *ngIf="f['waterPerDay'].errors?.['min']">Water per day must be positive</div>
+            </div>
+          </div>
+
+          <!-- Fertilizer Per Day -->
+          <div>
+            <label for="fertilizerPerDay" class="block mb-2 text-sm font-medium text-gray-900">
+              Fertilizer Per Day (kg)
+            </label>
+            <input
+              type="number"
+              id="fertilizerPerDay"
+              formControlName="fertilizerPerDay"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('fertilizerPerDay') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="1.5"
+              step="0.1"
+            />
+            <div *ngIf="isFieldInvalid('fertilizerPerDay')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['fertilizerPerDay'].errors?.['required']">Fertilizer per day is required</div>
+              <div *ngIf="f['fertilizerPerDay'].errors?.['min']">Fertilizer per day must be positive</div>
+            </div>
+          </div>
+
+          <!-- Times Per Day -->
+          <div>
+            <label for="timesPerDay" class="block mb-2 text-sm font-medium text-gray-900">
+              Times Per Day
+            </label>
+            <input
+              type="number"
+              id="timesPerDay"
+              formControlName="timesPerDay"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('timesPerDay') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="3"
+              min="1"
+            />
+            <div *ngIf="isFieldInvalid('timesPerDay')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['timesPerDay'].errors?.['required']">Times per day is required</div>
+              <div *ngIf="f['timesPerDay'].errors?.['min']">Times per day must be at least 1</div>
+            </div>
+          </div>
+
+          <!-- Is Morning -->
+          <div>
+            <label for="isMorning" class="block mb-2 text-sm font-medium text-gray-900">
+              Morning Irrigation
+            </label>
+            <select
+              id="isMorning"
+              formControlName="isMorning"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('isMorning') ? 'border-red-500' : 'border-gray-300' }}"
+            >
+              <option value="" disabled>Select option</option>
+              <option value="1">Enabled</option>
+              <option value="0">Disabled</option>
+            </select>
+            <div *ngIf="isFieldInvalid('isMorning')" class="text-red-500 text-sm mt-1">
+              Please select an option
+            </div>
+          </div>
+
+          <!-- Morning Time -->
+          <div>
+            <label for="morningTime" class="block mb-2 text-sm font-medium text-gray-900">
+              Morning Time
+            </label>
+            <input
+              type="time"
+              id="morningTime"
+              formControlName="morningTime"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('morningTime') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="06:30"
+            />
+            <div *ngIf="isFieldInvalid('morningTime')" class="text-red-500 text-sm mt-1">
+              Morning time is required
+            </div>
+          </div>
+
+          <!-- Is Evening -->
+          <div>
+            <label for="isEvening" class="block mb-2 text-sm font-medium text-gray-900">
+              Evening Irrigation
+            </label>
+            <select
+              id="isEvening"
+              formControlName="isEvening"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('isEvening') ? 'border-red-500' : 'border-gray-300' }}"
+            >
+              <option value="" disabled>Select option</option>
+              <option value="1">Enabled</option>
+              <option value="0">Disabled</option>
+            </select>
+            <div *ngIf="isFieldInvalid('isEvening')" class="text-red-500 text-sm mt-1">
+              Please select an option
+            </div>
+          </div>
+
+          <!-- Evening Time -->
+          <div>
+            <label for="eveningTime" class="block mb-2 text-sm font-medium text-gray-900">
+              Evening Time
+            </label>
+            <input
+              type="time"
+              id="eveningTime"
+              formControlName="eveningTime"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('eveningTime') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="18:30"
+            />
+            <div *ngIf="isFieldInvalid('eveningTime')" class="text-red-500 text-sm mt-1">
+              Evening time is required
+            </div>
+          </div>
+
+          <!-- Duration -->
+          <div>
+            <label for="duration" class="block mb-2 text-sm font-medium text-gray-900">
+              Duration (minutes)
+            </label>
+            <input
+              type="number"
+              id="duration"
+              formControlName="duration"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('duration') ? 'border-red-500' : 'border-gray-300' }}"
+              placeholder="15"
+              min="1"
+            />
+            <div *ngIf="isFieldInvalid('duration')" class="text-red-500 text-sm mt-1">
+              <div *ngIf="f['duration'].errors?.['required']">Duration is required</div>
+              <div *ngIf="f['duration'].errors?.['min']">Duration must be at least 1</div>
+            </div>
+          </div>
+
+          <!-- Plant ID -->
+          <div>
+            <label for="plantId" class="block mb-2 text-sm font-medium text-gray-900">
+              Plant
+            </label>
+            <select
+              id="plantId"
+              formControlName="plantId"
+              class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('plantId') ? 'border-red-500' : 'border-gray-300' }}"
+            >
+              <option value="" disabled>Select plant</option>
+              <option *ngFor="let plant of plants" [value]="plant.id">{{ plant.name }}</option>
+            </select>
+            <div *ngIf="isFieldInvalid('plantId')" class="text-red-500 text-sm mt-1">
+              Please select a plant
+            </div>
+          </div>
+
+          <!-- Clear Button -->
+          <div>
+            <button
+              type="reset"
+              class="w-full p-2.5 border rounded-lg text-sm bg-red-600 text-white hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
+            >
+              Clear
+            </button>
+          </div>
+
+          <!-- Submit Button -->
+          <div>
+            <button
+              type="submit"
+              [disabled]="isSubmitting"
+              class="w-full p-2.5 border rounded-lg text-sm bg-blue-600 text-white hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
+            >
+              {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Message -->
+        <div *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-4">
+          {{ errorMessage }}
+        </div>
+      </form>
+
+      <!-- Table Card -->
+      <div class="bg-white p-6 rounded-lg shadow-lg w-full">
+        <h2 class="text-lg font-medium text-gray-900 mb-6">Irrigation Schedules</h2>
+        <div class="relative overflow-x-auto overflow-y-auto max-h-96">
+          <table class="w-full border border-gray-200">
+            <thead class="sticky top-0 bg-gray-50">
+            <tr>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Water (liters)</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Fertilizer (kg)</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Times/Day</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Morning</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Morning Time</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Evening</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Evening Time</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Duration (min)</th>
+              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Plant</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.waterPerDay }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.fertilizerPerDay }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.timesPerDay }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.isMorning ? 'Enabled' : 'Disabled' }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.morningTime }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.isEvening ? 'Enabled' : 'Disabled' }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.eveningTime }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.duration }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ getPlantName(row.plantId) }}</td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

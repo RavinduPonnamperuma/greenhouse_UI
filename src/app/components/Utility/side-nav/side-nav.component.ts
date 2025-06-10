@@ -1,12 +1,12 @@
-import {Component} from '@angular/core';
-import {Router, RouterLink} from "@angular/router";
+import {Component, OnInit} from '@angular/core';
+import {NavigationEnd, Router, RouterLink} from "@angular/router";
 import {DatePipe, NgClass, NgForOf, NgIf, SlicePipe} from "@angular/common";
+import {filter} from "rxjs";
 
 export interface NavItem {
   label: string;
   route: string;
 }
-
 @Component({
   selector: 'app-side-nav',
   standalone: true,
@@ -19,39 +19,46 @@ export interface NavItem {
     DatePipe
   ],
   templateUrl: './side-nav.component.html',
-  styleUrl: './side-nav.component.scss'
+  styleUrl: './side-nav.component.scss',
+  providers: [DatePipe],
 })
-export class SideNavComponent {
+export class SideNavComponent implements OnInit {
   currentDateTime: Date = new Date();
-
   isSidebarOpen: boolean = false;
   isDropdownOpen: boolean = false;
-
-
-  ngOnInit() {
-    this.checkLoginStatus();
-    this.router.events.subscribe(() => {
-      this.checkLoginStatus();
-    });
-  }
+  isLoggedIn = false;
+  currentRoute: string = '';
 
   navigationItems: NavItem[] = [
-    {label: 'Dashboard', route: '/dashboard'},
-    {label: 'Tunnel', route: '/polytunnel'},
-    {label: 'Plant', route: '/plant'},
-    {label: 'Schedule', route: '/schedule'},
-    {label: 'Irrigation', route: '/Irrigation'},
-    {label: 'Harvest', route: '/harvest'},
-
-    {label: 'Reports', route: '/report'},
-    {label: 'Alerts', route: '/alerts'},
-    {label: 'Sign Up', route: '/register'},
-    {label: 'Sign out', route: '/logout'}
+    { label: 'Dashboard', route: '/dashboard' },
+    { label: 'Tunnel', route: '/polytunnel' },
+    { label: 'Plant', route: '/plant' },
+    { label: 'Schedule', route: '/schedule' },
+    { label: 'Irrigation', route: '/irrigation' },
+    { label: 'Harvest', route: '/harvest' },
+    { label: 'Reports', route: '/report' },
+    { label: 'Alerts', route: '/alerts' },
+    { label: 'Sign Up', route: '/register' },
+    { label: 'Sign out', route: '/logout' }
   ];
+  userName: string | null =''
 
-  isLoggedIn = false;
+  constructor(private router: Router ,private datePipe: DatePipe) {}
 
-  constructor(private router: Router) {
+  ngOnInit() {
+    this.userName = JSON.parse(<string>localStorage.getItem('userData'));
+    console.log(this.userName);
+    this.checkLoginStatus();
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.currentRoute = event.urlAfterRedirects.split('?')[0]; // Strip query params
+        this.checkLoginStatus();
+      });
+  }
+
+  isActive(route: string): boolean {
+    return this.currentRoute === route;
   }
 
   toggleSidebar(): void {
@@ -64,8 +71,8 @@ export class SideNavComponent {
 
   navigateTo(route: string): void {
     this.router.navigate([route]);
-    this.isDropdownOpen = false; // Close dropdown after navigation
-    this.isSidebarOpen = false; // Close sidebar on mobile after navigation
+    this.isDropdownOpen = false;
+    this.isSidebarOpen = false;
   }
 
   logOut(): void {
@@ -74,10 +81,10 @@ export class SideNavComponent {
     this.router.navigate(['login']);
     this.checkLoginStatus();
   }
+
   checkLoginStatus() {
     const userData = localStorage.getItem('userData');
     const currentRoute = this.router.url;
-
     this.isLoggedIn = !!userData && currentRoute !== '/login';
   }
 }
