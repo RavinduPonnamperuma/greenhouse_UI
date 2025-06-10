@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.registrationForm.valid) {
+    // if (this.registrationForm.valid) {
       this.userService.login(this.hardcodedUsername,this.hardcodedPassword).subscribe(
         data => {
           this.notificationService.showSuccess('Login Successfully!', 3000);
@@ -44,10 +44,10 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['dashboard']);
         }
       )
-    } else {
-      this.notificationService.showError('Login Failed!', 3000);
-      console.log('Form is invalid');
-    }
+    // } else {
+    //   this.notificationService.showError('Login Failed!', 3000);
+    //   console.log('Form is invalid');
+    // }
   }
 
   // onSubmit(): void {
