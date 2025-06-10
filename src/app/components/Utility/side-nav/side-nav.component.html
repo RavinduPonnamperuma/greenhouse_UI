@@ -1,5 +1,5 @@
 @if (isLoggedIn){
-  <nav class="fixed top-0 z-50 w-full  border-b border-gray-200 bg-blue-800 dark:border-gray-700">
+  <nav class="fixed top-0 z-50 w-full border-b border-gray-200 bg-blue-800 dark:border-gray-700">
     <div class="px-3 py-3 lg:px-5 lg:pl-3">
       <div class="flex items-center justify-between">
         <div class="flex items-center justify-start">
@@ -27,14 +27,15 @@
             </div>
 
             <div *ngIf="isDropdownOpen"
-                 class="absolute right-0 mt-2 w-48  divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
+                 class="absolute right-0 mt-2 w-48 divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600">
               <div class="px-4 py-3">
                 <p class="text-sm text-gray-900 dark:text-white">Neil Sims</p>
               </div>
               <ul class="py-1">
                 <li *ngFor="let item of navigationItems | slice:7:10">
                   <a [routerLink]="item.route"
-                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white">{{ item.label }}</a>
+                     [ngClass]="{'bg-gray-100 text-gray-900 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white': !isActive(item.route)}"
+                     class="block px-4 py-2 text-sm">{{ item.label }}</a>
                 </li>
               </ul>
             </div>
@@ -51,13 +52,15 @@
           <!-- If it's Sign out, use click handler; otherwise use routerLink -->
           <a *ngIf="item.label !== 'Sign out'; else logoutTemplate"
              [routerLink]="item.route"
-             class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+             [ngClass]="{'bg-blue-100 text-blue-700 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700': !isActive(item.route)}"
+             class="flex items-center p-2 rounded-lg">
             <span class="flex-1 ms-3 whitespace-nowrap">{{ item.label }}</span>
           </a>
 
           <ng-template #logoutTemplate>
             <a href="#" (click)="logOut()"
-               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+               [ngClass]="{'bg-blue-100 text-blue-700 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700': !isActive(item.route)}"
+               class="flex items-center p-2 rounded-lg">
               <span class="flex-1 ms-3 whitespace-nowrap">{{ item.label }}</span>
             </a>
           </ng-template>
@@ -65,5 +68,4 @@
       </ul>
     </div>
   </aside>
-
 }
