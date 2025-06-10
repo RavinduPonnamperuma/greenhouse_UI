@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {NgForOf, NgIf} from "@angular/common";
 import {DeviceService} from "../../services/device.service";
 import {DeviceDTO} from "../../interfaces/device.interface";
+import {NotificationService} from "../Utility/notification/notification.service";
 
 @Component({
   selector: 'app-polytunnel',
@@ -21,6 +22,7 @@ export class PolytunnelComponent implements OnInit {
 
 
   deviceService=inject(DeviceService)
+  notificationService=inject(NotificationService)
 
   getAllDevices(): void {
     this.deviceService.getAll().subscribe({
@@ -85,6 +87,8 @@ export class PolytunnelComponent implements OnInit {
   onSubmit(): void {
     if (this.plotForm.invalid) {
       this.plotForm.markAllAsTouched();
+      this.notificationService.showWarning('Please fill the required fields!', 3000);
+
       return;
     }
     this.isSubmitting = true;
@@ -95,6 +99,8 @@ export class PolytunnelComponent implements OnInit {
       formValue.userId = +formValue.userId;
       formValue.status = 'active';
       this.isSubmitting = false;
+      this.notificationService.showSuccess('New poly tunnel added successfully', 3000);
+
     }, 1000);
   }
 }
