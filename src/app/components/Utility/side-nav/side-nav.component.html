@@ -46,7 +46,6 @@
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
       <ul class="space-y-2 font-medium">
         <li *ngFor="let item of navigationItems">
-          <!-- If it's Sign out, use click handler; otherwise use routerLink -->
           <a *ngIf="item.label !== 'Sign out'; else logoutTemplate"
              [routerLink]="item.route"
              [ngClass]="{'bg-blue-100 text-blue-700 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700': !isActive(item.route)}"
