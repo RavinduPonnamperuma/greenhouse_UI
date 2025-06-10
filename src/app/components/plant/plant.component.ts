@@ -49,7 +49,7 @@ export class PlantComponent implements OnInit {
       cost: ['', [Validators.required, Validators.min(0)]],
       harvestTime: ['', [Validators.required, Validators.min(0)]],
       startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      endTime: ['', Validators.required],
       polytunnelId: ['', Validators.required],
     });
   }
