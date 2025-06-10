@@ -27,10 +27,17 @@ export class SideNavComponent {
   isSidebarOpen: boolean = false;
   isDropdownOpen: boolean = false;
 
+
+  ngOnInit() {
+    this.checkLoginStatus();
+    this.router.events.subscribe(() => {
+      this.checkLoginStatus();
+    });
+  }
+
   navigationItems: NavItem[] = [
     {label: 'Dashboard', route: '/dashboard'},
-    {label: 'Profile', route: '/profile'},
-    {label: 'Tunnel', route: '/Tunnel'},
+    {label: 'Tunnel', route: '/polytunnel'},
     {label: 'Plant', route: '/plant'},
     {label: 'Schedule', route: '/schedule'},
     {label: 'Irrigation', route: '/Irrigation'},
@@ -41,6 +48,8 @@ export class SideNavComponent {
     {label: 'Sign Up', route: '/register'},
     {label: 'Sign out', route: '/logout'}
   ];
+
+  isLoggedIn = false;
 
   constructor(private router: Router) {
   }
@@ -57,5 +66,18 @@ export class SideNavComponent {
     this.router.navigate([route]);
     this.isDropdownOpen = false; // Close dropdown after navigation
     this.isSidebarOpen = false; // Close sidebar on mobile after navigation
+  }
+
+  logOut(): void {
+    localStorage.removeItem('userData');
+    localStorage.clear();
+    this.router.navigate(['login']);
+    this.checkLoginStatus();
+  }
+  checkLoginStatus() {
+    const userData = localStorage.getItem('userData');
+    const currentRoute = this.router.url;
+
+    this.isLoggedIn = !!userData && currentRoute !== '/login';
   }
 }

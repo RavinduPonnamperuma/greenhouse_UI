@@ -61,3 +61,9 @@ h2 {
 .input-new{
   @apply p-1.5 border border-[#e8e8e8] rounded-md w-full;
 }
+
+body, html {
+  position: relative;
+  overflow-x: visible;
+  overflow-y: visible;
+}
