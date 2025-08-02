@@ -1,4 +1,5 @@
 import {DeviceService} from "../../app/services/device.service";
+import {ActionService} from "../../app/services/action.service";
 
 
 export enum APIRequestResources {
@@ -8,6 +9,7 @@ export enum APIRequestResources {
   DeviceService = 'device',
   PolytunnelService = 'polytunnel',
   PlantService = 'plant',
+  ActionService = 'action',
 }
 
 export type APIRequestResource =
@@ -15,5 +17,6 @@ export type APIRequestResource =
   APIRequestResources.SensorService |
   APIRequestResources.DeviceService |
   APIRequestResources.UserService|
-  APIRequestResources.PolytunnelService|
+  APIRequestResources.PolytunnelService |
+  APIRequestResources.ActionService |
   APIRequestResources.PlantService;
