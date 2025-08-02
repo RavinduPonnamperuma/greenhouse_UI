@@ -16,7 +16,7 @@ import {NotificationService} from "./components/Utility/notification/notificatio
 })
 
 export class AppComponent  implements OnInit {
-  isLoggedIn = false;
+  isLoggedIn = true;
 
   constructor(private router: Router, private notificationService: NotificationService) {}
 
@@ -31,7 +31,8 @@ export class AppComponent  implements OnInit {
   checkLoginStatus() {
     const userData = localStorage.getItem('userData');
     const currentRoute = this.router.url;
-    this.isLoggedIn = !!userData && currentRoute !== '/login';
+    // this.isLoggedIn = !!userData && currentRoute !== '/login';
+    this.isLoggedIn =  currentRoute !== '/login';
   }
 
   testNotification() {
