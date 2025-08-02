@@ -1,1 +1,170 @@
-<p>irrigation-schedule works!</p>
+<div class="p-4 sm:ml-64">
+  <div class="p-6 border border-gray-200 rounded-xl bg-white shadow-lg mt-14">
+    <div class="space-y-1">
+      <h2 class="text-xl font-bold text-gray-900">Irrigation Tasks</h2>
+      <button
+        (click)="openCreateModal()"
+        class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        New Schedule
+      </button>
+    </div>
+
+    <!-- Table -->
+    <div class="bg-white p-6 rounded-xl shadow-lg overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Task Type</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plant</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let task of tasks" class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.scheduledDate }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.scheduledTime }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.taskType }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.duration }} min</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.plant.plantName}}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <button (click)="openEditModal(task)" class="text-blue-600 hover:text-blue-800 mr-4">Edit</button>
+            <button (click)="deleteTask(task.id)" class="text-red-600 hover:text-red-800">Delete</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal -->
+    <div *ngIf="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">{{ editingTask ? 'Edit Irrigation Task' : 'Schedule Irrigation Task' }}</h3>
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-4">
+          <div class="grid grid-cols-1 gap-4">
+            <!-- Scheduled Date -->
+            <div>
+              <label for="scheduledDate" class="block text-sm font-medium text-gray-700">Scheduled Date</label>
+              <input
+                type="date"
+                id="scheduledDate"
+                formControlName="scheduledDate"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 {{ isFieldInvalid('scheduledDate') ? 'border-red-500' : '' }}"
+              />
+              <div *ngIf="isFieldInvalid('scheduledDate')" class="text-red-500 text-sm mt-1">
+                Scheduled date is required
+              </div>
+            </div>
+
+            <!-- Scheduled Time -->
+            <div>
+              <label for="scheduledTime" class="block text-sm font-medium text-gray-700">Scheduled Time</label>
+              <input
+                type="time"
+                id="scheduledTime"
+                formControlName="scheduledTime"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 {{ isFieldInvalid('scheduledTime') ? 'border-red-500' : '' }}"
+              />
+              <div *ngIf="isFieldInvalid('scheduledTime')" class="text-red-500 text-sm mt-1">
+                Scheduled time is required
+              </div>
+            </div>
+
+            <!-- Task Type -->
+            <div>
+              <label for="taskType" class="block text-sm font-medium text-gray-700">Task Type</label>
+              <select
+                id="taskType"
+                formControlName="taskType"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 {{ isFieldInvalid('taskType') ? 'border-red-500' : '' }}"
+              >
+                <option value="" disabled>Select task type</option>
+                <option value="watering">Watering</option>
+                <option value="fertilizing">Fertilizing</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
+              <div *ngIf="isFieldInvalid('taskType')" class="text-red-500 text-sm mt-1">
+                Task type is required
+              </div>
+            </div>
+
+            <!-- Duration -->
+            <div>
+              <label for="duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
+              <input
+                type="number"
+                id="duration"
+                formControlName="duration"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 {{ isFieldInvalid('duration') ? 'border-red-500' : '' }}"
+                placeholder="20"
+                min="1"
+              />
+              <div *ngIf="isFieldInvalid('duration')" class="text-red-500 text-sm mt-1">
+                <div *ngIf="f['duration'].errors?.['required']">Duration is required</div>
+                <div *ngIf="f['duration'].errors?.['min']">Must be at least 1</div>
+              </div>
+            </div>
+
+            <!-- Plant Selection -->
+            <div>
+              <label for="plantId" class="block text-sm font-medium text-gray-700">Plant</label>
+              <select
+                id="plantId"
+                formControlName="plantId"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 {{ isFieldInvalid('plantId') ? 'border-red-500' : '' }}"
+              >
+                <option value="" disabled>Select a plant</option>
+                <option *ngFor="let plant of plants" [value]="plant.id">{{ plant.plantName }}</option>
+              </select>
+              <div *ngIf="isFieldInvalid('plantId')" class="text-red-500 text-sm mt-1">
+                Please select a plant
+              </div>
+            </div>
+
+            <!-- Irrigation Selection -->
+            <div>
+              <label for="irrigationId" class="block text-sm font-medium text-gray-700">Irrigation Schedule</label>
+              <select
+                id="irrigationId"
+                formControlName="irrigationId"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500 {{ isFieldInvalid('irrigationId') ? 'border-red-500' : '' }}"
+              >
+                <option value="" disabled>Select an irrigation schedule</option>
+                <option *ngFor="let irrigation of irrigations" [value]="irrigation.id">{{ irrigation.id }} ({{ irrigation.plant.plantName }})</option>
+              </select>
+              <div *ngIf="isFieldInvalid('irrigationId')" class="text-red-500 text-sm mt-1">
+                Please select an irrigation schedule
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Buttons -->
+          <div class="flex justify-end space-x-4 mt-6">
+            <button
+              type="button"
+              (click)="closeModal()"
+              class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmitting"
+              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
+            >
+              {{ isSubmitting ? 'Saving...' : (editingTask ? 'Update' : 'Schedule') }}
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-4">
+            {{ errorMessage }}
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
