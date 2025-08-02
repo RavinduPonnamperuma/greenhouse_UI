@@ -1,9 +1,11 @@
 import {Component, inject, OnInit, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexNonAxisChartSeries, ApexResponsive } from 'ng-apexcharts';
 import {SensorDataService} from "../../services/sensor-data.service";
 import {HumidityDTO, MoistureDTO, SensorDataDTO, TemperatureDTO} from "../../interfaces/sensor-data.interface";
+import {ActionService} from "../../services/action.service";
+import {NotificationService} from "../Utility/notification/notification.service";
 
 @Component({
   selector: 'app-home',
@@ -11,7 +13,8 @@ import {HumidityDTO, MoistureDTO, SensorDataDTO, TemperatureDTO} from "../../int
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ChartComponent
+    ChartComponent,
+    FormsModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
@@ -20,7 +23,13 @@ export class HomeComponent implements OnInit {
   @ViewChild('realtimeChart') realtimeChart: ChartComponent | undefined;
   @ViewChild('waterLevelChart') waterLevelChart: ChartComponent | undefined;
 
+  fanChecked: boolean = false; // Initial state
+  waterChecked: boolean = false; // Initial state
+  fertilizerChecked: boolean = false; // Initial state
+
   sensorDataService=inject(SensorDataService)
+  notificationService=inject(NotificationService)
+  actionService=inject(ActionService)
 
   public lineChartOptions: {
     series: ApexAxisChartSeries;
@@ -136,9 +145,53 @@ export class HomeComponent implements OnInit {
       this.fetchSensorData();
     }, 3000);
 
-
-
   }
+
+  turnOn(name: string, id: number) {
+    this.actionService.turnOn(String(id)).subscribe({
+      next: (data: any) => {
+        this.notificationService.showSuccess(`Turned on the ${name}`, 3000);
+      },
+      error: (err) => {
+        console.error('Failed to turn on:', err);
+        this.notificationService.showError(`Failed to turn on the ${name}`, 3000);
+      }
+    });
+  }
+
+  toggleDevice(name: string, id: number, isChecked: boolean) {
+    if (isChecked) {
+      this.turnOn(name, id);
+    } else {
+      this.turnOff(name, id);
+    }
+  }
+
+  private revertCheckboxState(name: string, revertTo: boolean) {
+    if (name === 'Fan') {
+      this.fanChecked = revertTo;
+    } else if (name === 'Water') {
+      this.waterChecked = revertTo;
+    } else if (name === 'Fertilizer') {
+      this.fertilizerChecked = revertTo;
+    }
+  }
+
+  turnOff(name: string, id: number) {
+    this.actionService.turnOff(String(id)).subscribe({
+      next: (data: any) => {
+        this.notificationService.showSuccess(`Turned off the ${name}`, 3000);
+      },
+      error: (err) => {
+        console.error('Failed to turn off:', err);
+        this.notificationService.showError(`Failed to turn off the ${name}`, 3000);
+      }
+    });
+  }
+
+
+
+
 
   temperatures: { timestamp: string; value: number }[] = [];
   humidities: { timestamp: string; value: number }[] = [];
