@@ -33,17 +33,6 @@ export class PlantComponent implements OnInit {
   notificationService=inject(NotificationService)
   polytunnelService=inject(PolytunnelService)
   plantService=inject(PlantService)
-  polytunnels = [
-    { id: 1, name: 'Polytunnel 1' },
-    { id: 2, name: 'Polytunnel 2' },
-    { id: 3, name: 'Polytunnel 3' },
-  ];
-  tableData = [
-    { plantName: 'Tomato', status: 'Growing', cost: 100, harvestTime: 60 },
-    { plantName: 'Cucumber', status: 'Seeding', cost: 80, harvestTime: 50 },
-    { plantName: 'Lettuce', status: 'Harvested', cost: 50, harvestTime: 30 },
-    { plantName: 'Pepper', status: 'Growing', cost: 120, harvestTime: 70 },
-  ];
 
   constructor(private fb: FormBuilder) {
    this.tunnelGetAll();

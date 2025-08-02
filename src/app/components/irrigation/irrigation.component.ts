@@ -5,6 +5,7 @@ import {PlantService} from "../../services/plant.service";
 import {PlantDto} from "../../interfaces/plant.interface";
 import {IrrigationService} from "../../services/irrigation.service";
 import {IrrigationDTO} from "../../interfaces/irrigation.entity";
+import {NotificationService} from "../Utility/notification/notification.service";
 
 
 interface Irrigation {
@@ -30,20 +31,21 @@ interface Irrigation {
   templateUrl: './irrigation.component.html',
   styleUrl: './irrigation.component.scss'
 })
-export class IrrigationComponent implements OnInit {
+export class IrrigationComponent {
 
   plantService = inject(PlantService)
   irrigationService = inject(IrrigationService)
-
-
+  notificationService = inject(NotificationService)
   plantDtos: PlantDto[] = []
   irrigationDTOS: IrrigationDTO[] = []
+  irrigationForm: FormGroup;
+  isSubmitting = false;
+  errorMessage: string | null = null;
 
 
   constructor(private fb: FormBuilder) {
     this.plantGetAll();
     this.getAllIrrigations();
-
     this.irrigationForm = this.fb.group({
       waterPerDay: ['', [Validators.required, Validators.min(0)]],
       fertilizerPerDay: ['', [Validators.required, Validators.min(0)]],
@@ -67,7 +69,6 @@ export class IrrigationComponent implements OnInit {
   }
 
   getAllIrrigations() {
-
     this.irrigationService.getAll().subscribe({
       next: data => {
         this.irrigationDTOS = Array.isArray(data.data) ? data.data : [data.data];
@@ -81,44 +82,6 @@ export class IrrigationComponent implements OnInit {
   }
 
 
-  irrigationForm: FormGroup;
-
-  isSubmitting = false;
-  errorMessage: string | null = null;
-  plants = [
-    {id: 1, name: 'Tomato'},
-    {id: 2, name: 'Cucumber'},
-    {id: 3, name: 'Lettuce'},
-  ];
-  tableData: Irrigation[] = [
-    {
-      waterPerDay: 2.5,
-      fertilizerPerDay: 1.5,
-      timesPerDay: 3,
-      isMorning: 0,
-      morningTime: '06:30',
-      isEvening: 0,
-      eveningTime: '18:30',
-      duration: 15,
-      plantId: 2,
-    },
-    {
-      waterPerDay: 3.0,
-      fertilizerPerDay: 1.0,
-      timesPerDay: 2,
-      isMorning: 1,
-      morningTime: '07:00',
-      isEvening: 1,
-      eveningTime: '19:00',
-      duration: 20,
-      plantId: 1,
-    },
-  ];
-
-
-  ngOnInit(): void {
-  }
-
   get f() {
     return this.irrigationForm.controls;
   }
@@ -126,11 +89,6 @@ export class IrrigationComponent implements OnInit {
   isFieldInvalid(field: string): boolean {
     const control = this.irrigationForm.get(field);
     return !!control && control.invalid && (control.dirty || control.touched);
-  }
-
-  getPlantName(plantId: number): string {
-    const plant = this.plants.find(p => p.id === plantId);
-    return plant ? plant.name : 'Unknown';
   }
 
   onSubmit(): void {
@@ -143,23 +101,36 @@ export class IrrigationComponent implements OnInit {
     this.errorMessage = null;
 
     const formValue: Irrigation = this.irrigationForm.value;
-    console.log('Form submitted:', formValue);
+    const payload = {
+      waterPerDay: this.irrigationForm.value.waterPerDay.toString(),
+      fertilizerPerDay: this.irrigationForm.value.fertilizerPerDay.toString(),
+      timesPerDay: +this.irrigationForm.value.timesPerDay,
+      isMorning: this.irrigationForm.value.isMorning === '1',
+      morningTime: this.irrigationForm.value.morningTime,
+      isEvening: this.irrigationForm.value.isEvening === '1',
+      eveningTime: this.irrigationForm.value.eveningTime,
+      duration: +this.irrigationForm.value.duration,
+      plantId: +this.irrigationForm.value.plantId,
+    };
+    this.irrigationService.createPlant(payload).subscribe({
+      next: data => {
+        this.notificationService.showSuccess('New irrigation added successfully', 3000);
+        this.isSubmitting = false;
+        this.reset()
+      },
+      error: (err) => {
+        console.error('Failed to create irrigation:', err);
+        this.notificationService.showError('Failed to add irrigation schedule. Please try again.', 5000);
+        this.errorMessage = 'Failed to add irrigation schedule.';
+        this.isSubmitting = false;
+      }
+    });
+  }
 
-    // Simulate form submission
-    setTimeout(() => {
-      this.tableData.push({
-        ...formValue,
-        waterPerDay: +formValue.waterPerDay,
-        fertilizerPerDay: +formValue.fertilizerPerDay,
-        timesPerDay: +formValue.timesPerDay,
-        isMorning: +formValue.isMorning,
-        isEvening: +formValue.isEvening,
-        duration: +formValue.duration,
-        plantId: +formValue.plantId,
-      });
-      this.isSubmitting = false;
-      this.irrigationForm.reset();
-    }, 1000);
+  reset() {
+    this.irrigationForm.reset();
+    this.getAllIrrigations();
+    this.plantGetAll();
   }
 
 
