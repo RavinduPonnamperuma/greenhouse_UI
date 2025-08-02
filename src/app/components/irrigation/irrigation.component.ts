@@ -110,7 +110,7 @@ export class IrrigationComponent {
       isEvening: this.irrigationForm.value.isEvening === '1',
       eveningTime: this.irrigationForm.value.eveningTime,
       duration: +this.irrigationForm.value.duration,
-      plantId: +this.irrigationForm.value.plantId,
+      plantId:  + this.irrigationForm.value.plantId
     };
     this.irrigationService.createPlant(payload).subscribe({
       next: data => {
@@ -121,7 +121,6 @@ export class IrrigationComponent {
       error: (err) => {
         console.error('Failed to create irrigation:', err);
         this.notificationService.showError('Failed to add irrigation schedule. Please try again.', 5000);
-        this.errorMessage = 'Failed to add irrigation schedule.';
         this.isSubmitting = false;
       }
     });
