@@ -4,7 +4,7 @@
       <!-- Form Card -->
       <form [formGroup]="plantForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
         <div>
-          <h3 class="text-lg font-medium text-gray-900 mb-4">Add new Plant</h3>
+          <h2 class="text-xl font-bold text-gray-900">Add new Plant</h2>
         </div>
         <div class="grid grid-cols-3 gap-4">
           <!-- Plant Name -->
@@ -26,22 +26,22 @@
           </div>
 
           <!-- Status -->
-          <div>
-            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
-              Status
-            </label>
-            <input
-              type="text"
-              id="status"
-              formControlName="status"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"
-              placeholder="Growing"
-            />
-            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['status'].errors?.['required']">Status is required</div>
-              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>
-            </div>
-          </div>
+<!--          <div>-->
+<!--            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">-->
+<!--              Status-->
+<!--            </label>-->
+<!--            <input-->
+<!--              type="text"-->
+<!--              id="status"-->
+<!--              formControlName="status"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"-->
+<!--              placeholder="Growing"-->
+<!--            />-->
+<!--            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">-->
+<!--              <div *ngIf="f['status'].errors?.['required']">Status is required</div>-->
+<!--              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>-->
+<!--            </div>-->
+<!--          </div>-->
 
           <!-- Cost -->
           <div>
@@ -102,11 +102,11 @@
             </label>
             <input
               type="date"
-              id="endDate"
-              formControlName="endDate"
+              id="endTime"
+              formControlName="endTime"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('endDate') ? 'border-red-500' : 'border-gray-300' }}"
             />
-            <div *ngIf="isFieldInvalid('endDate')" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('endTime')" class="text-red-500 text-sm mt-1">
               End date is required
             </div>
           </div>
@@ -122,7 +122,7 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('polytunnelId') ? 'border-red-500' : 'border-gray-300' }}"
             >
               <option value="" disabled>Select a polytunnel</option>
-              <option *ngFor="let polytunnel of polytunnels" [value]="polytunnel.id">{{ polytunnel.name }}</option>
+              <option *ngFor="let polytunnel of polytunnel" [value]="polytunnel.id">{{ polytunnel.code }}-{{ polytunnel.location}}</option>
             </select>
             <div *ngIf="isFieldInvalid('polytunnelId')" class="text-red-500 text-sm mt-1">
               Please select a polytunnel
@@ -168,17 +168,19 @@
             <thead>
             <tr class="bg-gray-50">
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Plant Name</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Planted Date</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Status</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Cost</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Harvest Time</th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+            <tr *ngFor="let row of plantDtos" class="even:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.plantName }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.status }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.cost }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestTime }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.startDate }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"><app-status-badges [statusValue]="row.status"></app-status-badges></td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">Rs:{{ row.cost }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestTime }} Days</td>
             </tr>
             </tbody>
           </table>

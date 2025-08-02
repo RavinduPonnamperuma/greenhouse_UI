@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {finalize, Observable, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {APIRequest, APIRequestResources} from "../../core";
-import {SensorDataDTO} from "../interfaces/sensor-data.interface";
+import {SensorDataDTO, WaterTankLevelDto} from "../interfaces/sensor-data.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -21,6 +21,19 @@ export class SensorDataService extends APIRequest {
         topic: topics,
       },
     });
+  }
+
+  public getWaterTank(id: number): Observable<any> {
+    const requestOptions = {
+      endpoint: `water-level/${id}`,
+    };
+    return this.get<WaterTankLevelDto>(requestOptions).pipe(
+      tap(response => {
+      }),
+      finalize(() => {
+
+      })
+    );
   }
 
 }
