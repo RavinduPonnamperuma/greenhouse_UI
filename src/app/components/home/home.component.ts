@@ -1,11 +1,19 @@
-import {Component, inject, OnInit, ViewChild} from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexNonAxisChartSeries, ApexResponsive } from 'ng-apexcharts';
-import {SensorDataService} from "../../services/sensor-data.service";
-import {HumidityDTO, MoistureDTO, SensorDataDTO, TemperatureDTO} from "../../interfaces/sensor-data.interface";
-import {ActionService} from "../../services/action.service";
-import {NotificationService} from "../Utility/notification/notification.service";
+import { SensorDataService } from "../../services/sensor-data.service";
+import { HumidityDTO, MoistureDTO, SensorDataDTO, TemperatureDTO } from "../../interfaces/sensor-data.interface";
+import { ActionService } from "../../services/action.service";
+import { NotificationService } from "../Utility/notification/notification.service";
+
+export interface WaterTankLevelDto {
+  waterTankId: number;
+  tankNumber: string;
+  totalCapacity: number;
+  totalOut: string;
+  currentWaterLevel: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -23,13 +31,13 @@ export class HomeComponent implements OnInit {
   @ViewChild('realtimeChart') realtimeChart: ChartComponent | undefined;
   @ViewChild('waterLevelChart') waterLevelChart: ChartComponent | undefined;
 
-  fanChecked: boolean = false; // Initial state
-  waterChecked: boolean = false; // Initial state
-  fertilizerChecked: boolean = false; // Initial state
+  fanChecked: boolean = false;
+  waterChecked: boolean = false;
+  fertilizerChecked: boolean = false;
 
-  sensorDataService=inject(SensorDataService)
-  notificationService=inject(NotificationService)
-  actionService=inject(ActionService)
+  sensorDataService = inject(SensorDataService);
+  notificationService = inject(NotificationService);
+  actionService = inject(ActionService);
 
   public lineChartOptions: {
     series: ApexAxisChartSeries;
@@ -117,34 +125,24 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.temperatures=[]
-    this.humidities=[]
-    this.moistures=[]
+    this.temperatures = [];
+    this.humidities = [];
+    this.moistures = [];
     setInterval(() => {
       const newLive = (this.lineChartOptions.series[0].data.slice(-1)[0] as number) + Math.floor(Math.random() * 10 - 5);
       const newDead = (this.lineChartOptions.series[1].data.slice(-1)[0] as number) + Math.floor(Math.random() * 3 - 1);
       const newIncome = (this.lineChartOptions.series[2].data.slice(-1)[0] as number) + Math.floor(Math.random() * 200 - 100);
 
-      // this.lineChartOptions.series[0].data = [...this.lineChartOptions.series[0].data.slice(1), newLive];
-      // this.lineChartOptions.series[1].data = [...this.lineChartOptions.series[1].data.slice(1), newDead];
-      // this.lineChartOptions.series[2].data = [...this.lineChartOptions.series[2].data.slice(1), newIncome];
-
       this.realtimeChart?.updateSeries(this.lineChartOptions.series);
     }, 2000);
 
     setInterval(() => {
-      const newLevel = Math.min(100, Math.max(0, (this.gaugeChartOptions.series[0] as number) + Math.floor(Math.random() * 10 - 5)));
-      this.gaugeChartOptions.series = [newLevel];
-      this.waterLevelChart?.updateSeries(this.gaugeChartOptions.series);
+      this.getWaterLevel();
     }, 3000);
-
-
-    //3 second wli autorun wnw
 
     setInterval(() => {
       this.fetchSensorData();
-    }, 3000);
-
+    }, 10000);
   }
 
   turnOn(name: string, id: number) {
@@ -187,20 +185,14 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
-
-
-
   temperatures: { timestamp: string; value: number }[] = [];
   humidities: { timestamp: string; value: number }[] = [];
   moistures: { timestamp: string; value: number }[] = [];
 
-  //get sensor data
   fetchSensorData() {
     this.sensorDataService.getSensorById('all').subscribe({
       next: (data: any) => {
         const sensorData: SensorDataDTO[] = data.data;
-
 
         this.temperatures = sensorData
           .filter(item => item.topic === 'temperature')
@@ -233,5 +225,20 @@ export class HomeComponent implements OnInit {
     });
   }
 
-
+  getWaterLevel() {
+    this.sensorDataService.getWaterTank(1).subscribe({
+      next: (data: any) => {
+        const waterTank: WaterTankLevelDto = data.data;
+        const currentLevel = parseFloat(waterTank.currentWaterLevel);
+        const totalCapacity = waterTank.totalCapacity;
+        const percentage = Math.round((currentLevel / totalCapacity) * 100);
+        this.gaugeChartOptions.series = [percentage];
+        this.waterLevelChart?.updateSeries(this.gaugeChartOptions.series);
+      },
+      error: (err) => {
+        console.error('Error fetching water tank data:', err);
+        this.notificationService.showError('Failed to fetch water tank data', 3000);
+      }
+    });
+  }
 }
