@@ -155,14 +155,9 @@ export class IrrigationScheduleComponent {
       irrigationId: +this.taskForm.value.irrigationId,
     };
 
-
-
     this.irrigationTaskService.create(payload).subscribe({
       next: (response) => {
-        const message = this.editingTask
-          ? 'Irrigation task updated successfully'
-          : 'Irrigation task added successfully';
-        this.notificationService.showSuccess(message, 3000);
+        this.notificationService.showSuccess('Irrigation task added successfully\'', 3000);
 
         if (this.editingTask) {
           const index = this.tasks.findIndex((t) => t.id === this.editingTask!.id);
@@ -170,17 +165,12 @@ export class IrrigationScheduleComponent {
         } else {
           this.tasks.push(response.data);
         }
-
         this.isSubmitting = false;
         this.closeModal();
       },
       error: (err) => {
         console.error('Failed to save task:', err);
-        const message = this.editingTask
-          ? 'Failed to update irrigation task.'
-          : 'Failed to add irrigation task.';
-        this.notificationService.showError(message + ' Please try again.', 5000);
-        this.errorMessage = message;
+        this.notificationService.showError('Failed to add irrigation task' + ' Please try again.', 5000);
         this.isSubmitting = false;
       },
     });
@@ -202,8 +192,4 @@ export class IrrigationScheduleComponent {
     });
   }
 
-  getPlantName(plantId: number): string {
-    const plant = this.plants.find((p) => p.id === plantId);
-    return plant ? plant.plantName : 'Unknown';
-  }
 }
