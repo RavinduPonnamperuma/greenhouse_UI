@@ -150,7 +150,6 @@ export class HomeComponent implements OnInit {
   turnOn(name: string, id: number) {
     this.actionService.turnOn(String(id)).subscribe({
       next: (data: any) => {
-        this.notificationService.showSuccess(`Turned on the ${name}`, 3000);
       },
       error: (err) => {
         console.error('Failed to turn on:', err);
@@ -180,7 +179,6 @@ export class HomeComponent implements OnInit {
   turnOff(name: string, id: number) {
     this.actionService.turnOff(String(id)).subscribe({
       next: (data: any) => {
-        this.notificationService.showSuccess(`Turned off the ${name}`, 3000);
       },
       error: (err) => {
         console.error('Failed to turn off:', err);

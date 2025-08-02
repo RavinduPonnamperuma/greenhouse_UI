@@ -1,4 +1,5 @@
 import {IrrigationTaskService} from "../../app/services/IrrigationTask.service";
+import {HarvestService} from "../../app/services/harvest.service";
 
 
 export enum APIRequestResources {
@@ -11,6 +12,7 @@ export enum APIRequestResources {
   ActionService = 'action',
   IrrigationService = 'irrigation',
   IrrigationTaskService = 'schedule',
+  HarvestService = 'harvests',
 }
 
 export type APIRequestResource =
@@ -21,5 +23,6 @@ export type APIRequestResource =
   APIRequestResources.PolytunnelService |
   APIRequestResources.IrrigationService |
   APIRequestResources.IrrigationTaskService |
+  APIRequestResources.HarvestService |
   APIRequestResources.ActionService |
   APIRequestResources.PlantService;

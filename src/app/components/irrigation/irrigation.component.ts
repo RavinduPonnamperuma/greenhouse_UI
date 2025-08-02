@@ -34,8 +34,9 @@ interface Irrigation {
 export class IrrigationComponent {
 
   plantService = inject(PlantService)
-  irrigationService = inject(IrrigationService)
   notificationService = inject(NotificationService)
+  irrigationService = inject(IrrigationService)
+
   plantDtos: PlantDto[] = []
   irrigationDTOS: IrrigationDTO[] = []
   irrigationForm: FormGroup;

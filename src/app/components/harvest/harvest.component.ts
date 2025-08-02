@@ -1,6 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CurrencyPipe, NgForOf, NgIf} from "@angular/common";
+import {PlantService} from "../../services/plant.service";
+import {NotificationService} from "../Utility/notification/notification.service";
+import {HarvestService} from "../../services/harvest.service";
+import {HarvestDTO} from "../../interfaces/harverst.entity";
 
 
 
@@ -25,6 +29,47 @@ interface Harvest {
   styleUrl: './harvest.component.scss'
 })
 export class HarvestComponent implements OnInit {
+
+
+
+  plantService = inject(PlantService)
+  notificationService = inject(NotificationService)
+  harvestService = inject(HarvestService)
+
+
+  harvestDTOS:HarvestDTO[]=[]
+
+
+  constructor(private fb: FormBuilder) {
+    this.getHarvest();
+    this.harvestForm = this.fb.group({
+      harvestDate: ['', Validators.required],
+      sellingPrice: ['', [Validators.required, Validators.min(0)]],
+      quantity: ['', [Validators.required, Validators.min(0)]],
+      variety: ['', [Validators.required, Validators.minLength(2)]],
+      plantId: ['', Validators.required],
+    });
+  }
+
+
+  getHarvest() {
+    this.harvestService.getAll().subscribe({
+      next: data => {
+        this.harvestDTOS = Array.isArray(data.data) ? data.data : [data.data];
+      },
+      error: err => {
+        console.error('Failed to fetch irrigations:', err);
+        this.errorMessage = 'Failed to load irrigation data.';
+
+      }
+    });
+  }
+
+
+
+
+
+
   harvestForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
@@ -50,17 +95,10 @@ export class HarvestComponent implements OnInit {
     },
   ];
 
-  constructor(private fb: FormBuilder) {
-    this.harvestForm = this.fb.group({
-      harvestDate: ['', Validators.required],
-      sellingPrice: ['', [Validators.required, Validators.min(0)]],
-      quantity: ['', [Validators.required, Validators.min(0)]],
-      variety: ['', [Validators.required, Validators.minLength(2)]],
-      plantId: ['', Validators.required],
-    });
-  }
 
   ngOnInit(): void {}
+
+
 
   get f() {
     return this.harvestForm.controls;

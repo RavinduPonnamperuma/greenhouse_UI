@@ -141,12 +141,12 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+            <tr *ngFor="let row of harvestDTOS" class="even:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestDate }}</td>
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.sellingPrice | currency }}</td>
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.quantity }}</td>
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.variety }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ getPlantName(row.plantId) }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.plant.plantName }}</td>
             </tr>
             </tbody>
           </table>
