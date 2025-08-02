@@ -132,13 +132,12 @@ export class HomeComponent implements OnInit {
       const newLive = (this.lineChartOptions.series[0].data.slice(-1)[0] as number) + Math.floor(Math.random() * 10 - 5);
       const newDead = (this.lineChartOptions.series[1].data.slice(-1)[0] as number) + Math.floor(Math.random() * 3 - 1);
       const newIncome = (this.lineChartOptions.series[2].data.slice(-1)[0] as number) + Math.floor(Math.random() * 200 - 100);
-
       this.realtimeChart?.updateSeries(this.lineChartOptions.series);
     }, 2000);
 
     setInterval(() => {
       this.getWaterLevel();
-    }, 3000);
+    }, 5000);
 
     setInterval(() => {
       this.fetchSensorData();
@@ -161,16 +160,6 @@ export class HomeComponent implements OnInit {
       this.turnOn(name, id);
     } else {
       this.turnOff(name, id);
-    }
-  }
-
-  private revertCheckboxState(name: string, revertTo: boolean) {
-    if (name === 'Fan') {
-      this.fanChecked = revertTo;
-    } else if (name === 'Water') {
-      this.waterChecked = revertTo;
-    } else if (name === 'Fertilizer') {
-      this.fertilizerChecked = revertTo;
     }
   }
 
