@@ -1,6 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {DatePipe, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
+import {PlantService} from "../../services/plant.service";
+import {PolytunnelService} from "../../services/polytunnel.service";
+import {PlantTrayDTO} from "../../interfaces/polytunnel.interface";
+import {PlantDto} from "../../interfaces/plant.interface";
 
 interface Report {
   startDate: string;
@@ -19,54 +23,28 @@ interface Report {
     ReactiveFormsModule,
     NgIf,
     NgForOf,
-    TitleCasePipe
+    NgClass
   ],
   templateUrl: './report.component.html',
   styleUrl: './report.component.scss',
   providers: [DatePipe],
 })
 export class ReportComponent implements OnInit {
+
+  plantService = inject(PlantService)
+  polytunnelService=inject(PolytunnelService)
+
+
+  polytunnel:PlantTrayDTO[]=[]
+  plantDtos:PlantDto[]=[]
   reportForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
-  plants = [
-    { id: '1', name: 'Tomato' },
-    { id: '2', name: 'Cucumber' },
-    { id: '3', name: 'Lettuce' },
-  ];
-  plots = [
-    { id: '1', code: 'PT-001' },
-    { id: '2', code: 'PT-002' },
-    { id: '3', code: 'PT-003' },
-  ];
-  tableData: Report[] = [
-    {
-      startDate: '2025-01-01',
-      endDate: '2025-06-10',
-      plantId: '1',
-      plotId: '',
-      reportType: 'plant',
-      generatedAt: '2025-06-10T11:00:00',
-    },
-    {
-      startDate: '2025-03-01',
-      endDate: '2025-05-31',
-      plantId: '',
-      plotId: '2',
-      reportType: 'polytunnel',
-      generatedAt: '2025-06-09T14:30:00',
-    },
-    {
-      startDate: '2025-01-01',
-      endDate: '2025-06-10',
-      plantId: '',
-      plotId: '',
-      reportType: 'financial',
-      generatedAt: '2025-06-08T09:15:00',
-    },
-  ];
+
 
   constructor(private fb: FormBuilder, private datePipe: DatePipe) {
+    this.tunnelGetAll();
+    this.plantGetAll();
     this.reportForm = this.fb.group({
       startDate: ['', Validators.required],
       endDate: ['', Validators.required],
@@ -75,6 +53,28 @@ export class ReportComponent implements OnInit {
       reportType: ['', Validators.required],
     });
   }
+
+
+  tunnelGetAll(){
+    this.polytunnelService.getAll().subscribe({
+      next: data => {
+        this.polytunnel=data.data
+      }
+    })
+  }
+
+
+  plantGetAll(){
+    this.plantService.getAll().subscribe({
+      next: data => {
+        this.plantDtos=data.data
+      }
+    })
+  }
+
+
+
+
 
   ngOnInit(): void {}
 
@@ -85,18 +85,6 @@ export class ReportComponent implements OnInit {
   isFieldInvalid(field: string): boolean {
     const control = this.reportForm.get(field);
     return !!control && control.invalid && (control.dirty || control.touched);
-  }
-
-  getPlantName(plantId: string): string {
-    if (!plantId) return 'All Plants';
-    const plant = this.plants.find(p => p.id === plantId);
-    return plant ? plant.name : 'Unknown';
-  }
-
-  getPlotCode(plotId: string): string {
-    if (!plotId) return 'All Polytunnels';
-    const plot = this.plots.find(p => p.id === plotId);
-    return plot ? plot.code : 'Unknown';
   }
 
   onDownload(): void {
@@ -114,12 +102,5 @@ export class ReportComponent implements OnInit {
     };
     console.log('Report parameters:', formValue);
 
-    // Simulate report generation
-    setTimeout(() => {
-      this.tableData.push(formValue);
-      this.isSubmitting = false;
-      this.reportForm.reset();
-      // TODO: Implement actual report download (e.g., trigger file download)
-    }, 1000);
   }
 }

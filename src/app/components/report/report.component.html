@@ -1,152 +1,123 @@
-<div class="p-4 sm:ml-64">
-  <div class="p-6 border border-gray-200 rounded-xl bg-white shadow-lg mt-14">
-    <div class="space-y-8">
-      <!-- Form Card -->
-      <form [formGroup]="reportForm" (ngSubmit)="onDownload()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
+<div class="min-h-screen bg-gray-100 p-4 sm:ml-64">
+  <div class="max-w-7xl mx-auto">
+    <!-- Main Card -->
+    <div class="bg-white shadow-xl rounded-2xl p-8 mt-16">
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">Generate Farm Reports</h1>
+
+      <!-- Report Generation Form -->
+      <form [formGroup]="reportForm"  class="space-y-6">
+        <!-- Header and Description -->
         <div>
-          <h3 class="text-lg font-medium text-gray-900 mb-4">Generate Report</h3>
+          <p class="text-gray-600 text-sm">Select report type and filters to generate or preview insights for your polytunnels and plants.</p>
         </div>
-        <div class="grid grid-cols-3 gap-4">
+
+        <!-- Filters Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <!-- Start Date -->
           <div>
-            <label for="startDate" class="block mb-2 text-sm font-medium text-gray-900">
-              Start Date
-            </label>
+            <label for="startDate" class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
             <input
               type="date"
               id="startDate"
               formControlName="startDate"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('startDate') ? 'border-red-500' : 'border-gray-300' }}"
-              placeholder="YYYY-MM-DD"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              [ngClass]="{'border-red-500': isFieldInvalid('startDate')}"
             />
-            <div *ngIf="isFieldInvalid('startDate')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['startDate'].errors?.['required']">Start date is required</div>
-            </div>
+            <p *ngIf="isFieldInvalid('startDate')" class="text-red-500 text-xs mt-1">
+              Start date is required
+            </p>
           </div>
 
           <!-- End Date -->
           <div>
-            <label for="endDate" class="block mb-2 text-sm font-medium text-gray-900">
-              End Date
-            </label>
+            <label for="endDate" class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
             <input
               type="date"
               id="endDate"
               formControlName="endDate"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('endDate') ? 'border-red-500' : 'border-gray-300' }}"
-              placeholder="YYYY-MM-DD"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+              [ngClass]="{'border-red-500': isFieldInvalid('endDate')}"
             />
-            <div *ngIf="isFieldInvalid('endDate')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['endDate'].errors?.['required']">End date is required</div>
-            </div>
+            <p *ngIf="isFieldInvalid('endDate')" class="text-red-500 text-xs mt-1">
+              End date is required
+            </p>
           </div>
 
-          <!-- Plant ID -->
+          <!-- Polytunnel Filter -->
           <div>
-            <label for="plantId" class="block mb-2 text-sm font-medium text-gray-900">
-              Plant (Optional)
-            </label>
-            <select
-              id="plantId"
-              formControlName="plantId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            >
-              <option value="">All Plants</option>
-              <option *ngFor="let plant of plants" [value]="plant.id">{{ plant.name }}</option>
-            </select>
-          </div>
-
-          <!-- Plot ID -->
-          <div>
-            <label for="plotId" class="block mb-2 text-sm font-medium text-gray-900">
-              Polytunnel (Optional)
-            </label>
+            <label for="plotId" class="block text-sm font-medium text-gray-700 mb-1">Polytunnel (Optional)</label>
             <select
               id="plotId"
               formControlName="plotId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
             >
               <option value="">All Polytunnels</option>
-              <option *ngFor="let plot of plots" [value]="plot.id">{{ plot.code }}</option>
+              <option *ngFor="let plot of polytunnel" [value]="plot.id">{{ plot.code }} - {{ plot.location }}</option>
             </select>
           </div>
 
-          <!-- Report Type -->
+          <!-- Plant Filter -->
           <div>
-            <label for="reportType" class="block mb-2 text-sm font-medium text-gray-900">
-              Report Type
-            </label>
+            <label for="plantId" class="block text-sm font-medium text-gray-700 mb-1">Plant (Optional)</label>
             <select
-              id="reportType"
-              formControlName="reportType"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('reportType') ? 'border-red-500' : 'border-gray-300' }}"
+              id="plantId"
+              formControlName="plantId"
+              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
             >
-              <option value="" disabled>Select report type</option>
-              <option value="plant">Plant-wise</option>
-              <option value="polytunnel">Polytunnel-wise</option>
-              <option value="financial">Financial</option>
+              <option value="">All Plants</option>
+              <option *ngFor="let plant of plantDtos" [value]="plant.id">{{ plant.plantName }}</option>
             </select>
-            <div *ngIf="isFieldInvalid('reportType')" class="text-red-500 text-sm mt-1">
-              Please select a report type
-            </div>
-          </div>
-
-          <!-- Clear Button -->
-          <div class="mt-7">
-            <button
-              type="reset"
-              class="w-full p-2.5 border rounded-lg text-sm bg-red-600 text-white hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
-            >
-              Clear
-            </button>
-          </div>
-
-          <!-- Download Button -->
-          <div>
-            <button
-              type="submit"
-              [disabled]="isSubmitting"
-              class="w-full p-2.5 border rounded-lg text-sm bg-green-600 text-white hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium disabled:bg-gray-400"
-            >
-              {{ isSubmitting ? 'Generating...' : 'Download' }}
-            </button>
           </div>
         </div>
 
-        <!-- Error Message -->
-        <div *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-4">
-          {{ errorMessage }}
+        <!-- Report Type Selection -->
+        <div>
+          <label for="reportType" class="block text-sm font-medium text-gray-700 mb-1">Report Type</label>
+          <select
+            id="reportType"
+            formControlName="reportType"
+            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+            [ngClass]="{'border-red-500': isFieldInvalid('reportType')}"
+          >
+            <option value="" disabled>Select a report type</option>
+            <option value="polytunnel">Polytunnel Performance</option>
+            <option value="plant">Plant Growth & Yield</option>
+            <option value="irrigation">Irrigation Efficiency</option>
+            <option value="financial">Financial Performance</option>
+          </select>
+          <p *ngIf="isFieldInvalid('reportType')" class="text-red-500 text-xs mt-1">
+            Please select a report type
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex justify-end space-x-4">
+          <button
+            type="reset"
+
+            class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition duration-200"
+          >
+            Clear
+          </button>
+          <button
+            type="button"
+
+            [disabled]="isSubmitting || reportForm.invalid"
+            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition duration-200 disabled:bg-gray-400"
+          >
+            {{ isSubmitting ? 'Processing...' : 'Preview' }}
+          </button>
+          <button
+            type="submit"
+            [disabled]="isSubmitting || reportForm.invalid"
+            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:ring-4 focus:ring-green-300 transition duration-200 disabled:bg-gray-400"
+          >
+            {{ isSubmitting ? 'Generating...' : 'Download' }}
+          </button>
         </div>
       </form>
 
-      <!-- Table Card -->
-      <div class="bg-white p-6 rounded-lg shadow-lg w-full">
-        <h2 class="text-lg font-medium text-gray-900 mb-6">Generated Reports</h2>
-        <div class="relative overflow-x-auto overflow-y-auto max-h-96">
-          <table class="w-full border border-gray-200">
-            <thead class="sticky top-0 bg-gray-50">
-            <tr>
-              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Start Date</th>
-              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">End Date</th>
-              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Plant</th>
-              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Polytunnel</th>
-              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Report Type</th>
-              <th class="border border-gray-200 px-4 py-2 text-sm font-medium text-gray-900">Generated At</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
-              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.startDate }}</td>
-              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.endDate }}</td>
-              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ getPlantName(row.plantId) }}</td>
-              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ getPlotCode(row.plotId) }}</td>
-              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.reportType | titlecase }}</td>
-              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.generatedAt }}</td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <!-- Report Preview Section -->
     </div>
   </div>
 </div>

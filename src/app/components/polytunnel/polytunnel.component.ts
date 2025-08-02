@@ -1,6 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgForOf, NgIf, NgSwitch} from "@angular/common";
+import {DeviceService} from "../../services/device.service";
+import {DeviceDTO} from "../../interfaces/device.interface";
+import {NotificationService} from "../Utility/notification/notification.service";
+import {PolytunnelService} from "../../services/polytunnel.service";
+import {PlantTrayDTO} from "../../interfaces/polytunnel.interface";
+import {StatusBadgesComponent} from "../Utility/status-badges/status-badges.component";
 
 @Component({
   selector: 'app-polytunnel',
@@ -8,20 +14,45 @@ import {NgForOf, NgIf} from "@angular/common";
   imports: [
     ReactiveFormsModule,
     NgForOf,
-    NgIf
+    NgIf,
+    NgSwitch,
+    StatusBadgesComponent
   ],
   templateUrl: './polytunnel.component.html',
   styleUrl: './polytunnel.component.scss'
 })
 export class PolytunnelComponent implements OnInit {
+
+  deviceDTOS:DeviceDTO[]=[]
+  polytunnel:PlantTrayDTO[]=[]
+
+
+  deviceService=inject(DeviceService)
+  notificationService=inject(NotificationService)
+  polytunnelService=inject(PolytunnelService)
+
+  getAllDevices(): void {
+    this.deviceService.getAll().subscribe({
+      next: data => {
+        this.deviceDTOS=data.data
+        console.log(data.data)
+      }
+    })
+  }
+
+  userId=0
+
+
+
+  ngOnInit(): void {
+    // this.getAllDevices()
+    // this.userId = JSON.parse(<string>localStorage.getItem('userId'));
+    // console.log(this.userId);
+  }
+
   plotForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
-  users = [
-    { id: 1, name: 'John Doe' },
-    { id: 2, name: 'Jane Smith' },
-    { id: 3, name: 'Bob Johnson' },
-  ];
   devices = [
     { id: 1, name: 'Device 001' },
     { id: 2, name: 'Device 002' },
@@ -35,20 +66,22 @@ export class PolytunnelComponent implements OnInit {
   ];
 
   constructor(private fb: FormBuilder) {
+    this.getAllDevices();
+    this.getAll()
+    this.userId = JSON.parse(<string>localStorage.getItem('userId'));
     this.plotForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(3)]],
-      status: ['', [Validators.required, Validators.minLength(2)]],
+      // status: ['', [Validators.required, Validators.minLength(2)]],
       location: ['', [Validators.required, Validators.minLength(2)]],
       size: ['', [Validators.required, Validators.minLength(2)]],
       length: ['', [Validators.required, Validators.min(0)]],
       width: ['', [Validators.required, Validators.min(0)]],
       numberOfPlants: ['', [Validators.required, Validators.min(0)]],
-      userId: ['', Validators.required],
       deviceId: ['', Validators.required],
+      userId: this.userId,
     });
   }
 
-  ngOnInit(): void {}
 
   get f() {
     return this.plotForm.controls;
@@ -62,17 +95,34 @@ export class PolytunnelComponent implements OnInit {
   onSubmit(): void {
     if (this.plotForm.invalid) {
       this.plotForm.markAllAsTouched();
+      this.notificationService.showWarning('Please fill the required fields!', 3000);
+
       return;
     }
-
     this.isSubmitting = true;
     this.errorMessage = null;
-
-    // Simulate form submission
     setTimeout(() => {
-      console.log('Form submitted:', this.plotForm.value);
-      this.isSubmitting = false;
-      // Reset form or handle success as needed
+      const formValue = this.plotForm.value;
+      formValue.deviceId = +formValue.deviceId;
+      formValue.userId = +formValue.userId;
+      formValue.status = 'active';
+      this.polytunnelService.create(this.plotForm.value).subscribe({
+        next: data => {
+          this.notificationService.showSuccess('New poly tunnel added successfully', 3000);
+          this.isSubmitting = false;
+          console.log(data);
+          this.getAll()
+        }
+      })
+
     }, 1000);
+  }
+
+  getAll(){
+    this.polytunnelService.getAll().subscribe({
+      next: data => {
+        this.polytunnel=data.data
+      }
+    })
   }
 }

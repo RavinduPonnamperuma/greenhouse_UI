@@ -1,0 +1,16 @@
+/* Ensure modal is scrollable on small screens */
+.modal-content {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Smooth table hover effect */
+table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+/* Style for date and time pickers */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.5);
+}

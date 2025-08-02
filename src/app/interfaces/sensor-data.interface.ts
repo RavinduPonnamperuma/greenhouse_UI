@@ -9,3 +9,11 @@ export interface SensorDataDTO {
 export interface TemperatureDTO extends SensorDataDTO {}
 export interface HumidityDTO extends SensorDataDTO {}
 export interface MoistureDTO extends SensorDataDTO {}
+
+export interface WaterTankLevelDto {
+  waterTankId: number;
+  tankNumber: string;
+  totalCapacity: number;
+  totalOut: string; // since it's coming as "0.00"
+  currentWaterLevel: string; // since it's coming as "1550.00"
+}

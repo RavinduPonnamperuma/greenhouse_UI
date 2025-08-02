@@ -1,6 +1,6 @@
 @if (isLoggedIn){
-  <nav class="fixed top-0 z-50  mr-5 w-screen border-b border-gray-200 bg-blue-800 dark:border-gray-700">
-    <div class="pl-0 pr-3 py-3  ml-0 lg:pl-3 lg:pr-5">
+  <nav class="fixed top-0 z-50 mr-5 w-screen border-b border-gray-200 bg-blue-800 dark:border-gray-700">
+    <div class="pl-0 pr-3 py-3 ml-0 lg:pl-3 lg:pr-5">
       <div class="flex items-center justify-between ml-0">
         <div class="flex items-center justify-start ml-0">
           <span class="text-white">{{ currentDateTime | date: 'medium' }}</span>
@@ -18,11 +18,9 @@
           <div class="relative">
             <div class="flex gap-4">
               <span class="text-white">Welcome {{userName}}</span>
-                <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                     alt="user photo">
-
+              <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                   alt="user photo">
             </div>
-
             <div *ngIf="isDropdownOpen"
                  class="absolute right-0 mt-2 w-48 rounded-lg bg-white divide-y divide-gray-400 shadow dark:bg-gray-800 dark:divide-gray-600">
               <div class="px-4 py-3">
@@ -52,10 +50,9 @@
              class="flex items-center p-2 rounded-lg">
             <span class="flex-1 ms-3 whitespace-nowrap">{{ item.label }}</span>
           </a>
-
           <ng-template #logoutTemplate>
             <a href="#" (click)="logOut()"
-               [ngClass]="{'bg-blue-100 text-blue-700 dark:bg-gray-600 dark:text-white': isActive(item.route), 'text-gray-900 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700': !isActive(item.route)}"
+               [ngClass]="{'bg-red-100 text-red-700 dark:bg-red-600 dark:text-white': isActive(item.route), 'text-red-700 hover:bg-red-100 dark:text-red-300 dark:hover:bg-red-600 dark:hover:text-white': !isActive(item.route)}"
                class="flex items-center p-2 rounded-lg">
               <span class="flex-1 ms-3 whitespace-nowrap">{{ item.label }}</span>
             </a>

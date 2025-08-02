@@ -3,13 +3,13 @@
     <div class="space-y-8">
       <form [formGroup]="plotForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
         <div>
-          <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Polytunnel</h3>
+          <h2 class="text-xl font-bold text-gray-900">Add New Polytunnel</h2>
         </div>
         <div class="grid grid-cols-3 gap-4">
           <!-- Code -->
           <div>
             <label for="code" class="block mb-2 text-sm font-medium text-gray-900">
-              Plot Code
+              Polytunnel Code
             </label>
             <input
               type="text"
@@ -25,22 +25,22 @@
           </div>
 
           <!-- Status -->
-          <div>
-            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
-              Status
-            </label>
-            <input
-              type="text"
-              id="status"
-              formControlName="status"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"
-              placeholder="Active"
-            />
-            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['status'].errors?.['required']">Status is required</div>
-              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>
-            </div>
-          </div>
+<!--          <div>-->
+<!--            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">-->
+<!--              Status-->
+<!--            </label>-->
+<!--            <input-->
+<!--              type="text"-->
+<!--              id="status"-->
+<!--              formControlName="status"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"-->
+<!--              placeholder="Active"-->
+<!--            />-->
+<!--            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">-->
+<!--              <div *ngIf="f['status'].errors?.['required']">Status is required</div>-->
+<!--              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>-->
+<!--            </div>-->
+<!--          </div>-->
 
           <!-- Location -->
           <div>
@@ -133,22 +133,6 @@
           </div>
 
           <!-- User ID -->
-          <div>
-            <label for="userId" class="block mb-2 text-sm font-medium text-gray-900">
-              User
-            </label>
-            <select
-              id="userId"
-              formControlName="userId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('userId') ? 'border-red-500' : 'border-gray-300' }}"
-            >
-              <option value="" disabled>Select a user</option>
-              <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
-            </select>
-            <div *ngIf="isFieldInvalid('userId')" class="text-red-500 text-sm mt-1">
-              Please select a user
-            </div>
-          </div>
 
           <!-- Device ID -->
           <div>
@@ -161,7 +145,7 @@
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('deviceId') ? 'border-red-500' : 'border-gray-300' }}"
             >
               <option value="" disabled>Select a device</option>
-              <option *ngFor="let device of devices" [value]="device.id">{{ device.name }}</option>
+              <option *ngFor="let device of deviceDTOS" [value]="device.id">{{ device.code }}</option>
             </select>
             <div *ngIf="isFieldInvalid('deviceId')" class="text-red-500 text-sm mt-1">
               Please select a device
@@ -169,7 +153,7 @@
           </div>
 
           <!-- Clear Button -->
-          <div>
+          <div class="mt-7">
             <button
               type="reset"
               class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
@@ -179,7 +163,7 @@
           </div>
 
           <!-- Submit Button -->
-          <div>
+          <div class="mt-7">
             <button
               type="submit"
               [disabled]="isSubmitting"
@@ -203,18 +187,22 @@
           <table class="min-w-full border border-gray-300">
             <thead>
             <tr class="bg-gray-50">
-              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Plot Code</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Polytunnel Code</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Status</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Location</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Size</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">No Of Plants</th>
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+            <tr *ngFor="let row of polytunnel" class="even:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.code }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.status }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"><app-status-badges [statusValue]="row.status"></app-status-badges>
+              </td>
+
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.location }}</td>
               <td class="border border-gray-600 px-4 py-2 text-sm text-gray-600">{{ row.size }}</td>
+              <td class="border border-gray-600 px-4 py-2 text-sm text-gray-600">{{ row.numberOfPlants }}</td>
             </tr>
             </tbody>
           </table>
