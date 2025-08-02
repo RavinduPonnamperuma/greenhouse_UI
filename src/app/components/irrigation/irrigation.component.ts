@@ -1,7 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
-
+import {PlantService} from "../../services/plant.service";
+import {PlantDto} from "../../interfaces/plant.interface";
+import {IrrigationService} from "../../services/irrigation.service";
+import {IrrigationDTO} from "../../interfaces/irrigation.entity";
 
 
 interface Irrigation {
@@ -28,13 +31,64 @@ interface Irrigation {
   styleUrl: './irrigation.component.scss'
 })
 export class IrrigationComponent implements OnInit {
+
+  plantService = inject(PlantService)
+  irrigationService = inject(IrrigationService)
+
+
+  plantDtos: PlantDto[] = []
+  irrigationDTOS: IrrigationDTO[] = []
+
+
+  constructor(private fb: FormBuilder) {
+    this.plantGetAll();
+    this.getAllIrrigations();
+
+    this.irrigationForm = this.fb.group({
+      waterPerDay: ['', [Validators.required, Validators.min(0)]],
+      fertilizerPerDay: ['', [Validators.required, Validators.min(0)]],
+      timesPerDay: ['', [Validators.required, Validators.min(1)]],
+      isMorning: ['', Validators.required],
+      morningTime: ['', Validators.required],
+      isEvening: ['', Validators.required],
+      eveningTime: ['', Validators.required],
+      duration: ['', [Validators.required, Validators.min(1)]],
+      plantId: ['', Validators.required],
+    });
+  }
+
+
+  plantGetAll() {
+    this.plantService.getAll().subscribe({
+      next: data => {
+        this.plantDtos = data.data
+      }
+    })
+  }
+
+  getAllIrrigations() {
+
+    this.irrigationService.getAll().subscribe({
+      next: data => {
+        this.irrigationDTOS = Array.isArray(data.data) ? data.data : [data.data];
+      },
+      error: err => {
+        console.error('Failed to fetch irrigations:', err);
+        this.errorMessage = 'Failed to load irrigation data.';
+
+      }
+    });
+  }
+
+
   irrigationForm: FormGroup;
+
   isSubmitting = false;
   errorMessage: string | null = null;
   plants = [
-    { id: 1, name: 'Tomato' },
-    { id: 2, name: 'Cucumber' },
-    { id: 3, name: 'Lettuce' },
+    {id: 1, name: 'Tomato'},
+    {id: 2, name: 'Cucumber'},
+    {id: 3, name: 'Lettuce'},
   ];
   tableData: Irrigation[] = [
     {
@@ -61,21 +115,9 @@ export class IrrigationComponent implements OnInit {
     },
   ];
 
-  constructor(private fb: FormBuilder) {
-    this.irrigationForm = this.fb.group({
-      waterPerDay: ['', [Validators.required, Validators.min(0)]],
-      fertilizerPerDay: ['', [Validators.required, Validators.min(0)]],
-      timesPerDay: ['', [Validators.required, Validators.min(1)]],
-      isMorning: ['', Validators.required],
-      morningTime: ['', Validators.required],
-      isEvening: ['', Validators.required],
-      eveningTime: ['', Validators.required],
-      duration: ['', [Validators.required, Validators.min(1)]],
-      plantId: ['', Validators.required],
-    });
-  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   get f() {
     return this.irrigationForm.controls;
@@ -119,4 +161,6 @@ export class IrrigationComponent implements OnInit {
       this.irrigationForm.reset();
     }, 1000);
   }
+
+
 }

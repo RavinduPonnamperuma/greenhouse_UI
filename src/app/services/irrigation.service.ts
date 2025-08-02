@@ -22,7 +22,7 @@ export class IrrigationService extends APIRequest {
   }
 
   getAll(){
-    return this.get<IrrigationDTO[]>({
+    return this.get<IrrigationDTO>({
     })
   }
 

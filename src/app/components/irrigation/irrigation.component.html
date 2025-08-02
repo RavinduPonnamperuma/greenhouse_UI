@@ -166,7 +166,7 @@
               class="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('plantId') ? 'border-red-500' : 'border-gray-300' }}"
             >
               <option value="" disabled>Select plant</option>
-              <option *ngFor="let plant of plants" [value]="plant.id">{{ plant.name }}</option>
+              <option *ngFor="let plant of plantDtos" [value]="plant.id">{{ plant.plantName }}</option>
             </select>
             <div *ngIf="isFieldInvalid('plantId')" class="text-red-500 text-sm mt-1">
               Please select a plant
@@ -220,7 +220,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let row of tableData" class="even:bg-gray-50">
+            <tr *ngFor="let row of irrigationDTOS" class="even:bg-gray-50">
               <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.waterPerDay }}</td>
               <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.fertilizerPerDay }}</td>
               <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.timesPerDay }}</td>
@@ -229,7 +229,7 @@
               <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.isEvening ? 'Enabled' : 'Disabled' }}</td>
               <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.eveningTime }}</td>
               <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ row.duration }}</td>
-              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{ getPlantName(row.plantId) }}</td>
+              <td class="border border-gray-200 px-4 py-2 text-sm text-gray-600">{{row.plant.plantName}}</td>
             </tr>
             </tbody>
           </table>

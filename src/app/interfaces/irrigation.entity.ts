@@ -18,5 +18,5 @@ export interface IrrigationDTO {
   isEvening: boolean;
   eveningTime: string;        // e.g., "17:00"
   duration: number;
-  plant: Plant | null;
+  plant: Plant ;
 }
