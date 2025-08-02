@@ -154,54 +154,52 @@ export class IrrigationScheduleComponent {
       plantId: +this.taskForm.value.plantId,
       irrigationId: +this.taskForm.value.irrigationId,
     };
-    //
-    // const request = this.editingTask
-    //   ? this.irrigationTaskService.update(this.editingTask.id, payload)
-    //   : this.irrigationTaskService.create(payload);
-    //
-    // request.subscribe({
-    //   next: (response) => {
-    //     const message = this.editingTask
-    //       ? 'Irrigation task updated successfully'
-    //       : 'Irrigation task added successfully';
-    //     this.notificationService.showSuccess(message, 3000);
-    //
-    //     if (this.editingTask) {
-    //       const index = this.tasks.findIndex((t) => t.id === this.editingTask!.id);
-    //       this.tasks[index] = response.data;
-    //     } else {
-    //       this.tasks.push(response.data);
-    //     }
-    //
-    //     this.isSubmitting = false;
-    //     this.closeModal();
-    //   },
-    //   error: (err) => {
-    //     console.error('Failed to save task:', err);
-    //     const message = this.editingTask
-    //       ? 'Failed to update irrigation task.'
-    //       : 'Failed to add irrigation task.';
-    //     this.notificationService.showError(message + ' Please try again.', 5000);
-    //     this.errorMessage = message;
-    //     this.isSubmitting = false;
-    //   },
-    // });
+
+
+
+    this.irrigationTaskService.create(payload).subscribe({
+      next: (response) => {
+        const message = this.editingTask
+          ? 'Irrigation task updated successfully'
+          : 'Irrigation task added successfully';
+        this.notificationService.showSuccess(message, 3000);
+
+        if (this.editingTask) {
+          const index = this.tasks.findIndex((t) => t.id === this.editingTask!.id);
+          this.tasks[index] = response.data;
+        } else {
+          this.tasks.push(response.data);
+        }
+
+        this.isSubmitting = false;
+        this.closeModal();
+      },
+      error: (err) => {
+        console.error('Failed to save task:', err);
+        const message = this.editingTask
+          ? 'Failed to update irrigation task.'
+          : 'Failed to add irrigation task.';
+        this.notificationService.showError(message + ' Please try again.', 5000);
+        this.errorMessage = message;
+        this.isSubmitting = false;
+      },
+    });
   }
 
   deleteTask(id: number) {
-    // if (!confirm('Are you sure you want to delete this irrigation task?')) return;
-    //
-    // this.irrigationTaskService.delete(id).subscribe({
-    //   next: () => {
-    //     this.tasks = this.tasks.filter((t) => t.id !== id);
-    //     this.notificationService.showSuccess('Irrigation task deleted successfully', 3000);
-    //   },
-    //   error: (err) => {
-    //     console.error('Failed to delete task:', err);
-    //     this.notificationService.showError('Failed to delete irrigation task.', 5000);
-    //     this.errorMessage = 'Failed to delete irrigation task.';
-    //   },
-    // });
+    if (!confirm('Are you sure you want to delete this irrigation task?')) return;
+
+    this.irrigationTaskService.deleteTask(id).subscribe({
+      next: () => {
+        this.tasks = this.tasks.filter((t) => t.id !== id);
+        this.notificationService.showSuccess('Irrigation task deleted successfully', 3000);
+      },
+      error: (err) => {
+        console.error('Failed to delete task:', err);
+        this.notificationService.showError('Failed to delete irrigation task.', 5000);
+        this.errorMessage = 'Failed to delete irrigation task.';
+      },
+    });
   }
 
   getPlantName(plantId: number): string {
