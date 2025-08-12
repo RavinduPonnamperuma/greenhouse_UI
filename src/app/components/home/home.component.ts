@@ -1,11 +1,19 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ChartComponent, ApexAxisChartSeries, ApexChart, ApexXAxis, ApexTitleSubtitle, ApexNonAxisChartSeries, ApexResponsive } from 'ng-apexcharts';
-import { SensorDataService } from "../../services/sensor-data.service";
-import { HumidityDTO, MoistureDTO, SensorDataDTO, TemperatureDTO } from "../../interfaces/sensor-data.interface";
-import { ActionService } from "../../services/action.service";
-import { NotificationService } from "../Utility/notification/notification.service";
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexTitleSubtitle,
+  ApexXAxis,
+  ChartComponent
+} from 'ng-apexcharts';
+import {SensorDataService} from "../../services/sensor-data.service";
+import {SensorDataDTO} from "../../interfaces/sensor-data.interface";
+import {ActionService} from "../../services/action.service";
+import {NotificationService} from "../Utility/notification/notification.service";
 
 export interface WaterTankLevelDto {
   waterTankId: number;
@@ -53,20 +61,24 @@ export class HomeComponent implements OnInit {
     responsive: ApexResponsive[];
   };
 
+  temperatures: { timestamp: string; value: number }[] = [];
+  humidities: { timestamp: string; value: number }[] = [];
+  moistures: { timestamp: string; value: number }[] = [];
+
   constructor() {
     this.lineChartOptions = {
       series: [
         {
           name: 'Humidity',
-          data: [1200, 1230, 1245, 1220, 1250, 1260, 1245]
+          data: []
         },
         {
           name: 'Moisture',
-          data: [20, 22, 23, 21, 24, 22, 23]
+          data: []
         },
         {
           name: 'Temperature',
-          data: [11500, 11650, 12000, 11900, 12100, 12300, 12450]
+          data: []
         }
       ],
       chart: {
@@ -84,7 +96,7 @@ export class HomeComponent implements OnInit {
         }
       },
       xaxis: {
-        categories: ['10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00'],
+        categories: [], // Start with empty categories
         title: {
           text: 'Time'
         }
@@ -128,28 +140,28 @@ export class HomeComponent implements OnInit {
     this.temperatures = [];
     this.humidities = [];
     this.moistures = [];
-    setInterval(() => {
-      const newLive = (this.lineChartOptions.series[0].data.slice(-1)[0] as number) + Math.floor(Math.random() * 10 - 5);
-      const newDead = (this.lineChartOptions.series[1].data.slice(-1)[0] as number) + Math.floor(Math.random() * 3 - 1);
-      const newIncome = (this.lineChartOptions.series[2].data.slice(-1)[0] as number) + Math.floor(Math.random() * 200 - 100);
-      this.realtimeChart?.updateSeries(this.lineChartOptions.series);
-    }, 2000);
 
+    // Initial data fetch
+    this.fetchSensorData();
+    this.getWaterLevel();
+
+    // Real-time updates for sensor data
+    setInterval(() => {
+      this.fetchSensorData();
+    }, 1000);
+
+    // Real-time updates for water level
     setInterval(() => {
       this.getWaterLevel();
     }, 5000);
-
-    setInterval(() => {
-      this.fetchSensorData();
-    }, 10000);
   }
 
   turnOn(name: string, id: number) {
     this.actionService.turnOn(String(id)).subscribe({
       next: (data: any) => {
+        this.notificationService.showSuccess(`Successfully turned on the ${name}`, 3000);
       },
       error: (err) => {
-        console.error('Failed to turn on:', err);
         this.notificationService.showError(`Failed to turn on the ${name}`, 3000);
       }
     });
@@ -166,6 +178,7 @@ export class HomeComponent implements OnInit {
   turnOff(name: string, id: number) {
     this.actionService.turnOff(String(id)).subscribe({
       next: (data: any) => {
+        this.notificationService.showSuccess(`Successfully turned off the ${name}`, 3000);
       },
       error: (err) => {
         console.error('Failed to turn off:', err);
@@ -174,24 +187,66 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  temperatures: { timestamp: string; value: number }[] = [];
-  humidities: { timestamp: string; value: number }[] = [];
-  moistures: { timestamp: string; value: number }[] = [];
+  //  filter data by 5-minute intervals
+  private filterBy30MinuteIntervals(data: { timestamp: string; value: number }[]): {
+    timestamp: string;
+    value: number
+  }[] {
+    if (data.length === 0) return [];
+
+    const filtered: { timestamp: string; value: number }[] = [];
+    let lastTimestamp: Date | null = null;
+
+    for (const item of data) {
+      const currentTimestamp = new Date(item.timestamp);
+
+      if (!lastTimestamp ||
+        currentTimestamp.getTime() - lastTimestamp.getTime() >= 5 * 60 * 1000) { // 30 minutes in milliseconds
+        filtered.push(item);
+        lastTimestamp = currentTimestamp;
+      }
+    }
+
+    return filtered;
+  }
 
   fetchSensorData() {
     this.sensorDataService.getSensorById('all').subscribe({
       next: (data: any) => {
         const sensorData: SensorDataDTO[] = data.data;
 
-        this.temperatures = sensorData
+        // Get and sort all sensor data
+        const allTemperatures = sensorData
           .filter(item => item.topic === 'temperature')
-          .map(item => ({ value: item.value, timestamp: item.createdAt }));
-        this.humidities = sensorData
+          .map(item => ({value: item.value, timestamp: item.createdAt}))
+          .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+        const allHumidities = sensorData
           .filter(item => item.topic === 'humidity')
-          .map(item => ({ value: item.value, timestamp: item.createdAt }));
-        this.moistures = sensorData
+          .map(item => ({value: item.value, timestamp: item.createdAt}))
+          .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+        const allMoistures = sensorData
           .filter(item => item.topic === 'moisture')
-          .map(item => ({ value: item.value, timestamp: item.createdAt }));
+          .map(item => ({value: item.value, timestamp: item.createdAt}))
+          .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+
+        // Filter to show only 30-minute intervals
+        this.temperatures = this.filterBy30MinuteIntervals(allTemperatures);
+        this.humidities = this.filterBy30MinuteIntervals(allHumidities);
+        this.moistures = this.filterBy30MinuteIntervals(allMoistures);
+
+        // Format timestamps for better display
+        const formatTimestamp = (timestamp: string) => {
+          const date = new Date(timestamp);
+          return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          });
+        };
+
+        // Update series data
         this.lineChartOptions.series = [
           {
             name: 'Humidity',
@@ -206,10 +261,24 @@ export class HomeComponent implements OnInit {
             data: this.temperatures.map(item => item.value)
           }
         ];
-        this.lineChartOptions.xaxis.categories = this.temperatures.map(item => item.timestamp);
+
+        // Update xaxis categories with formatted timestamps
+        // Use temperatures array as reference for timestamps (assuming all sensors have same timestamps)
+        this.lineChartOptions.xaxis.categories = this.temperatures.map(item =>
+          formatTimestamp(item.timestamp)
+        );
+
+        // Update the chart with new data
+        if (this.realtimeChart) {
+          this.realtimeChart.updateOptions({
+            series: this.lineChartOptions.series,
+            xaxis: this.lineChartOptions.xaxis
+          });
+        }
       },
       error: (err) => {
         console.error('Error fetching sensor data:', err);
+        this.notificationService.showError('Failed to fetch sensor data', 3000);
       }
     });
   }
@@ -221,8 +290,12 @@ export class HomeComponent implements OnInit {
         const currentLevel = parseFloat(waterTank.currentWaterLevel);
         const totalCapacity = waterTank.totalCapacity;
         const percentage = Math.round((currentLevel / totalCapacity) * 100);
+
         this.gaugeChartOptions.series = [percentage];
-        this.waterLevelChart?.updateSeries(this.gaugeChartOptions.series);
+
+        if (this.waterLevelChart) {
+          this.waterLevelChart.updateSeries(this.gaugeChartOptions.series);
+        }
       },
       error: (err) => {
         console.error('Error fetching water tank data:', err);
