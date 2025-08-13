@@ -107,13 +107,7 @@
         </div>
       </form>
 
-      <!-- Report Preview Section -->
-      <div *ngIf="previewData" class="mt-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Report Preview</h2>
-        <div class="bg-gray-50 p-6 rounded-lg">
-          <pre class="text-sm text-gray-700">{{ previewData | json }}</pre>
-        </div>
-      </div>
+      <!-- Error Section -->
       <div *ngIf="errorMessage" class="mt-4 text-red-500 text-sm">{{ errorMessage }}</div>
     </div>
   </div>
