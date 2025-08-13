@@ -37,7 +37,6 @@ export class SideNavComponent implements OnInit {
     { label: 'Irrigation', route: '/irrigation' },
     { label: 'Harvest', route: '/harvest' },
     { label: 'Reports', route: '/report' },
-    { label: 'Alerts', route: '/alerts' },
     { label: 'Sign Up', route: '/register' },
     { label: 'Sign out', route: '/logout' }
   ];
@@ -47,7 +46,6 @@ export class SideNavComponent implements OnInit {
 
   ngOnInit() {
     this.userName = JSON.parse(<string>localStorage.getItem('userData'));
-    console.log(this.userName);
     this.checkLoginStatus();
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
