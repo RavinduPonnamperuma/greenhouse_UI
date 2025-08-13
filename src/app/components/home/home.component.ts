@@ -148,12 +148,12 @@ export class HomeComponent implements OnInit {
     // Real-time updates for sensor data
     setInterval(() => {
       this.fetchSensorData();
-    }, 1000);
+    }, 20000);
 
     // Real-time updates for water level
     setInterval(() => {
       this.getWaterLevel();
-    }, 5000);
+    }, 20000);
   }
 
   turnOn(name: string, id: number) {
@@ -188,7 +188,7 @@ export class HomeComponent implements OnInit {
   }
 
   //  filter data by 5-minute intervals
-  private filterBy30MinuteIntervals(data: { timestamp: string; value: number }[]): {
+  private filterByMinuteIntervals(data: { timestamp: string; value: number }[]): {
     timestamp: string;
     value: number
   }[] {
@@ -232,9 +232,9 @@ export class HomeComponent implements OnInit {
           .sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
         // Filter to show only 30-minute intervals
-        this.temperatures = this.filterBy30MinuteIntervals(allTemperatures);
-        this.humidities = this.filterBy30MinuteIntervals(allHumidities);
-        this.moistures = this.filterBy30MinuteIntervals(allMoistures);
+        this.temperatures = this.filterByMinuteIntervals(allTemperatures);
+        this.humidities = this.filterByMinuteIntervals(allHumidities);
+        this.moistures = this.filterByMinuteIntervals(allMoistures);
 
         // Format timestamps for better display
         const formatTimestamp = (timestamp: string) => {
@@ -293,8 +293,15 @@ export class HomeComponent implements OnInit {
 
         this.gaugeChartOptions.series = [percentage];
 
+        // Update chart if it exists
         if (this.waterLevelChart) {
           this.waterLevelChart.updateSeries(this.gaugeChartOptions.series);
+        }
+
+        if (percentage < 10) {
+          this.notificationService.showWarning('Water level is below 10%!', 5000);
+        } else if (percentage >= 10 && percentage <= 50) {
+          this.notificationService.showWarning('Water level is between 10% and 50%.', 5000);
         }
       },
       error: (err) => {
@@ -303,4 +310,5 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
 }
