@@ -3,8 +3,11 @@
     <div class="space-y-8">
       <form [formGroup]="plotForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
         <div>
-          <h2 class="text-xl font-bold text-gray-900">Add New Polytunnel</h2>
+          <h2 class="text-xl font-bold text-gray-900">
+            {{ editingId ? 'Update Polytunnel' : 'Add New Polytunnel' }}
+          </h2>
         </div>
+
         <div class="grid grid-cols-3 gap-4">
           <!-- Code -->
           <div>
@@ -15,32 +18,36 @@
               type="text"
               id="code"
               formControlName="code"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('code') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('code') ? 'border-red-500' : 'border-gray-300' }}"
               placeholder="PT-001"
             />
             <div *ngIf="isFieldInvalid('code')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['code'].errors?.['required']">Plot code is required</div>
-              <div *ngIf="f['code'].errors?.['minlength']">Plot code must be at least 3 characters</div>
+              <div *ngIf="f['code'].errors?.['required']">Code is required</div>
+              <div *ngIf="f['code'].errors?.['minlength']">At least 3 characters</div>
             </div>
           </div>
 
           <!-- Status -->
-<!--          <div>-->
-<!--            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">-->
-<!--              Status-->
-<!--            </label>-->
-<!--            <input-->
-<!--              type="text"-->
-<!--              id="status"-->
-<!--              formControlName="status"-->
-<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"-->
-<!--              placeholder="Active"-->
-<!--            />-->
-<!--            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">-->
-<!--              <div *ngIf="f['status'].errors?.['required']">Status is required</div>-->
-<!--              <div *ngIf="f['status'].errors?.['minlength']">Status must be at least 2 characters</div>-->
-<!--            </div>-->
-<!--          </div>-->
+          <div>
+            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
+              Status
+            </label>
+            <select
+              id="status"
+              formControlName="status"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('status') ? 'border-red-500' : 'border-gray-300' }}"
+            >
+              <option value="" disabled>Select status</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Maintenance">Maintenance</option>
+            </select>
+            <div *ngIf="isFieldInvalid('status')" class="text-red-500 text-sm mt-1">
+              Status is required
+            </div>
+          </div>
 
           <!-- Location -->
           <div>
@@ -51,12 +58,12 @@
               type="text"
               id="location"
               formControlName="location"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('location') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('location') ? 'border-red-500' : 'border-gray-300' }}"
               placeholder="Field A"
             />
             <div *ngIf="isFieldInvalid('location')" class="text-red-500 text-sm mt-1">
               <div *ngIf="f['location'].errors?.['required']">Location is required</div>
-              <div *ngIf="f['location'].errors?.['minlength']">Location must be at least 2 characters</div>
             </div>
           </div>
 
@@ -69,12 +76,12 @@
               type="text"
               id="size"
               formControlName="size"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('size') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('size') ? 'border-red-500' : 'border-gray-300' }}"
               placeholder="100 sqm"
             />
             <div *ngIf="isFieldInvalid('size')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['size'].errors?.['required']">Size is required</div>
-              <div *ngIf="f['size'].errors?.['minlength']">Size must be at least 2 characters</div>
+              Size is required
             </div>
           </div>
 
@@ -87,12 +94,12 @@
               type="number"
               id="length"
               formControlName="length"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('length') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('length') ? 'border-red-500' : 'border-gray-300' }}"
               placeholder="20"
             />
             <div *ngIf="isFieldInvalid('length')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['length'].errors?.['required']">Length is required</div>
-              <div *ngIf="f['length'].errors?.['min']">Length must be a positive number</div>
+              Length is required
             </div>
           </div>
 
@@ -105,12 +112,12 @@
               type="number"
               id="width"
               formControlName="width"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('width') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('width') ? 'border-red-500' : 'border-gray-300' }}"
               placeholder="5"
             />
             <div *ngIf="isFieldInvalid('width')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['width'].errors?.['required']">Width is required</div>
-              <div *ngIf="f['width'].errors?.['min']">Width must be a positive number</div>
+              Width is required
             </div>
           </div>
 
@@ -123,26 +130,25 @@
               type="number"
               id="numberOfPlants"
               formControlName="numberOfPlants"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('numberOfPlants') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('numberOfPlants') ? 'border-red-500' : 'border-gray-300' }}"
               placeholder="100"
             />
             <div *ngIf="isFieldInvalid('numberOfPlants')" class="text-red-500 text-sm mt-1">
-              <div *ngIf="f['numberOfPlants'].errors?.['required']">Number of plants is required</div>
-              <div *ngIf="f['numberOfPlants'].errors?.['min']">Number of plants must be a positive number</div>
+              Required
             </div>
           </div>
 
-          <!-- User ID -->
-
-          <!-- Device ID -->
-          <div>
+          <!-- Device ID (only for create) -->
+          <div *ngIf="!editingId">
             <label for="deviceId" class="block mb-2 text-sm font-medium text-gray-900">
               Device
             </label>
             <select
               id="deviceId"
               formControlName="deviceId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('deviceId') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5
+                {{ isFieldInvalid('deviceId') ? 'border-red-500' : 'border-gray-300' }}"
             >
               <option value="" disabled>Select a device</option>
               <option *ngFor="let device of deviceDTOS" [value]="device.id">{{ device.code }}</option>
@@ -152,46 +158,46 @@
             </div>
           </div>
 
-          <!-- Clear Button -->
+          <!-- Buttons -->
           <div class="mt-7">
             <button
               type="reset"
               class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
+              (click)="onCancel()"
             >
-              Clear
+              {{ editingId ? 'Cancel Edit' : 'Clear' }}
             </button>
           </div>
 
-          <!-- Submit Button -->
           <div class="mt-7">
             <button
               type="submit"
               [disabled]="isSubmitting"
               class="w-full p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
             >
-              {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+              {{ isSubmitting ? 'Processing...' : (editingId ? 'Update' : 'Submit') }}
             </button>
           </div>
         </div>
 
-        <!-- Error Message -->
         <div *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-4">
           {{ errorMessage }}
         </div>
       </form>
 
-      <!-- Table Card -->
+      <!-- Table -->
       <div class="bg-white p-6 rounded-lg shadow-lg w-full">
         <h2 class="text-lg font-medium text-gray-900 mb-4">Polytunnel Information</h2>
         <div class="overflow-x-auto">
           <table class="min-w-full border border-gray-300">
             <thead>
             <tr class="bg-gray-50">
-              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Polytunnel Code</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Code</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Status</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Location</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Size</th>
-              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">No Of Plants</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">No. of Plants</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Actions</th>
             </tr>
             </thead>
             <tbody>
@@ -201,12 +207,10 @@
                 <app-status-badges [statusValue]="row.status"></app-status-badges>
               </td>
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.location }}</td>
-              <td class="border border-gray-600 px-4 py-2 text-sm text-gray-600">{{ row.size }}</td>
-              <td class="border border-gray-600 px-4 py-2 text-sm text-gray-600">{{ row.numberOfPlants }}</td>
-              <td class="border border-gray-600 px-4 py-2 text-sm text-gray-600 text-center">
-                <button
-                  class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-                  (click)="onEdit(row)">
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.size }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.numberOfPlants }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-center">
+                <button class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" (click)="onEdit(row)">
                   Edit
                 </button>
               </td>

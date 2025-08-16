@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgForOf, NgIf, NgSwitch} from "@angular/common";
+import {NgForOf, NgIf} from "@angular/common";
 import {DeviceService} from "../../services/device.service";
 import {DeviceDTO} from "../../interfaces/device.interface";
 import {NotificationService} from "../Utility/notification/notification.service";
@@ -21,63 +21,39 @@ import {StatusBadgesComponent} from "../Utility/status-badges/status-badges.comp
   styleUrl: './polytunnel.component.scss'
 })
 export class PolytunnelComponent implements OnInit {
+  deviceDTOS: DeviceDTO[] = [];
+  polytunnel: PlantTrayDTO[] = [];
 
-  deviceDTOS: DeviceDTO[] = []
-  polytunnel: PlantTrayDTO[] = []
+  deviceService = inject(DeviceService);
+  notificationService = inject(NotificationService);
+  polytunnelService = inject(PolytunnelService);
 
+  userId = 0;
   editingId: number | null = null;
-
-  deviceService = inject(DeviceService)
-  notificationService = inject(NotificationService)
-  polytunnelService = inject(PolytunnelService)
-
-  getAllDevices(): void {
-    this.deviceService.getAll().subscribe({
-      next: data => {
-        this.deviceDTOS = data.data
-        console.log(data.data)
-      }
-    })
-  }
-
-  userId = 0
-
-
-  ngOnInit(): void {
-  }
 
   plotForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
-  devices = [
-    {id: 1, name: 'Device 001'},
-    {id: 2, name: 'Device 002'},
-    {id: 3, name: 'Device 003'},
-  ];
-  tableData = [
-    {code: 'PT-001', status: 'Active', location: 'Field A', size: '100 sqm'},
-    {code: 'PT-002', status: 'Inactive', location: 'Row B', size: '600 sqm'},
-    {code: 'PT-003', status: 'Active', location: 'Field C', size: '450 sqm'},
-    {code: 'PT-004', status: 'Maintenance', location: 'Field D', size: '300 sqm'},
-  ];
 
   constructor(private fb: FormBuilder) {
-    this.getAllDevices();
-    this.getAll()
     this.userId = JSON.parse(<string>localStorage.getItem('userId'));
     this.plotForm = this.fb.group({
       code: ['', [Validators.required, Validators.minLength(3)]],
-      // status: ['', [Validators.required, Validators.minLength(2)]],
+      status: ['', Validators.required],
       location: ['', [Validators.required, Validators.minLength(2)]],
       size: ['', [Validators.required, Validators.minLength(2)]],
       length: ['', [Validators.required, Validators.min(0)]],
       width: ['', [Validators.required, Validators.min(0)]],
       numberOfPlants: ['', [Validators.required, Validators.min(0)]],
-      deviceId: ['', Validators.required],
-      userId: this.userId,
+      deviceId: ['', Validators.required], // only used for create
+      userId: this.userId
     });
   }
 
+  ngOnInit(): void {
+    this.getAllDevices();
+    this.getAll();
+  }
 
   get f() {
     return this.plotForm.controls;
@@ -88,18 +64,41 @@ export class PolytunnelComponent implements OnInit {
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 
+  getAllDevices(): void {
+    this.deviceService.getAll().subscribe({
+      next: data => {
+        this.deviceDTOS = data.data;
+      }
+    });
+  }
+
+  getAll(): void {
+    this.polytunnelService.getAll().subscribe({
+      next: data => {
+        this.polytunnel = data.data;
+      }
+    });
+  }
+
   onEdit(row: PlantTrayDTO): void {
     this.editingId = row.id;
     this.plotForm.patchValue({
       code: row.code,
+      status: row.status,
       location: row.location,
       size: row.size,
       length: row.length,
       width: row.width,
       numberOfPlants: row.numberOfPlants,
-      userId: this.userId,
-      status: row.status
+      userId: this.userId
     });
+    this.plotForm.get('deviceId')?.disable(); // device not editable in update
+  }
+
+  onCancel(): void {
+    this.editingId = null;
+    this.plotForm.reset();
+    this.plotForm.get('deviceId')?.enable();
   }
 
   onSubmit(): void {
@@ -110,15 +109,13 @@ export class PolytunnelComponent implements OnInit {
     }
 
     this.isSubmitting = true;
-    this.errorMessage = null;
-
-    const formValue = this.plotForm.value;
+    const formValue = this.plotForm.getRawValue();
 
     if (this.editingId) {
-      // build payload only with required fields
+      // ✅ update payload only allowed fields
       const updatePayload = {
         code: formValue.code,
-        status: formValue.status ?? 'Active', // default if missing
+        status: formValue.status,
         location: formValue.location,
         size: formValue.size,
         length: +formValue.length,
@@ -130,8 +127,7 @@ export class PolytunnelComponent implements OnInit {
         next: () => {
           this.notificationService.showSuccess('Polytunnel updated successfully', 3000);
           this.isSubmitting = false;
-          this.editingId = null;
-          this.plotForm.reset();
+          this.onCancel();
           this.getAll();
         },
         error: () => {
@@ -140,12 +136,11 @@ export class PolytunnelComponent implements OnInit {
         }
       });
     } else {
-      // Create payload includes everything
+      // ✅ create payload
       const createPayload = {
         ...formValue,
         deviceId: +formValue.deviceId,
-        userId: +formValue.userId,
-        status: 'Active'
+        userId: +formValue.userId
       };
 
       this.polytunnelService.create(createPayload).subscribe({
@@ -161,14 +156,5 @@ export class PolytunnelComponent implements OnInit {
         }
       });
     }
-  }
-
-
-  getAll() {
-    this.polytunnelService.getAll().subscribe({
-      next: data => {
-        this.polytunnel = data.data
-      }
-    })
   }
 }
