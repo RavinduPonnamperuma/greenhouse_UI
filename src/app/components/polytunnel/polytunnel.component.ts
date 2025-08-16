@@ -45,7 +45,7 @@ export class PolytunnelComponent implements OnInit {
       length: ['', [Validators.required, Validators.min(0)]],
       width: ['', [Validators.required, Validators.min(0)]],
       numberOfPlants: ['', [Validators.required, Validators.min(0)]],
-      deviceId: ['', Validators.required], // only used for create
+      deviceId: ['', Validators.required],
       userId: this.userId
     });
   }
@@ -92,7 +92,7 @@ export class PolytunnelComponent implements OnInit {
       numberOfPlants: row.numberOfPlants,
       userId: this.userId
     });
-    this.plotForm.get('deviceId')?.disable(); // device not editable in update
+    this.plotForm.get('deviceId')?.disable();
   }
 
   onCancel(): void {
@@ -112,7 +112,6 @@ export class PolytunnelComponent implements OnInit {
     const formValue = this.plotForm.getRawValue();
 
     if (this.editingId) {
-      // ✅ update payload only allowed fields
       const updatePayload = {
         code: formValue.code,
         status: formValue.status,
@@ -136,7 +135,6 @@ export class PolytunnelComponent implements OnInit {
         }
       });
     } else {
-      // ✅ create payload
       const createPayload = {
         ...formValue,
         deviceId: +formValue.deviceId,

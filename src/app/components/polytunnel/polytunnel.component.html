@@ -159,25 +159,23 @@
           </div>
 
           <!-- Buttons -->
-          <div class="mt-7">
-            <button
-              type="reset"
-              class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
-              (click)="onCancel()"
-            >
-              {{ editingId ? 'Cancel Edit' : 'Clear' }}
-            </button>
-          </div>
+          <div class="flex h-fit mt-7">
+              <button
+                type="reset"
+                class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
+                (click)="onCancel()"
+              >
+                {{ editingId ? 'Cancel Edit' : 'Clear' }}
+              </button>
 
-          <div class="mt-7">
-            <button
-              type="submit"
-              [disabled]="isSubmitting"
-              class="w-full p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
-            >
-              {{ isSubmitting ? 'Processing...' : (editingId ? 'Update' : 'Submit') }}
-            </button>
-          </div>
+              <button
+                type="submit"
+                [disabled]="isSubmitting"
+                class="w-full p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
+              >
+                {{ isSubmitting ? 'Processing...' : (editingId ? 'Update' : 'Submit') }}
+              </button>
+            </div>
         </div>
 
         <div *ngIf="errorMessage" class="text-red-500 text-sm text-center mt-4">
