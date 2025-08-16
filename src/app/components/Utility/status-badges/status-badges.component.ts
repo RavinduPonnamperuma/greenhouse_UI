@@ -23,7 +23,7 @@ export class StatusBadgesComponent {
     } else if (redStatuses.includes(this.statusValue)) {
       return 'red';
     } else {
-      return 'red'; // default to red if unknown status
+      return 'green'; // default to red if unknown status
     }
   }
 }

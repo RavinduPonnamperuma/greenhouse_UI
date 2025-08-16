@@ -3,6 +3,7 @@ import {APIRequest, APIRequestResources} from "../../core";
 import {HttpClient} from "@angular/common/http";
 import {IrrigationDTO} from "../interfaces/irrigation.entity";
 import {HarvestDTO} from "../interfaces/harverst.entity";
+import {tap} from "rxjs";
 
 @Injectable({
   providedIn: 'root',
@@ -14,13 +15,20 @@ export class HarvestService extends APIRequest {
   }
 
   create(data: any) {
-    return this.post<any>(data, {
-    });
+    return this.post<any>(data, {});
   }
 
-  getAll(){
-    return this.get<HarvestDTO>({
-    })
+  update = (id: number, payload: any) => {
+    const options = {suffix: id.toString()};
+    return this.patch<any>(payload, options).pipe(
+      tap(() => {
+
+      })
+    );
+  }
+
+  getAll() {
+    return this.get<HarvestDTO>({})
   }
 
 }

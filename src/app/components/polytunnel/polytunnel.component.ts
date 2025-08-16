@@ -15,7 +15,6 @@ import {StatusBadgesComponent} from "../Utility/status-badges/status-badges.comp
     ReactiveFormsModule,
     NgForOf,
     NgIf,
-    NgSwitch,
     StatusBadgesComponent
   ],
   templateUrl: './polytunnel.component.html',
@@ -23,46 +22,43 @@ import {StatusBadgesComponent} from "../Utility/status-badges/status-badges.comp
 })
 export class PolytunnelComponent implements OnInit {
 
-  deviceDTOS:DeviceDTO[]=[]
-  polytunnel:PlantTrayDTO[]=[]
+  deviceDTOS: DeviceDTO[] = []
+  polytunnel: PlantTrayDTO[] = []
 
+  editingId: number | null = null;
 
-  deviceService=inject(DeviceService)
-  notificationService=inject(NotificationService)
-  polytunnelService=inject(PolytunnelService)
+  deviceService = inject(DeviceService)
+  notificationService = inject(NotificationService)
+  polytunnelService = inject(PolytunnelService)
 
   getAllDevices(): void {
     this.deviceService.getAll().subscribe({
       next: data => {
-        this.deviceDTOS=data.data
+        this.deviceDTOS = data.data
         console.log(data.data)
       }
     })
   }
 
-  userId=0
-
+  userId = 0
 
 
   ngOnInit(): void {
-    // this.getAllDevices()
-    // this.userId = JSON.parse(<string>localStorage.getItem('userId'));
-    // console.log(this.userId);
   }
 
   plotForm: FormGroup;
   isSubmitting = false;
   errorMessage: string | null = null;
   devices = [
-    { id: 1, name: 'Device 001' },
-    { id: 2, name: 'Device 002' },
-    { id: 3, name: 'Device 003' },
+    {id: 1, name: 'Device 001'},
+    {id: 2, name: 'Device 002'},
+    {id: 3, name: 'Device 003'},
   ];
   tableData = [
-    { code: 'PT-001', status: 'Active', location: 'Field A', size: '100 sqm' },
-    { code: 'PT-002', status: 'Inactive', location: 'Row B', size: '600 sqm' },
-    { code: 'PT-003', status: 'Active', location: 'Field C', size: '450 sqm' },
-    { code: 'PT-004', status: 'Maintenance', location: 'Field D', size: '300 sqm' },
+    {code: 'PT-001', status: 'Active', location: 'Field A', size: '100 sqm'},
+    {code: 'PT-002', status: 'Inactive', location: 'Row B', size: '600 sqm'},
+    {code: 'PT-003', status: 'Active', location: 'Field C', size: '450 sqm'},
+    {code: 'PT-004', status: 'Maintenance', location: 'Field D', size: '300 sqm'},
   ];
 
   constructor(private fb: FormBuilder) {
@@ -92,36 +88,86 @@ export class PolytunnelComponent implements OnInit {
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 
+  onEdit(row: PlantTrayDTO): void {
+    this.editingId = row.id;
+    this.plotForm.patchValue({
+      code: row.code,
+      location: row.location,
+      size: row.size,
+      length: row.length,
+      width: row.width,
+      numberOfPlants: row.numberOfPlants,
+      userId: this.userId,
+      status: row.status
+    });
+  }
+
   onSubmit(): void {
     if (this.plotForm.invalid) {
       this.plotForm.markAllAsTouched();
       this.notificationService.showWarning('Please fill the required fields!', 3000);
-
       return;
     }
+
     this.isSubmitting = true;
     this.errorMessage = null;
-    setTimeout(() => {
-      const formValue = this.plotForm.value;
-      formValue.deviceId = +formValue.deviceId;
-      formValue.userId = +formValue.userId;
-      formValue.status = 'active';
-      this.polytunnelService.create(this.plotForm.value).subscribe({
-        next: data => {
-          this.notificationService.showSuccess('New poly tunnel added successfully', 3000);
-          this.isSubmitting = false;
-          console.log(data);
-          this.getAll()
-        }
-      })
 
-    }, 1000);
+    const formValue = this.plotForm.value;
+
+    if (this.editingId) {
+      // build payload only with required fields
+      const updatePayload = {
+        code: formValue.code,
+        status: formValue.status ?? 'Active', // default if missing
+        location: formValue.location,
+        size: formValue.size,
+        length: +formValue.length,
+        width: +formValue.width,
+        numberOfPlants: formValue.numberOfPlants
+      };
+
+      this.polytunnelService.update(this.editingId, updatePayload).subscribe({
+        next: () => {
+          this.notificationService.showSuccess('Polytunnel updated successfully', 3000);
+          this.isSubmitting = false;
+          this.editingId = null;
+          this.plotForm.reset();
+          this.getAll();
+        },
+        error: () => {
+          this.isSubmitting = false;
+          this.notificationService.showError('Failed to update polytunnel', 3000);
+        }
+      });
+    } else {
+      // Create payload includes everything
+      const createPayload = {
+        ...formValue,
+        deviceId: +formValue.deviceId,
+        userId: +formValue.userId,
+        status: 'Active'
+      };
+
+      this.polytunnelService.create(createPayload).subscribe({
+        next: () => {
+          this.notificationService.showSuccess('New polytunnel added successfully', 3000);
+          this.isSubmitting = false;
+          this.plotForm.reset();
+          this.getAll();
+        },
+        error: () => {
+          this.isSubmitting = false;
+          this.notificationService.showError('Failed to create polytunnel', 3000);
+        }
+      });
+    }
   }
 
-  getAll(){
+
+  getAll() {
     this.polytunnelService.getAll().subscribe({
       next: data => {
-        this.polytunnel=data.data
+        this.polytunnel = data.data
       }
     })
   }
