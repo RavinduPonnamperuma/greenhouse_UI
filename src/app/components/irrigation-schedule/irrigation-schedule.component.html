@@ -1,42 +1,56 @@
 <div class="p-4 sm:ml-64">
   <div class="p-6 border border-gray-200 rounded-xl bg-white shadow-lg mt-14">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold text-gray-900">Irrigation Schedules</h2>
+    <div class="space-y-1 flex justify-between items-center">
+      <h2 class="text-xl font-bold text-gray-900">Irrigation Tasks</h2>
       <button
         (click)="openCreateModal()"
-        class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+        class="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        aria-label="Create new irrigation schedule"
       >
         New Schedule
       </button>
     </div>
 
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="mt-4 p-4 bg-red-100 text-red-700 rounded-md">
+      {{ errorMessage }}
+    </div>
+
     <!-- Table -->
-    <div class="overflow-x-auto bg-white rounded-xl shadow-lg">
+    <div class="bg-white p-6 rounded-xl shadow-lg overflow-x-auto mt-4">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
         <tr>
-          <th class="px-6 py-3 text-left text-xs font-medium">Water/day</th>
-          <th class="px-6 py-3 text-left text-xs font-medium">Fertilizer/day</th>
-          <th class="px-6 py-3 text-left text-xs font-medium">Times/day</th>
-          <th class="px-6 py-3 text-left text-xs font-medium">Morning</th>
-          <th class="px-6 py-3 text-left text-xs font-medium">Evening</th>
-          <th class="px-6 py-3 text-left text-xs font-medium">Duration</th>
-          <th class="px-6 py-3 text-left text-xs font-medium">Plant</th>
-          <th class="px-6 py-3 text-left text-xs font-medium">Actions</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Task Type</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Duration</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Plant</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
         </thead>
-        <tbody>
-        <tr *ngFor="let schedule of schedules" class="hover:bg-gray-50">
-          <td class="px-6 py-4">{{ schedule.waterPerDay }}</td>
-          <td class="px-6 py-4">{{ schedule.fertilizerPerDay }}</td>
-          <td class="px-6 py-4">{{ schedule.timesPerDay }}</td>
-          <td class="px-6 py-4">{{ schedule.isMorning ? schedule.morningTime : '—' }}</td>
-          <td class="px-6 py-4">{{ schedule.isEvening ? schedule.eveningTime : '—' }}</td>
-          <td class="px-6 py-4">{{ schedule.duration }} min</td>
-          <td class="px-6 py-4">{{ schedule.plant?.plantName }}</td>
-          <td class="px-6 py-4 space-x-3">
-            <button (click)="openEditModal(schedule)" class="text-blue-600 hover:underline">Edit</button>
-            <button (click)="deleteSchedule(schedule.id)" class="text-red-600 hover:underline">Delete</button>
+        <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let task of tasks" class="hover:bg-gray-50">
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.scheduledDate | date: 'mediumDate' }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.scheduledTime }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.taskType | titlecase }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.duration }} min</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{{ task.plant.plantName }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm">
+            <button
+              (click)="openEditModal(task)"
+              class="text-blue-600 hover:text-blue-800 mr-4"
+              aria-label="Edit task"
+            >
+              Edit
+            </button>
+            <button
+              (click)="deleteTask(task.id)"
+              class="text-red-600 hover:text-red-800"
+              aria-label="Delete task"
+            >
+              Delete
+            </button>
           </td>
         </tr>
         </tbody>
@@ -45,57 +59,133 @@
 
     <!-- Modal -->
     <div *ngIf="showModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-xl p-6 w-full max-w-lg">
-        <h3 class="text-lg font-bold mb-4">{{ editingSchedule ? 'Edit Schedule' : 'New Schedule' }}</h3>
-        <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div class="bg-white rounded-xl p-6 w-full max-w-md">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">{{ editingTask ? 'Edit Irrigation Task' : 'Schedule Irrigation Task' }}</h3>
+        <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="space-y-4">
+          <div class="grid grid-cols-1 gap-4">
+            <!-- Scheduled Date -->
+            <div>
+              <label for="scheduledDate" class="block text-sm font-medium text-gray-700">Scheduled Date</label>
+              <input
+                type="date"
+                id="scheduledDate"
+                formControlName="scheduledDate"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': isFieldInvalid('scheduledDate')}"
+              />
+              <div *ngIf="isFieldInvalid('scheduledDate')" class="text-red-500 text-sm mt-1">
+                Scheduled date is required
+              </div>
+            </div>
 
-          <div>
-            <label class="block text-sm">Water per day (L)</label>
-            <input type="number" formControlName="waterPerDay" class="w-full border rounded p-2"/>
+            <!-- Scheduled Time -->
+            <div>
+              <label for="scheduledTime" class="block text-sm font-medium text-gray-700">Scheduled Time</label>
+              <input
+                type="time"
+                id="scheduledTime"
+                formControlName="scheduledTime"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': isFieldInvalid('scheduledTime')}"
+              />
+              <div *ngIf="isFieldInvalid('scheduledTime')" class="text-red-500 text-sm mt-1">
+                Scheduled time is required
+              </div>
+            </div>
+
+            <!-- Task Type -->
+            <div>
+              <label for="taskType" class="block text-sm font-medium text-gray-700">Task Type</label>
+              <select
+                id="taskType"
+                formControlName="taskType"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': isFieldInvalid('taskType')}"
+              >
+                <option value="" disabled>Select task type</option>
+                <option value="watering">Watering</option>
+                <option value="fertilizing">Fertilizing</option>
+                <option value="maintenance">Maintenance</option>
+              </select>
+              <div *ngIf="isFieldInvalid('taskType')" class="text-red-500 text-sm mt-1">
+                Task type is required
+              </div>
+            </div>
+
+            <!-- Duration -->
+            <div>
+              <label for="duration" class="block text-sm font-medium text-gray-700">Duration (minutes)</label>
+              <input
+                type="number"
+                id="duration"
+                formControlName="duration"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': isFieldInvalid('duration')}"
+                placeholder="20"
+                min="1"
+              />
+              <div *ngIf="isFieldInvalid('duration')" class="text-red-500 text-sm mt-1">
+                <div *ngIf="f['duration'].errors?.['required']">Duration is required</div>
+                <div *ngIf="f['duration'].errors?.['min']">Must be at least 1</div>
+              </div>
+            </div>
+
+            <!-- Plant Selection -->
+            <div>
+              <label for="plantId" class="block text-sm font-medium text-gray-700">Plant</label>
+              <select
+                id="plantId"
+                formControlName="plantId"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': isFieldInvalid('plantId')}"
+              >
+                <option value="" disabled>Select a plant</option>
+                <option *ngFor="let plant of plants" [value]="plant.id">{{ plant.plantName }}</option>
+              </select>
+              <div *ngIf="isFieldInvalid('plantId')" class="text-red-500 text-sm mt-1">
+                Please select a plant
+              </div>
+            </div>
+
+            <!-- Irrigation Selection -->
+            <div>
+              <label for="irrigationId" class="block text-sm font-medium text-gray-700">Irrigation Schedule</label>
+              <select
+                id="irrigationId"
+                formControlName="irrigationId"
+                class="mt-1 block w-full rounded-md border border-gray-300 p-2.5 text-sm focus:ring-blue-500 focus:border-blue-500"
+                [ngClass]="{'border-red-500': isFieldInvalid('irrigationId')}"
+              >
+                <option value="" disabled>Select an irrigation schedule</option>
+                <option *ngFor="let irrigation of irrigations" [value]="irrigation.id">{{ irrigation.id }} ({{ irrigation.plant.plantName }})</option>
+              </select>
+              <div *ngIf="isFieldInvalid('irrigationId')" class="text-red-500 text-sm mt-1">
+                Please select an irrigation schedule
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label class="block text-sm">Fertilizer per day (kg)</label>
-            <input type="number" step="0.01" formControlName="fertilizerPerDay" class="w-full border rounded p-2"/>
-          </div>
-
-          <div>
-            <label class="block text-sm">Times per day</label>
-            <input type="number" formControlName="timesPerDay" class="w-full border rounded p-2"/>
-          </div>
-
-          <div class="flex items-center space-x-4">
-            <label><input type="checkbox" formControlName="isMorning"/> Morning</label>
-            <input type="time" formControlName="morningTime" class="border rounded p-1"/>
-          </div>
-
-          <div class="flex items-center space-x-4">
-            <label><input type="checkbox" formControlName="isEvening"/> Evening</label>
-            <input type="time" formControlName="eveningTime" class="border rounded p-1"/>
-          </div>
-
-          <div>
-            <label class="block text-sm">Duration (minutes)</label>
-            <input type="number" formControlName="duration" class="w-full border rounded p-2"/>
-          </div>
-
-          <div>
-            <label class="block text-sm">Plant</label>
-            <select formControlName="plantId" class="w-full border rounded p-2">
-              <option value="" disabled>Select a plant</option>
-              <option *ngFor="let plant of plants" [value]="plant.id">{{ plant.plantName }}</option>
-            </select>
-          </div>
-
-          <div class="flex justify-end space-x-3 mt-6">
-            <button type="button" (click)="closeModal()" class="px-4 py-2 bg-gray-300 rounded">Cancel</button>
-            <button type="submit" [disabled]="isSubmitting" class="px-4 py-2 bg-blue-600 text-white rounded">
-              {{ isSubmitting ? 'Saving...' : (editingSchedule ? 'Update' : 'Create') }}
+          <!-- Modal Buttons -->
+          <div class="flex justify-end space-x-4 mt-6">
+            <button
+              type="button"
+              (click)="closeModal()"
+              class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500"
+              aria-label="Cancel"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              [disabled]="isSubmitting"
+              class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
+              [attr.aria-label]="editingTask ? 'Update task' : 'Schedule task'"
+            >
+              {{ isSubmitting ? 'Saving...' : (editingTask ? 'Update' : 'Schedule') }}
             </button>
           </div>
         </form>
       </div>
     </div>
-
   </div>
 </div>
