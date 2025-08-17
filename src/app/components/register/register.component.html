@@ -152,7 +152,6 @@
             />
             <div *ngIf="isFieldInvalid('confirmPassword') || registrationForm.errors?.['passwordMismatch']" id="confirmPasswordError" class="text-red-500 text-xs mt-1">
               <div *ngIf="f['confirmPassword'].errors?.['required']">Please confirm your password</div>
-              <div *ngIf="registrationForm.errors?.['passwordMismatch']">Passwords do not match</div>
             </div>
           </div>
 
