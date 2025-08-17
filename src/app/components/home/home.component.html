@@ -26,7 +26,7 @@
         <div class="flex items-center justify-between p-6 rounded-xl bg-gradient-to-r from-blue-50 to-white shadow-md hover:shadow-xl transition-shadow duration-300">
           <div>
             <p class="text-lg font-semibold text-gray-700">Total Income</p>
-            <p class="text-3xl font-bold text-blue-600">{{dashboardMetricsDtos[0].totalIncome | currency}}</p>
+            <p class="text-3xl font-bold text-blue-600"> {{ dashboardMetricsDtos[0].totalIncome | currency:'LKR':'symbol' }}</p>
           </div>
           <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
