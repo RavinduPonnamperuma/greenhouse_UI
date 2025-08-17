@@ -79,7 +79,6 @@ export class PlantComponent implements OnInit {
         }
       })
 
-      // Reset form or handle success as needed
     }, 1000);
   }
 

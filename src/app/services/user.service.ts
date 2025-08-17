@@ -1,7 +1,8 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
-import {Observable} from "rxjs";
+import {Observable, tap} from "rxjs";
 import {APIRequest, APIRequestResources} from "../../core";
+import {UserDto} from "../interfaces/user.interface";
 
 
 @Injectable({
@@ -28,6 +29,18 @@ export class UserService extends APIRequest {
     });
   }
 
+  update = (id: number, payload: any) => {
+    const options = {suffix: id.toString()};
+    return this.patch<any>(payload, options).pipe(
+      tap(() => {
+
+      })
+    );
+  }
+
+  getById = (id: any) => {
+    return this.get<UserDto>({id})
+  }
 
   // getUsers(): Observable<HttpResponse<any>> {
   //     const headers = new HttpHeaders().set('Content-Type', 'application/json; charset=utf-8');
