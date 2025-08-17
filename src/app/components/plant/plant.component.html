@@ -4,7 +4,7 @@
       <!-- Form Card -->
       <form [formGroup]="plantForm" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow-lg w-full mb-6">
         <div>
-          <h2 class="text-xl font-bold text-gray-900">Add new Plant</h2>
+          <h2 class="text-xl font-bold text-gray-900">{{ editingPlant ? 'Edit Plant' : 'Add New Plant' }}</h2>
         </div>
         <div class="grid grid-cols-3 gap-4">
           <!-- Plant Name -->
@@ -16,14 +16,18 @@
               type="text"
               id="plantName"
               formControlName="plantName"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('plantName') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              [ngClass]="{'border-red-500': isFieldInvalid('plantName')}"
               placeholder="Tomato"
+              aria-describedby="plantNameError"
             />
-            <div *ngIf="isFieldInvalid('plantName')" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('plantName')" id="plantNameError" class="text-red-500 text-sm mt-1">
               <div *ngIf="f['plantName'].errors?.['required']">Plant name is required</div>
               <div *ngIf="f['plantName'].errors?.['minlength']">Plant name must be at least 2 characters</div>
             </div>
           </div>
+
+          <!-- Cost -->
           <div>
             <label for="cost" class="block mb-2 text-sm font-medium text-gray-900">
               Cost
@@ -32,10 +36,13 @@
               type="number"
               id="cost"
               formControlName="cost"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('cost') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              [ngClass]="{'border-red-500': isFieldInvalid('cost')}"
               placeholder="100"
+              min="0"
+              aria-describedby="costError"
             />
-            <div *ngIf="isFieldInvalid('cost')" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('cost')" id="costError" class="text-red-500 text-sm mt-1">
               <div *ngIf="f['cost'].errors?.['required']">Cost is required</div>
               <div *ngIf="f['cost'].errors?.['min']">Cost must be a positive number</div>
             </div>
@@ -50,10 +57,13 @@
               type="number"
               id="harvestTime"
               formControlName="harvestTime"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('harvestTime') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              [ngClass]="{'border-red-500': isFieldInvalid('harvestTime')}"
               placeholder="50"
+              min="0"
+              aria-describedby="harvestTimeError"
             />
-            <div *ngIf="isFieldInvalid('harvestTime')" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('harvestTime')" id="harvestTimeError" class="text-red-500 text-sm mt-1">
               <div *ngIf="f['harvestTime'].errors?.['required']">Harvest time is required</div>
               <div *ngIf="f['harvestTime'].errors?.['min']">Harvest time must be a positive number</div>
             </div>
@@ -68,9 +78,11 @@
               type="date"
               id="startDate"
               formControlName="startDate"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('startDate') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              [ngClass]="{'border-red-500': isFieldInvalid('startDate')}"
+              aria-describedby="startDateError"
             />
-            <div *ngIf="isFieldInvalid('startDate')" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('startDate')" id="startDateError" class="text-red-500 text-sm mt-1">
               Start date is required
             </div>
           </div>
@@ -82,11 +94,13 @@
             </label>
             <input
               type="date"
-              id="endTime"
-              formControlName="endTime"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('endDate') ? 'border-red-500' : 'border-gray-300' }}"
+              id="endDate"
+              formControlName="endDate"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              [ngClass]="{'border-red-500': isFieldInvalid('endDate')}"
+              aria-describedby="endDateError"
             />
-            <div *ngIf="isFieldInvalid('endTime')" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('endDate')" id="endDateError" class="text-red-500 text-sm mt-1">
               End date is required
             </div>
           </div>
@@ -99,37 +113,40 @@
             <select
               id="polytunnelId"
               formControlName="polytunnelId"
-              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 {{ isFieldInvalid('polytunnelId') ? 'border-red-500' : 'border-gray-300' }}"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              [ngClass]="{'border-red-500': isFieldInvalid('polytunnelId')}"
+              aria-describedby="polytunnelIdError"
             >
               <option value="" disabled>Select a polytunnel</option>
-              <option *ngFor="let polytunnel of polytunnel" [value]="polytunnel.id">{{ polytunnel.code }}-{{ polytunnel.location}}</option>
+              <option *ngFor="let polytunnel of polytunnels" [value]="polytunnel.id">{{ polytunnel.code }} - {{ polytunnel.location }}</option>
             </select>
-            <div *ngIf="isFieldInvalid('polytunnelId')" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('polytunnelId')" id="polytunnelIdError" class="text-red-500 text-sm mt-1">
               Please select a polytunnel
             </div>
           </div>
 
           <!-- Clear Button -->
-          <div class="mt-5 ">
-            <label for="polytunnelId" class="block mb-2 text-sm font-medium text-gray-900">
-            </label>
+          <div class="mt-5">
+            <label class="block mb-2 text-sm font-medium text-gray-900"></label>
             <button
               type="reset"
+              (click)="onReset()"
               class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium"
+              aria-label="Clear form"
             >
               Clear
             </button>
           </div>
 
           <!-- Submit Button -->
-          <div class="mt-7 ">
-
+          <div class="mt-7">
             <button
               type="submit"
               [disabled]="isSubmitting"
               class="w-full p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
+              [attr.aria-label]="editingPlant ? 'Update plant' : 'Add plant'"
             >
-              {{ isSubmitting ? 'Submitting...' : 'Submit' }}
+              {{ isSubmitting ? 'Submitting...' : (editingPlant ? 'Update' : 'Submit') }}
             </button>
           </div>
         </div>
@@ -152,15 +169,32 @@
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Status</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Cost</th>
               <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Harvest Time</th>
+              <th class="border border-gray-300 px-4 py-2 text-sm font-medium text-gray-900">Actions</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let row of plantDtos" class="even:bg-gray-50">
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.plantName }}</td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.startDate }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.startDate | date: 'mediumDate' }}</td>
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600"><app-status-badges [statusValue]="row.status"></app-status-badges></td>
-              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">Rs:{{ row.cost }}</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">Rs: {{ row.cost }}</td>
               <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">{{ row.harvestTime }} Days</td>
+              <td class="border border-gray-300 px-4 py-2 text-sm text-gray-600">
+                <button
+                  (click)="editPlant(row)"
+                  class="text-blue-600 hover:text-blue-800 mr-4"
+                  aria-label="Edit plant"
+                >
+                  Edit
+                </button>
+                <button
+                  (click)="deletePlant(row.id)"
+                  class="text-red-600 hover:text-red-800"
+                  aria-label="Delete plant"
+                >
+                  Delete
+                </button>
+              </td>
             </tr>
             </tbody>
           </table>

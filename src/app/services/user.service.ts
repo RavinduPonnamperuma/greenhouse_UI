@@ -31,7 +31,7 @@ export class UserService extends APIRequest {
 
   update = (id: number, payload: any) => {
     const options = {suffix: id.toString()};
-    return this.patch<any>(payload, options).pipe(
+    return this.put<any>(payload, options).pipe(
       tap(() => {
 
       })
