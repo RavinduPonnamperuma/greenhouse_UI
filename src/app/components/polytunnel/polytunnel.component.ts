@@ -38,7 +38,7 @@ export class PolytunnelComponent implements OnInit {
   constructor(private fb: FormBuilder) {
     this.userId = JSON.parse(<string>localStorage.getItem('userId'));
     this.plotForm = this.fb.group({
-      code: ['', [Validators.required, Validators.minLength(3)]],
+      code: ['PT-', [Validators.required, Validators.minLength(3), Validators.pattern(/^PT-.+/)]],
       status: ['', Validators.required],
       location: ['', [Validators.required, Validators.minLength(2)]],
       size: ['', [Validators.required, Validators.minLength(2)]],
@@ -97,7 +97,7 @@ export class PolytunnelComponent implements OnInit {
 
   onCancel(): void {
     this.editingId = null;
-    this.plotForm.reset();
+    this.plotForm.reset({ code: 'PT-', userId: this.userId });
     this.plotForm.get('deviceId')?.enable();
   }
 
@@ -145,7 +145,7 @@ export class PolytunnelComponent implements OnInit {
         next: () => {
           this.notificationService.showSuccess('New polytunnel added successfully', 3000);
           this.isSubmitting = false;
-          this.plotForm.reset();
+          this.plotForm.reset({ code: 'PT-', userId: this.userId });
           this.getAll();
         },
         error: () => {
