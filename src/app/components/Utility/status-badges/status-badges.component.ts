@@ -17,8 +17,8 @@ export class StatusBadgesComponent {
   get badgeType(): 'green' | 'red' | 'yellow' {
     const normalized = this.statusValue?.toLowerCase();
 
-    const greenStatuses = ['active', 'available', 'growing'];
-    const redStatuses = ['inactive', 'unavailable'];
+    const greenStatuses = ['active', 'available', 'growing','planted'];
+    const redStatuses = ['inactive', 'unavailable','dead'];
     const yellowStatuses = ['maintenance', 'pending'];
 
     if (greenStatuses.includes(normalized)) {

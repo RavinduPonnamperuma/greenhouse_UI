@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import {NgForOf, NgIf, DatePipe, NgClass} from '@angular/common';
+import { NgForOf, NgIf, DatePipe, NgClass } from '@angular/common';
 import { NotificationService } from '../Utility/notification/notification.service';
 import { PolytunnelService } from '../../services/polytunnel.service';
 import { PlantService } from '../../services/plant.service';
@@ -42,7 +42,7 @@ export class PlantComponent implements OnInit {
   constructor() {
     this.plantForm = this.fb.group({
       plantName: ['', [Validators.required, Validators.minLength(2)]],
-      status: ['Planted', Validators.required],
+      status: ['', Validators.required],
       cost: ['', [Validators.required, Validators.min(0)]],
       harvestTime: ['', [Validators.required, Validators.min(0)]],
       startDate: ['', Validators.required],
@@ -119,7 +119,6 @@ export class PlantComponent implements OnInit {
     });
   }
 
-
   onSubmit(): void {
     if (this.plantForm.invalid) {
       this.plantForm.markAllAsTouched();
@@ -186,7 +185,7 @@ export class PlantComponent implements OnInit {
   }
 
   onReset(): void {
-    this.plantForm.reset({ status: 'Planted' });
+    this.plantForm.reset({ status: '' });
     this.editingPlant = null;
     this.errorMessage = null;
   }

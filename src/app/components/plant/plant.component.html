@@ -125,6 +125,27 @@
             </div>
           </div>
 
+          <!-- Status -->
+          <div>
+            <label for="status" class="block mb-2 text-sm font-medium text-gray-900">
+              Status
+            </label>
+            <select
+              id="status"
+              formControlName="status"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              [ngClass]="{'border-red-500': isFieldInvalid('status')}"
+              aria-describedby="statusError"
+            >
+              <option value="" disabled>Select a status</option>
+              <option value="Planted">Planted</option>
+              <option value="Dead">Dead</option>
+            </select>
+            <div *ngIf="isFieldInvalid('status')" id="statusError" class="text-red-500 text-sm mt-1">
+              Please select a status
+            </div>
+          </div>
+
           <!-- Clear Button -->
           <div class="mt-5">
             <label class="block mb-2 text-sm font-medium text-gray-900"></label>
