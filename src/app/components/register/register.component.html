@@ -1,7 +1,18 @@
 <div class="p-4 sm:ml-64">
   <div class="p-6 border border-gray-200 rounded-xl bg-white shadow-lg mt-14">
     <div class="space-y-8">
-      <h2 class="text-xl font-bold text-gray-900">{{ editingUser ? 'Edit Profile' : 'Register User' }}</h2>
+      <div class="flex justify-between items-center">
+        <h2 class="text-xl font-bold text-gray-900">{{ editingUser ? 'Edit Profile' : 'Register User' }}</h2>
+        <button
+          *ngIf="editingUser"
+          type="button"
+          (click)="onNewUser()"
+          class="p-2.5 border rounded-lg text-sm bg-green-700 text-white hover:bg-green-800 focus:outline-none font-medium"
+          aria-label="Add new user"
+        >
+          New User
+        </button>
+      </div>
 
       <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="space-y-6">
         <div class="grid gap-6 md:grid-cols-3">
@@ -185,21 +196,19 @@
           </div>
 
           <!-- Buttons -->
-          <div>
+          <div class="flex gap-4">
             <button
               type="reset"
               (click)="onReset()"
-              class="w-full p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:outline-none font-medium"
+              class="w-32 p-2.5 border rounded-lg text-sm bg-red-700 text-white hover:bg-red-800 focus:outline-none font-medium"
               aria-label="Clear form"
             >
               Clear
             </button>
-          </div>
-          <div>
             <button
               type="submit"
               [disabled]="isSubmitting"
-              class="w-full p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
+              class="w-32 p-2.5 border rounded-lg text-sm bg-blue-700 text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium disabled:bg-gray-400"
               [attr.aria-label]="editingUser ? 'Update profile' : 'Register user'"
             >
               {{ isSubmitting ? 'Submitting...' : (editingUser ? 'Update' : 'Submit') }}

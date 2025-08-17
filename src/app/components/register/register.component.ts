@@ -149,6 +149,11 @@ export class RegisterComponent implements OnInit {
     this.registrationForm.get('confirmPassword')?.enable();
   }
 
+  onNewUser(): void {
+    this.onReset();
+    this.registrationForm.reset();
+  }
+
   isFieldInvalid(fieldName: string): boolean {
     const field = this.registrationForm.get(fieldName);
     return field ? field.invalid && (field.dirty || field.touched || this.submitted) : false;
