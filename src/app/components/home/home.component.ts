@@ -11,7 +11,7 @@ import {
   ChartComponent
 } from 'ng-apexcharts';
 import {SensorDataService} from "../../services/sensor-data.service";
-import {SensorDataDTO} from "../../interfaces/sensor-data.interface";
+import {DashboardMetricsDto, SensorDataDTO} from "../../interfaces/sensor-data.interface";
 import {ActionService} from "../../services/action.service";
 import {NotificationService} from "../Utility/notification/notification.service";
 
@@ -65,7 +65,10 @@ export class HomeComponent implements OnInit {
   humidities: { timestamp: string; value: number }[] = [];
   moistures: { timestamp: string; value: number }[] = [];
 
+  dashboardMetricsDtos: DashboardMetricsDto[] = []
+
   constructor() {
+    this.getDashBordData();
     this.lineChartOptions = {
       series: [
         {
@@ -311,4 +314,15 @@ export class HomeComponent implements OnInit {
     });
   }
 
+
+  getDashBordData() {
+    this.sensorDataService.getDashBoardData().subscribe(
+      {
+        next: (data: any) => {
+          this.dashboardMetricsDtos = data.data;
+          console.log(this.dashboardMetricsDtos)
+        }
+      }
+    )
+  }
 }

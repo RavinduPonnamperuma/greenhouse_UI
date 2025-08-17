@@ -4,7 +4,7 @@ import {finalize, Observable, tap} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
 import {APIRequest, APIRequestResources} from "../../core";
-import {SensorDataDTO, WaterTankLevelDto} from "../interfaces/sensor-data.interface";
+import {DashboardMetricsDto, SensorDataDTO, WaterTankLevelDto} from "../interfaces/sensor-data.interface";
 
 @Injectable({
   providedIn: 'root',
@@ -28,6 +28,19 @@ export class SensorDataService extends APIRequest {
       endpoint: `water-level/${id}`,
     };
     return this.get<WaterTankLevelDto>(requestOptions).pipe(
+      tap(response => {
+      }),
+      finalize(() => {
+
+      })
+    );
+  }
+
+  public getDashBoardData(): Observable<any> {
+    const requestOptions = {
+      endpoint: `dashboard`,
+    };
+    return this.get<DashboardMetricsDto>(requestOptions).pipe(
       tap(response => {
       }),
       finalize(() => {
