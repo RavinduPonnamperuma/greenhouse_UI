@@ -15,7 +15,7 @@ interface PlantPayload {
   cost: number;
   harvestTime: number;
   startDate: string;
-  endDate: string;
+  endTime: string;
   polytunnelId: number;
 }
 
@@ -46,7 +46,7 @@ export class PlantComponent implements OnInit {
       cost: ['', [Validators.required, Validators.min(0)]],
       harvestTime: ['', [Validators.required, Validators.min(0)]],
       startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      endTime: ['', Validators.required],
       polytunnelId: ['', Validators.required],
     });
   }
@@ -114,7 +114,7 @@ export class PlantComponent implements OnInit {
       cost: plant.cost,
       harvestTime: plant.harvestTime,
       startDate: plant.startDate,
-      endDate: plant.endTime,
+      endTime: plant.endTime,
       polytunnelId: plant.polytunnel.id,
     });
   }
@@ -136,7 +136,7 @@ export class PlantComponent implements OnInit {
       cost: +formValue.cost,
       harvestTime: +formValue.harvestTime,
       startDate: formValue.startDate,
-      endDate: formValue.endDate,
+      endTime: formValue.endDate,
       polytunnelId: +formValue.polytunnelId,
     };
 

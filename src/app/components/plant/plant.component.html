@@ -94,13 +94,13 @@
             </label>
             <input
               type="date"
-              id="endDate"
-              formControlName="endDate"
+              id="endTime"
+              formControlName="endTime"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-              [ngClass]="{'border-red-500': isFieldInvalid('endDate')}"
+              [ngClass]="{'border-red-500': isFieldInvalid('endTime')}"
               aria-describedby="endDateError"
             />
-            <div *ngIf="isFieldInvalid('endDate')" id="endDateError" class="text-red-500 text-sm mt-1">
+            <div *ngIf="isFieldInvalid('endTime')" id="endDateError" class="text-red-500 text-sm mt-1">
               End date is required
             </div>
           </div>
