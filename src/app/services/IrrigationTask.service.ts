@@ -26,7 +26,14 @@ export class IrrigationTaskService extends APIRequest {
     })
   }
 
+  update = (id: number, payload: any) => {
+    const options = {suffix: id.toString()};
+    return this.patch<any>(payload, options).pipe(
+      tap(() => {
 
+      })
+    );
+  }
   deleteTask(id: any) {
     return this.delete<any>({id}).pipe(
       tap(response => {

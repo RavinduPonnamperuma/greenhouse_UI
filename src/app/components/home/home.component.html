@@ -6,7 +6,7 @@
         <div class="flex items-center justify-between p-6 rounded-xl bg-gradient-to-r from-green-50 to-white shadow-md hover:shadow-xl transition-shadow duration-300">
           <div>
             <p class="text-lg font-semibold text-gray-700">Live Plants</p>
-            <p class="text-3xl font-bold text-green-600">1,245</p>
+            <p class="text-3xl font-bold text-green-600">{{dashboardMetricsDtos[0].growingPlants}}</p>
           </div>
           <svg class="w-12 h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
@@ -16,7 +16,7 @@
         <div class="flex items-center justify-between p-6 rounded-xl bg-gradient-to-r from-red-50 to-white shadow-md hover:shadow-xl transition-shadow duration-300">
           <div>
             <p class="text-lg font-semibold text-gray-700">Dead Plants</p>
-            <p class="text-3xl font-bold text-red-600">23</p>
+            <p class="text-3xl font-bold text-red-600">{{dashboardMetricsDtos[0].harvestedPlants}}</p>
           </div>
           <svg class="w-12 h-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6"></path>
@@ -26,7 +26,7 @@
         <div class="flex items-center justify-between p-6 rounded-xl bg-gradient-to-r from-blue-50 to-white shadow-md hover:shadow-xl transition-shadow duration-300">
           <div>
             <p class="text-lg font-semibold text-gray-700">Total Income</p>
-            <p class="text-3xl font-bold text-blue-600">$12,450</p>
+            <p class="text-3xl font-bold text-blue-600"> {{ dashboardMetricsDtos[0].totalIncome | currency:'LKR':'symbol' }}</p>
           </div>
           <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
@@ -37,24 +37,24 @@
       <!-- Middle Section: Controls -->
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 px-4 sm:px-16">
         <label class="inline-flex items-center cursor-pointer group">
-          <span class="text-lg font-medium text-gray-700 mr-3">Fan</span>
+          <span class="text-lg font-medium text-gray-700 mr-3">Water</span>
           <input
             type="checkbox"
             class="sr-only peer"
-            [(ngModel)]="fanChecked"
-            (change)="toggleDevice('Fan', 1, fanChecked)"
+            [(ngModel)]="waterChecked"
+            (change)="toggleDevice('Water', 1, waterChecked)"
           >
           <div class="relative w-12 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-purple-200 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500 transition-colors duration-300"></div>
           <span class="ml-2 text-sm text-gray-500 group-hover:text-purple-500">{{ fanChecked ? 'On' : 'Off' }}</span>
         </label>
 
         <label class="inline-flex items-center cursor-pointer group">
-          <span class="text-lg font-medium text-gray-700 mr-3">Water</span>
+          <span class="text-lg font-medium text-gray-700 mr-3">Fan</span>
           <input
             type="checkbox"
             class="sr-only peer"
-            [(ngModel)]="waterChecked"
-            (change)="toggleDevice('Water', 2, waterChecked)"
+            [(ngModel)]="fanChecked"
+            (change)="toggleDevice('Fan', 2, fanChecked)"
           >
           <div class="relative w-12 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-yellow-200 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-yellow-400 transition-colors duration-300"></div>
           <span class="ml-2 text-sm text-gray-500 group-hover:text-yellow-500">{{ waterChecked ? 'On' : 'Off' }}</span>

@@ -1,16 +1,15 @@
-import {Component, inject} from '@angular/core';
-import {NgForOf, NgIf} from "@angular/common";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {PlantService} from "../../services/plant.service";
-import {IrrigationService} from "../../services/irrigation.service";
-import {PlantDto} from "../../interfaces/plant.interface";
-import {IrrigationDTO} from "../../interfaces/irrigation.entity";
-import {NotificationService} from "../Utility/notification/notification.service";
+import { Component, inject } from '@angular/core';
+import {NgForOf, NgIf, DatePipe, NgClass, TitleCasePipe} from '@angular/common';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PlantService } from '../../services/plant.service';
+import { IrrigationService } from '../../services/irrigation.service';
+import { NotificationService } from '../Utility/notification/notification.service';
+import { PlantDto } from '../../interfaces/plant.interface';
+import { IrrigationDTO } from '../../interfaces/irrigation.entity';
+import { PlantTaskDto } from '../../interfaces/irrigation-task.entity';
 import {IrrigationTaskService} from "../../services/IrrigationTask.service";
-import {PlantTaskDto} from "../../interfaces/irrigation-task.entity";
 
-
-interface IrrigationTask {
+interface IrrigationTaskPayload {
   scheduledDate: string;
   scheduledTime: string;
   taskType: string;
@@ -19,17 +18,12 @@ interface IrrigationTask {
   irrigationId: number;
 }
 
-
 @Component({
   selector: 'app-irrigation-schedule',
   standalone: true,
-  imports: [
-    NgForOf,
-    NgIf,
-    ReactiveFormsModule
-  ],
+  imports: [NgForOf, NgIf, ReactiveFormsModule, NgClass, DatePipe, TitleCasePipe],
   templateUrl: './irrigation-schedule.component.html',
-  styleUrl: './irrigation-schedule.component.scss'
+  styleUrls: ['./irrigation-schedule.component.scss'],
 })
 export class IrrigationScheduleComponent {
   private plantService = inject(PlantService);
@@ -59,9 +53,7 @@ export class IrrigationScheduleComponent {
   }
 
   ngOnInit(): void {
-    this.getAllTasks();
-    this.getAllPlants();
-    this.getAllIrrigations();
+    this.loadData();
   }
 
   get f() {
@@ -73,52 +65,76 @@ export class IrrigationScheduleComponent {
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 
-  getAllPlants() {
-    this.plantService.getAll().subscribe({
-      next: (response) => {
-        this.plants = Array.isArray(response.data) ? response.data : [response.data];
-      },
-      error: (err) => {
-        console.error('Failed to fetch plants:', err);
-        this.errorMessage = 'Failed to load plant data.';
-        this.notificationService.showError('Failed to load plant data.', 5000);
-      },
+  private loadData(): void {
+    Promise.all([
+      this.getAllPlants(),
+      this.getAllIrrigations(),
+      this.getAllTasks(),
+    ]).catch((err) => {
+      console.error('Failed to load initial data:', err);
+      this.errorMessage = 'Failed to load data. Please try again.';
+      this.notificationService.showError(this.errorMessage, 5000);
     });
   }
 
-  getAllIrrigations() {
-    this.irrigationService.getAll().subscribe({
-      next: (response) => {
-        this.irrigations = Array.isArray(response.data) ? response.data : [response.data];
-      },
-      error: (err) => {
-        console.error('Failed to fetch irrigations:', err);
-        this.errorMessage = 'Failed to load irrigation schedules.';
-        this.notificationService.showError('Failed to load irrigation schedules.', 5000);
-      },
+  private getAllPlants(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.plantService.getAll().subscribe({
+        next: (response) => {
+          this.plants = Array.isArray(response.data) ? response.data : [response.data];
+          resolve();
+        },
+        error: (err) => {
+          console.error('Failed to fetch plants:', err);
+          this.errorMessage = 'Failed to load plant data.';
+          this.notificationService.showError(this.errorMessage, 5000);
+          reject(err);
+        },
+      });
     });
   }
 
-  getAllTasks() {
-    this.irrigationTaskService.getAll().subscribe({
-      next: (response) => {
-        this.tasks = Array.isArray(response.data) ? response.data : [response.data];
-      },
-      error: (err) => {
-        console.error('Failed to fetch tasks:', err);
-        this.errorMessage = 'Failed to load irrigation tasks.';
-        this.notificationService.showError('Failed to load irrigation tasks.', 5000);
-      },
+  private getAllIrrigations(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.irrigationService.getAll().subscribe({
+        next: (response) => {
+          this.irrigations = Array.isArray(response.data) ? response.data : [response.data];
+          resolve();
+        },
+        error: (err) => {
+          console.error('Failed to fetch irrigations:', err);
+          this.errorMessage = 'Failed to load irrigation schedules.';
+          this.notificationService.showError(this.errorMessage, 5000);
+          reject(err);
+        },
+      });
     });
   }
 
-  openCreateModal() {
+  private getAllTasks(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.irrigationTaskService.getAll().subscribe({
+        next: (response) => {
+          this.tasks = Array.isArray(response.data) ? response.data : [response.data];
+          resolve();
+        },
+        error: (err) => {
+          console.error('Failed to fetch tasks:', err);
+          this.errorMessage = 'Failed to load irrigation tasks.';
+          this.notificationService.showError(this.errorMessage, 5000);
+          reject(err);
+        },
+      });
+    });
+  }
+
+  openCreateModal(): void {
     this.editingTask = null;
     this.taskForm.reset();
     this.showModal = true;
   }
 
-  openEditModal(task: PlantTaskDto) {
+  openEditModal(task: PlantTaskDto): void {
     this.editingTask = task;
     this.taskForm.patchValue({
       scheduledDate: task.scheduledDate,
@@ -131,13 +147,14 @@ export class IrrigationScheduleComponent {
     this.showModal = true;
   }
 
-  closeModal() {
+  closeModal(): void {
     this.showModal = false;
     this.taskForm.reset();
     this.errorMessage = null;
+    this.editingTask = null;
   }
 
-  onSubmit() {
+  onSubmit(): void {
     if (this.taskForm.invalid) {
       this.taskForm.markAllAsTouched();
       return;
@@ -146,7 +163,7 @@ export class IrrigationScheduleComponent {
     this.isSubmitting = true;
     this.errorMessage = null;
 
-    const payload: IrrigationTask = {
+    const payload: IrrigationTaskPayload = {
       scheduledDate: this.taskForm.value.scheduledDate,
       scheduledTime: this.taskForm.value.scheduledTime,
       taskType: this.taskForm.value.taskType,
@@ -155,10 +172,16 @@ export class IrrigationScheduleComponent {
       irrigationId: +this.taskForm.value.irrigationId,
     };
 
-    this.irrigationTaskService.create(payload).subscribe({
-      next: (response) => {
-        this.notificationService.showSuccess('Irrigation task added successfully\'', 3000);
+    const request = this.editingTask
+      ? this.irrigationTaskService.update(this.editingTask.id, payload)
+      : this.irrigationTaskService.create(payload);
 
+    request.subscribe({
+      next: (response) => {
+        this.notificationService.showSuccess(
+          `Irrigation task ${this.editingTask ? 'updated' : 'added'} successfully`,
+          3000
+        );
         if (this.editingTask) {
           const index = this.tasks.findIndex((t) => t.id === this.editingTask!.id);
           this.tasks[index] = response.data;
@@ -169,14 +192,15 @@ export class IrrigationScheduleComponent {
         this.closeModal();
       },
       error: (err) => {
-        console.error('Failed to save task:', err);
-        this.notificationService.showError('Failed to add irrigation task' + ' Please try again.', 5000);
+        console.error(`Failed to ${this.editingTask ? 'update' : 'create'} task:`, err);
+        this.errorMessage = `Failed to ${this.editingTask ? 'update' : 'add'} irrigation task. Please try again.`;
+        this.notificationService.showError(this.errorMessage, 5000);
         this.isSubmitting = false;
       },
     });
   }
 
-  deleteTask(id: number) {
+  deleteTask(id: number): void {
     if (!confirm('Are you sure you want to delete this irrigation task?')) return;
 
     this.irrigationTaskService.deleteTask(id).subscribe({
@@ -186,10 +210,9 @@ export class IrrigationScheduleComponent {
       },
       error: (err) => {
         console.error('Failed to delete task:', err);
-        this.notificationService.showError('Failed to delete irrigation task.', 5000);
         this.errorMessage = 'Failed to delete irrigation task.';
+        this.notificationService.showError(this.errorMessage, 5000);
       },
     });
   }
-
 }

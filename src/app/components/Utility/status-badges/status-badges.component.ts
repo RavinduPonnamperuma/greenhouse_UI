@@ -12,18 +12,23 @@ import {NgSwitch, NgSwitchCase} from "@angular/common";
   styleUrl: './status-badges.component.scss'
 })
 export class StatusBadgesComponent {
-  @Input() statusValue: string = 'Available';  // accept any string status
+  @Input() statusValue: string = 'Available';
 
-  get badgeType(): 'green' | 'red' {
-    const greenStatuses = ['active', 'available', 'growing'];
-    const redStatuses = ['inactive', 'Unavailable'];
+  get badgeType(): 'green' | 'red' | 'yellow' {
+    const normalized = this.statusValue?.toLowerCase();
 
-    if (greenStatuses.includes(this.statusValue)) {
+    const greenStatuses = ['active', 'available', 'growing','planted'];
+    const redStatuses = ['inactive', 'unavailable','dead'];
+    const yellowStatuses = ['maintenance', 'pending'];
+
+    if (greenStatuses.includes(normalized)) {
       return 'green';
-    } else if (redStatuses.includes(this.statusValue)) {
+    } else if (redStatuses.includes(normalized)) {
       return 'red';
+    } else if (yellowStatuses.includes(normalized)) {
+      return 'yellow';
     } else {
-      return 'red'; // default to red if unknown status
+      return 'red';
     }
   }
 }

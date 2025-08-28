@@ -17,3 +17,9 @@ export interface WaterTankLevelDto {
   totalOut: string; // since it's coming as "0.00"
   currentWaterLevel: string; // since it's coming as "1550.00"
 }
+
+export interface DashboardMetricsDto {
+  growingPlants: number;
+  harvestedPlants: number;
+  totalIncome: number;
+}

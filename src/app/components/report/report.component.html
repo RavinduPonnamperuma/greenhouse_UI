@@ -5,7 +5,7 @@
       <h1 class="text-2xl font-bold text-gray-800 mb-6">Generate Farm Reports</h1>
 
       <!-- Report Generation Form -->
-      <form [formGroup]="reportForm"  class="space-y-6">
+      <form [formGroup]="reportForm" (ngSubmit)="onDownload()" class="space-y-6">
         <!-- Header and Description -->
         <div>
           <p class="text-gray-600 text-sm">Select report type and filters to generate or preview insights for your polytunnels and plants.</p>
@@ -52,7 +52,7 @@
               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
             >
               <option value="">All Polytunnels</option>
-              <option *ngFor="let plot of polytunnel" [value]="plot.id">{{ plot.code }} - {{ plot.location }}</option>
+              <option *ngFor="let plot of polytunnels" [value]="plot.code">{{ plot.code }} - {{ plot.location }}</option>
             </select>
           </div>
 
@@ -65,12 +65,11 @@
               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200"
             >
               <option value="">All Plants</option>
-              <option *ngFor="let plant of plantDtos" [value]="plant.id">{{ plant.plantName }}</option>
+              <option *ngFor="let plant of plants" [value]="plant.plantName">{{ plant.plantName }}</option>
             </select>
           </div>
         </div>
 
-        <!-- Report Type Selection -->
         <div>
           <label for="reportType" class="block text-sm font-medium text-gray-700 mb-1">Report Type</label>
           <select
@@ -90,22 +89,13 @@
           </p>
         </div>
 
-        <!-- Action Buttons -->
         <div class="flex justify-end space-x-4">
           <button
-            type="reset"
-
+            type="button"
+            (click)="onReset()"
             class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition duration-200"
           >
             Clear
-          </button>
-          <button
-            type="button"
-
-            [disabled]="isSubmitting || reportForm.invalid"
-            class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition duration-200 disabled:bg-gray-400"
-          >
-            {{ isSubmitting ? 'Processing...' : 'Preview' }}
           </button>
           <button
             type="submit"
@@ -117,7 +107,8 @@
         </div>
       </form>
 
-      <!-- Report Preview Section -->
+      <!-- Error Section -->
+      <div *ngIf="errorMessage" class="mt-4 text-red-500 text-sm">{{ errorMessage }}</div>
     </div>
   </div>
 </div>
